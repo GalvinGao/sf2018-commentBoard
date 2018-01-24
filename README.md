@@ -1,6 +1,6 @@
 # sf-2018 Public Site
 
-Uses NodeJS and PHP as backend, and WebSocket to dynamically update posts.
+Uses **NodeJS** and **PHP** as backend, and **WebSocket** to dynamically update posts.
 
 ## Client -> Server
 
@@ -21,7 +21,7 @@ Uses NodeJS and PHP as backend, and WebSocket to dynamically update posts.
 ```javascript
 {
 	"status": "ok | warn | error | fatal",
-	"servertime": "$server-time",
+	"time": "$server-time",
 	"data": @SEE-BELOW@
 }
 ```
