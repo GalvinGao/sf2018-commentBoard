@@ -21,7 +21,8 @@ Uses **NodeJS** and **PHP** as backend, and **WebSocket** to dynamically update 
 ```javascript
 {
 	"status": "ok | warn | error | fatal",
-	"time": "$server-time",
+	"time": $server-time,
+	"type": $response-data-type
 	"data": @SEE-BELOW@
 }
 ```
