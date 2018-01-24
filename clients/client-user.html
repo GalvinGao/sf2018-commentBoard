@@ -1,0 +1,318 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+		<title>Science Fair 2018</title>
+		<style>
+			.section {
+				border-radius: 0;
+				padding: 1em;
+				background: rgba(255, 255, 255, 0.7);
+				-webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.14), 0 0 14px 2px rgba(0, 0, 0, 0.12), 0 0 5px -3px rgba(0, 0, 0, 0.3);
+				box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.14), 0 0 14px 2px rgba(0, 0, 0, 0.12), 0 0 5px -3px rgba(0, 0, 0, 0.3);
+				margin: 2em 0;
+				font-size: 1em;
+			}
+
+			body {
+				padding: 0.3em;
+				text-align: left;
+				font-family: 'Product Sans', 'Open Sans', serif;
+				background: url("http://image.qn.iblueg.cn/kuanpin053.jpg") no-repeat top center;
+			}
+
+			.header {
+				text-align: center;
+				font-size: 2em;
+				padding: 0.75em;
+				text-shadow: 0 0 3px #fff;
+			}
+
+			.single-comment .name {
+				font-size: 1.5em;
+				margin-bottom: 0.3em;
+			}
+
+			.single-comment .content {
+				margin-left: 0.5em;
+			}
+
+			.single-comment {
+				padding: 1em;
+				border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+			}
+
+			.single-comment:last-child {
+				padding: none;
+				border-bottom: none;
+			}
+
+			.heading {
+				font-size: 2em;
+				padding: 0.25em;
+			}
+
+			.loading {
+				position: fixed;
+				top: -70px;
+				left: 0;
+				right: 0;
+				text-align: center;
+				font-weight: 400;
+				font-family: 'Kefa';
+				background: rgba(0, 0, 0, 0.75);
+				font-size: 1em;
+				color: #fff;
+				padding: 1em 0.5em;
+				margin: 0;
+				transition: all 0.3s ease-out;
+			}
+
+			.spinner {
+			  margin: 5px auto 0;
+			  width: 70px;
+			  text-align: center;
+			  display: inline-block;
+			}
+
+			.spinner > div {
+			  width: 18px;
+			  height: 18px;
+			  background-color: #fff;
+
+			  border-radius: 100%;
+			  display: inline-block;
+			  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+			  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+			}
+
+			.spinner .bounce1 {
+			  -webkit-animation-delay: -0.32s;
+			  animation-delay: -0.32s;
+			}
+
+			.spinner .bounce2 {
+			  -webkit-animation-delay: -0.16s;
+			  animation-delay: -0.16s;
+			}
+
+			@-webkit-keyframes sk-bouncedelay {
+			  0%, 80%, 100% { -webkit-transform: scale(0) }
+			  40% { -webkit-transform: scale(1.0) }
+			}
+
+			@keyframes sk-bouncedelay {
+			  0%, 80%, 100% { 
+				-webkit-transform: scale(0);
+				transform: scale(0);
+			  } 40% { 
+				-webkit-transform: scale(1.0);
+				transform: scale(1.0);
+			  }
+			}
+
+			.submit #name, .submit #comment {
+				border-color: #e51c23;
+				border-style: solid;
+				border: none;
+			}
+			
+			.submitForm {
+				padding: 1em;
+			}
+		</style>
+		<link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
+		<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container">
+			<div class="section header">
+				Science Fair 2018
+			</div>
+			<div class="section submit">
+				<div class="heading">
+					Submit
+				</div>
+				<div class="submitForm row">
+					<div class="input-field col s12">
+						<input placeholder="John Appleseed" id="name" type="text"></input>
+						<label for="name">姓名 / Name</label>
+					</div>
+					<div class="input-field col s12">
+						<textarea id="comment" class="materialize-textarea" placeholder="请在此输入留言 / Please input comments at here"></textarea>
+						<label for="comment">留言 / Comments</label>
+					</div>
+					<div class="col s12">
+						<button class="btn waves-effect waves-light sendCommentButton">
+							提交 / Send
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="section comment">
+				<div class="heading">
+					Comments
+				</div>
+				<div class="single-comment">
+					<div class="name">
+						Lorem Ipsum Dolor 1
+					</div>
+					<div class="content">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium. Proin non gravida justo. Phasellus mollis placerat lobortis. Fusce eget sodales augue, sit amet maximus neque. In hac habitasse platea dictumst. Phasellus ullamcorper magna vitae leo viverra luctus. Vivamus vitae dui sollicitudin, iaculis enim nec, finibus eros. Mauris eu finibus urna, id sodales mi.
+					</div>
+				</div>
+				<div class="single-comment">
+					<div class="name">
+						Lorem Ipsum Dolor 2
+					</div>
+					<div class="content">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium. Proin non gravida justo. Phasellus mollis placerat lobortis. Fusce eget sodales augue, sit amet maximus neque. In hac habitasse platea dictumst. Phasellus ullamcorper magna vitae leo viverra luctus. Vivamus vitae dui sollicitudin, iaculis enim nec, finibus eros. Mauris eu finibus urna, id sodales mi.
+					</div>
+				</div>
+				<div class="single-comment">
+					<div class="name">
+						Lorem Ipsum Dolor 3
+					</div>
+					<div class="content">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium. Proin non gravida justo. Phasellus mollis placerat lobortis. Fusce eget sodales augue, sit amet maximus neque. In hac habitasse platea dictumst. Phasellus ullamcorper magna vitae leo viverra luctus. Vivamus vitae dui sollicitudin, iaculis enim nec, finibus eros. Mauris eu finibus urna, id sodales mi.
+					</div>
+				</div>
+				<div class="single-comment">
+					<div class="name">
+						Lorem Ipsum Dolor 4
+					</div>
+					<div class="content">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium. Proin non gravida justo. Phasellus mollis placerat lobortis. Fusce eget sodales augue, sit amet maximus neque. In hac habitasse platea dictumst. Phasellus ullamcorper magna vitae leo viverra luctus. Vivamus vitae dui sollicitudin, iaculis enim nec, finibus eros. Mauris eu finibus urna, id sodales mi.
+					</div>
+				</div>
+			</div>
+			<div class="ue loading">
+				<div class="spinner">
+					<div class="bounce1"></div>
+					<div class="bounce2"></div>
+					<div class="bounce3"></div>
+				</div>
+				正在提交... / Submitting...
+			</div>
+		</div>
+		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
+		<script src="https://cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
+  		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+		<script id="main-script">
+			var socket;
+		    try {
+				window.socket = new ReconnectingWebSocket('ws://localhost:8080');
+            	socket.timeoutInterval = 3000;
+				socket.reconnectDecay = 1.2;
+				socket.timeoutInterval = 5000;
+		    } catch ( e ) {  
+				alert('WebSocket 连接错误，请尝试刷新页面。详细信息：', e);
+		    }
+		    window.socket.onopen = sOpen;  
+		    window.socket.onerror = sError;
+		    window.socket.onmessage = sMessage;
+		    window.socket.onclose = sClose;
+		    
+		    $(".sendCommentButton").click(function(){
+		    	submitComment();
+		    });
+			    
+			function submitComment() {
+				/* Feature Logic
+				 *
+				 * [UE] Ajax Loading Animation, like New PUBG: fixed at top or bottom
+				 * [DATA] Post via websocket
+				 * [DATA] Promise received -- Strong Referred ->
+				 * (UE) NOT YET CLOSE MODAL _WAIT FOR WEBSOCKET RECEIVE THIS MESSAGE VIA BOARDCAST_
+				 * ;if received; [UE] STOP ANIMATION, POP MODAL WITH COMPLETED MESSAGE
+				 * Operation Completed
+				 */
+				 
+				 loadingBox();
+				 
+				 var name = $(".submit #name").val() || friendlyError("请输入'家长名称'。 / Please complete 'name' field.", "#name");
+				 var message = $(".submit #comment").val() || friendlyError("请输入留言。 / Please complete 'comments' field.", "#comment");
+				 var time = new Date().getTime() || 1;
+				 
+				 if (!name || !message) {
+				 	return false;
+				 }
+				 
+				 var data = {
+				 	name: name,
+				 	message: message,
+				 	time: time
+				 }
+				 
+				 sendSocket(JSON.stringify(data));
+				 
+				 window.prevName = name;
+				 window.prevMessage = message;
+				 window.prevTime = time;
+			}
+
+			function sOpen(){
+			    console.info('Connection Established.');
+			}
+			
+			function sError(e){
+			    console.info("Connection Error. ", e);
+			}
+			
+			function sMessage(msg){  
+				hideLoadingBox();
+			    console.info('Server Response: ', msg.data);
+			}
+			
+			function sClose(e){
+			    console.info("Connection Closed. ", e.code);
+			}
+			  
+			function sendSocket(msg){
+				console.info("Sending: ", ob(msg))
+			    window.socket.send(msg);
+			} 
+			
+			function closeSocket(){
+			    console.info("Closing Connection.");
+			    window.socket.close();
+			}  
+			
+			function loadingBox() {
+				// Shows the Loading Animation
+				anime({
+					targets: ".loading",
+					top: 0,
+					duration: 300,
+					easing: 'easeOutExpo'
+				})
+			}
+			
+			function hideLoadingBox() {
+				// Hides the Loading Animation
+				$(".loading").animate({
+					top: '-70px'
+				})
+			}
+			
+			function friendlyError(errorMsg, noticeSelector) {
+				hideLoadingBox();
+				Materialize.toast(errorMsg, 3000);
+				$(noticeSelector).addClass("animated shake");
+			}
+			
+			function odb(object) {
+				console.info(JSON.stringify(object, null, 4));
+			}
+			
+			function ob(object) {
+				return JSON.stringify(object, null, 4);
+			}
+			
+			/* Alias Explained:
+			 * UE: User Experience
+			 */
+		</script>
+	</body>
+</html>
