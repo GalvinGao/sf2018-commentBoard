@@ -2,12 +2,6 @@
 
 Uses **NodeJS** and **PHP** as backend and flavored with **WebSocket**.
 
-### Table of Contents
-
-[TOC]
-
-
-
 ## Install
 
 ### Ready the environment
