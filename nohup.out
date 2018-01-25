@@ -1,1 +1,5 @@
 loading Caddyfile via flag: open gitsync.caddy: no such file or directory
+Activating privacy features... done.
+https://git.la1.galvin.tech
+http://git.la1.galvin.tech
+WARNING: File descriptor limit 1024 is too low for production servers. At least 8192 is recommended. Fix with "ulimit -n 8192".
