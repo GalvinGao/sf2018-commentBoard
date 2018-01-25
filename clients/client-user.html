@@ -120,6 +120,18 @@
 			.submitForm {
 				padding: 1em;
 			}
+			
+			.is-loading, .not-loading {
+				transition: all 0.3s ease-in-out;
+			}
+			
+			.is-loading {
+				top: 0;
+			}
+			
+			.not-loading {
+				top: -70px;
+			}
 		</style>
 		<link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
 		<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
@@ -186,7 +198,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="ue loading">
+			<div class="ue loading not-loading">
 				<div class="spinner">
 					<div class="bounce1"></div>
 					<div class="bounce2"></div>
@@ -200,6 +212,7 @@
 		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
 		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script>
 		<script id="main-script">
 		throttle = function(func, wait, options) {
 				var context, args, result;
@@ -276,8 +289,8 @@
 					action: "post",
 					time: time,
 					data: {
-						name: name,
-					 	message: message,
+						name: filterXSS(name),
+					 	message: filterXSS(message),
 					 	time: time
 					}
 				 }
@@ -289,8 +302,8 @@
 				 window.prevTime = time;
 				 window.prevHash = md5({
 					data: {
-						name: name,
-					 	message: message,
+						name: filterXSS(name),
+					 	message: filterXSS(message),
 					 	time: time
 					}
 				 });
@@ -312,14 +325,16 @@
 			    console.info('Server Says: ', msg.data);
 				switch (msg.type){
 					case "received":
-						console.info("Message has been received.");
+						console.info("Message has been received by server.");
 						console.info("Checking message...");
-						if (window.prevName === msg.name && window.prevMessage === msg.message && window.prevTime === msg.time && window.prevHash === msg.hash) {
+						window.msg = msg;
+						if (window.prevName === msg.data.name && window.prevMessage === msg.data.message && window.prevTime === msg.data.time) {
 							console.info("Message is Valid: Message is correctly sended to the server.");
 							hideLoadingBox();
 						} else {
 							console.warn("Message validation failed.");
 						}
+						break;
 					case "newmessage":
 						console.info("New Message received:", msg.data);
 						break;
@@ -348,19 +363,14 @@
 			
 			function loadingBox() {
 				// Shows the Loading Animation
-				anime({
-					targets: ".loading",
-					top: 0,
-					duration: 300,
-					easing: 'easeOutExpo'
-				})
+				$(".loading").removeClass("not-loading");
+				$(".loading").addClass("is-loading");
 			}
 			
 			function hideLoadingBox() {
 				// Hides the Loading Animation
-				$(".loading").animate({
-					top: '-70px'
-				})
+				$(".loading").removeClass("is-loading");
+				$(".loading").addClass("not-loading");
 			}
 			
 			function friendlyError(errorMsg, noticeSelector) {

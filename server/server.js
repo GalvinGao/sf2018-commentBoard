@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 const mysqlConn = require('mysql');
 const crypto = require('crypto');
+const xss = require('xss');
 
 function insertSql(name, comment, time) {
   var ip = req.connection.remoteAddress;
@@ -43,9 +44,8 @@ wss.on('connection', function connection(ws) {
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message) {
-    procReq(message);
+    procReq(message, ws);
   });
-	
   ws.on('error', (e) => console.log('Client connection error: [ code:', e.code, ', errno:', e.errno, ']. More details:\n', e));
 });
 
@@ -69,7 +69,7 @@ function log(msg) {
 
 // procReq = processRequest
 
-function procReq(msg) {
+function procReq(msg, wsObject) {
   var message = JSON.parse(msg);
   console.log('received: %j', msg);
   var action = message.action;
@@ -80,7 +80,16 @@ function procReq(msg) {
       console.log("message.message: %s", message.data.message);
       console.log("message.time: %s", message.data.time);
       //insertSql(message.name, message.message, message.time);
-      boardcast(message.data, "newmessage");
+      var names = xss(message.data.name);
+      var messages = xss(message.data.message);
+      var times = message.data.time;
+      var dexss = {
+        name: names,
+        message: messages,
+        time: times
+      }
+      wsObject.send(respParse(dexss, "received"));
+      boardcast(dexss, "newmessage");
       break;
     default:
       console.info("Invalid action type: ", action);
