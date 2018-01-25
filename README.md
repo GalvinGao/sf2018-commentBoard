@@ -1,6 +1,31 @@
-# sf-2018 Public Site
+# sf-2018 Comment Board
 
-Uses **NodeJS** and **PHP** as backend, and **WebSocket** to dynamically update posts.
+Uses **NodeJS** and **PHP** as backend and flavored with **WebSocket**.
+
+### Table of Contents
+
+[TOC]
+
+
+
+## Install
+
+### Ready the environment
+
+```shell
+$ cd server
+$ chmod -R 777 deploy-env.sh
+$ ./deploy-env.sh
+$ mysql -u <username> -p sfcomments < create-tables.sql
+```
+
+### Go!
+
+```shell
+$ node server.js
+```
+
+## Interface
 
 ## Client -> Server
 
@@ -11,8 +36,21 @@ Uses **NodeJS** and **PHP** as backend, and **WebSocket** to dynamically update 
 - `String comment`: Comment _content_.
 - `Int time`: Client _time_.
 
-`String checkcount`: Check if all of the comments are synced.
-- `Int count`: Client's comment count.
+### Structure
+
+```javascript
+{
+    "action": "post || ...",
+    "time": $current-client-time,
+    "data": {
+        "name": $name,
+        "message": $message,
+        "time": $message-send-time
+    }
+}
+```
+
+
 
 ## Server -> Client
 
