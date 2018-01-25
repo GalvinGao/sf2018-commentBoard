@@ -22,7 +22,8 @@ Uses **NodeJS** and **PHP** as backend, and **WebSocket** to dynamically update 
 {
 	"status": "ok | warn | error | fatal",
 	"time": $server-time,
-	"type": $response-data-type
+	"type": "received | newmessage",
+    "hash": $data-md5-hash,
 	"data": @SEE-BELOW@
 }
 ```
@@ -39,7 +40,7 @@ Uses **NodeJS** and **PHP** as backend, and **WebSocket** to dynamically update 
 }
 ```
 
-#### `action: checkcount`
+#### `action: checkcount` (Deprecated)
 
 ```javascript
 {
@@ -49,7 +50,7 @@ Uses **NodeJS** and **PHP** as backend, and **WebSocket** to dynamically update 
 ```
 
 #### `event: received-other-posts`
-##### ! IMPORTANT: When event is received and check it is valid, then **broadcast** to all other clients. !
+##### ! IMPORTANT: When event is received and check it is valid, then _**broadcast**_ to all other clients. !
 
 ```javascript
 {
