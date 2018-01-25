@@ -200,6 +200,38 @@
 		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
 		<script id="main-script">
+		throttle = function(func, wait, options) {
+				var context, args, result;
+				var timeout = null;
+				var previous = 0;
+				if (!options) options = {};
+				var later = function() {
+						previous = options.leading === false ? 0 : _.now();
+						timeout = null;
+						result = func.apply(context, args);
+						if (!timeout) context = args = null
+				};
+				return function() {
+					var now = _.now();
+					if (!previous && options.leading === false) previous = now;
+					var remaining = wait - (now - previous);
+					context = this;
+					args = arguments;
+					if (remaining <= 0 || remaining > wait) {
+						if (timeout) {
+							clearTimeout(timeout);
+							timeout = null
+						}
+						previous = now;
+						result = func.apply(context, args);
+						if (!timeout) context = args = null
+					} else if (!timeout && options.trailing !== false) {
+						timeout = setTimeout(later, remaining)
+					}
+					return result
+				}
+			};
+		
 			var socket;
 		    try {
 				window.socket = new ReconnectingWebSocket('ws://localhost:8080');
@@ -241,9 +273,12 @@
 				 
 				 var data = {
 					action: "post",
-				 	name: name,
-				 	message: message,
-				 	time: time
+					time: time,
+					data: {
+						name: name,
+					 	message: message,
+					 	time: time
+					}
 				 }
 				 
 				 sendSocket(JSON.stringify(data));
@@ -252,29 +287,51 @@
 				 window.prevMessage = message;
 				 window.prevTime = time;
 			}
-
+			
+			// Connection Established.
 			function sOpen(){
-			    console.info('Connection Established.');
+			    console.info('Connection has been Established.');
 			}
 			
+			// Connection Error.
 			function sError(e){
 			    console.info("Connection Error. ", e);
 			}
 			
-			function sMessage(msg){  
-				hideLoadingBox();
-			    console.info('Server Response: ', msg.data);
+			// RECEIVED from SERVER
+			function sMessage(msg){
+				msg = JSON.parse(msg);
+				switch (msg.type){
+					case "received":
+						console.info("Message has been received.");
+						console.info("Checking message...");
+						if (window.prevName === msg.name && window.prevMessage === msg.message && window.prevTime === msg.time) {
+							console.info("Message is Valid: Message is correctly sended to the server.");
+							hideLoadingBox();
+						} else {
+							console.warn("Message validation failed.");
+						}
+					case "new":
+						console.info("New Message received!");
+						
+					default:
+						console.info("Invalid response type: ", msg.type);
+				}
+			    console.info('Server Says: ', msg.data);
 			}
 			
+			// Connection has been Closed.
 			function sClose(e){
-			    console.info("Connection Closed. ", e.code);
+			    console.info("Connection has been Closed. ", e.code);
 			}
-			  
+			
+			// SEND to SERVER
 			function sendSocket(msg){
 				console.info("Sending: ", ob(msg))
 			    window.socket.send(msg);
 			} 
 			
+			// Close the Socket
 			function closeSocket(){
 			    console.info("Closing Connection.");
 			    window.socket.close();
