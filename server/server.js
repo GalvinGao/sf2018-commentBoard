@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const mysqlConn = require('mysql');
+const crypto = require('crypto');
 
 function insertSql(name, comment, time) {
   var ip = req.connection.remoteAddress;
@@ -7,9 +8,11 @@ function insertSql(name, comment, time) {
 
   connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?)', sqlParam, function (error, results, fields) {
     if (error) throw error;
-      console.log('MySQL Response: ', results);
+    console.log('MySQL Response: ', results);
   });
 }
+
+/*
 
 var connection = mysqlConn.createConnection({
   host     : process.env.mysqlhost,
@@ -20,6 +23,8 @@ var connection = mysqlConn.createConnection({
 });
 
 connection.connect();
+
+*/
 
 const wss = new WebSocket.Server({ port: 8080 });
 
@@ -65,20 +70,50 @@ function log(msg) {
 // procReq = processRequest
 
 function procReq(msg) {
-  var message = JSON.parse(message);
-  console.log('received: %j', message);
+  var message = JSON.parse(msg);
+  console.log('received: %j', msg);
   var action = message.action;
-  
+
   switch (action) {
     case "post":
-      console.log("message.name: %s", message.name);
-      console.log("message.message: %s", message.message);
-      console.log("message.time: %s", message.time);
-      //console.log('message.name: %s, message.message: %s', message.name, message.message);
-      insertSql(message.name, message.message, message.time);
+      console.log("message.name: %s", message.data.name);
+      console.log("message.message: %s", message.data.message);
+      console.log("message.time: %s", message.data.time);
+      //insertSql(message.name, message.message, message.time);
+      boardcast(message.data, "newmessage");
       break;
-    case "checkcount":
-      break;
+    default:
+      console.info("Invalid action type: ", action);
   }
-  
+
+}
+
+function boardcast(message, type) {
+  wss.clients.forEach(function each(client) {
+    if (client !== wss && client.readyState === WebSocket.OPEN) {
+      client.send(respParse(message, type));
+    }
+  });
+  console.log("Sending: %s", respParse(message, type))
+}
+
+function formatSend(message, type) {
+  wss.send(respParse(message, type));
+}
+
+function respParse(dataObject, type) {
+  // 构造响应内容
+  var time = new Date().getTime();
+  var object = {
+    "status": "ok",
+    "time": time,
+    "type": type,
+    "hash": md5(JSON.stringify(dataObject)),
+    "data": dataObject
+  }
+  return JSON.stringify(object);
+}
+
+function md5(text) {
+	return crypto.createHash('md5').update(text).digest('hex');
 }

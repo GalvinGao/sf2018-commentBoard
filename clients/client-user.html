@@ -199,6 +199,7 @@
 		<script src="https://cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
 		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
 		<script id="main-script">
 		throttle = function(func, wait, options) {
 				var context, args, result;
@@ -286,6 +287,13 @@
 				 window.prevName = name;
 				 window.prevMessage = message;
 				 window.prevTime = time;
+				 window.prevHash = md5({
+					data: {
+						name: name,
+					 	message: message,
+					 	time: time
+					}
+				 });
 			}
 			
 			// Connection Established.
@@ -300,29 +308,30 @@
 			
 			// RECEIVED from SERVER
 			function sMessage(msg){
-				msg = JSON.parse(msg);
+            	var msg = JSON.parse(msg.data);
+			    console.info('Server Says: ', msg.data);
 				switch (msg.type){
 					case "received":
 						console.info("Message has been received.");
 						console.info("Checking message...");
-						if (window.prevName === msg.name && window.prevMessage === msg.message && window.prevTime === msg.time) {
+						if (window.prevName === msg.name && window.prevMessage === msg.message && window.prevTime === msg.time && window.prevHash === msg.hash) {
 							console.info("Message is Valid: Message is correctly sended to the server.");
 							hideLoadingBox();
 						} else {
 							console.warn("Message validation failed.");
 						}
-					case "new":
-						console.info("New Message received!");
-						
+					case "newmessage":
+						console.info("New Message received:", msg.data);
+						break;
 					default:
-						console.info("Invalid response type: ", msg.type);
+						console.info("Invalid response type:", msg.type);
+						break;
 				}
-			    console.info('Server Says: ', msg.data);
 			}
 			
 			// Connection has been Closed.
 			function sClose(e){
-			    console.info("Connection has been Closed. ", e.code);
+			    console.info("Connection has been Closed.", e.code);
 			}
 			
 			// SEND to SERVER
