@@ -212,7 +212,7 @@
 		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
 		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
-		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script>
+		<!--script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script-->
 		<script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js"></script>
 		<script id="main-script">
 			window.settings = {
@@ -309,8 +309,8 @@
 					action: "post",
 					time: time,
 					data: {
-						name: filterXSS(name),
-					 	message: filterXSS(message),
+						name: name,
+					 	message: message,
 					 	time: time
 					}
 				 }
