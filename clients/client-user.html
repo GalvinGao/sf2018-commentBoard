@@ -377,7 +377,8 @@
 			function sendSocket(msg){
 				console.info("Sending: ", msg);
 			    window.socket.send(msg);
-				Materialize.toast("Sending Message: " + msg.data.name + " says " + msg.data.message, 3000);
+				var parsed = JSON.parse(msg);
+				Materialize.toast("Sending Message: " + parsed.data.name + " says " + parsed.data.message, 3000);
 			} 
 			
 			// Close the Socket
