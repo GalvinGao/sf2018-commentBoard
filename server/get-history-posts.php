@@ -1,18 +1,22 @@
 <?php
 
 //Header("Content-Type: plain/text"); 
-Header("Expires: Wed, 11 Nov 1998 11:11:11 GMT"); 
+Header("Expires: Wed, 01 Jan 1970 00:00:01 GMT"); 
 Header("Cache-Control: no-cache"); 
 Header("Cache-Control: must-revalidate"); 
 Header("Access-Control-Allow-Origin: *");
+Header("Access-Control-Allow-Methods: GET");
 Header("Content-Encoding: utf-8");
-
-//echo "<meta charset='utf-8'>";
 
 //printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",71,73,70,56,57,97,1,0,1,0,128,255,0,192,192,192,0,0,0,33,249,4,1,0,0,0,0,44,0,0,0,0,1,0,1,0,0,2,2,68,1,0,59); 
 
+// Development Settings
 ini_set("display_errors", "On");
 error_reporting(E_ALL | E_STRICT);
+
+// Production Settings
+//ini_set("display_errors", "Off");
+//error_reporting(0);
 
 $sql_usr = $_ENV["mysqluser"]; //SQL Username
 $sql_pwd = $_ENV["mysqlpassword"]; //SQL Password
@@ -37,17 +41,19 @@ function formatOut($status="ok", $data="{}" ) {
 EOF;
 }
 
-$sql = 'SELECT name, comment, time FROM comments';
+$sql = 'SELECT name, comment, time FROM comments;';
+
 // mysqli_select_db( $conn, 'sfcomments' );
 $retval = mysqli_query( $con, $sql );
-if(! $retval )
-{
+
+if(! $retval ) {
 	die('{"status": "error", "message": "数据读取失败。错误代码 ERR_INVALID_RESPONSE. 请联系管理员。"} ');
 }
+
 $output = "";
-while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
-{
-     $output = $output + "[".
+
+while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) {
+     $output += "[".
          "name: \"{$row['name']}\",".
          "message: \"{$row['comment']}\",".
          "time: \"{$row['time']}\" ".
@@ -55,4 +61,4 @@ while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 }
 
 $data = substr($output,0,-1);
-formatOut("ok", $data)
+formatOut("ok", $data);

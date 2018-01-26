@@ -6,8 +6,8 @@ const https = require('https');
 const fs = require('fs');
 
 // HTTPS Config
-const keypath = process.cwd()+'/server.key'; // HTTPS Server Certificate Key
-const certpath = process.cwd()+'/server.crt'; // HTTPS Server Certificate
+const keypath = '/etc/letsencrypt/live/sf2018.dev.iblueg.cn/privkey.pem'; // HTTPS Server Certificate Key
+const certpath = '/etc/letsencrypt/live/sf2018.dev.iblueg.cn/fullchain.pem'; // HTTPS Server Certificate
 
 /*
 
