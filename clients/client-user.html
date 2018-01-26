@@ -360,6 +360,7 @@
 						break;
 					case "newmessage":
 						console.info("New Message received:", msg.data);
+						Materialize.toast("New Message: " + msg.data.name + " says " + msg.data.message, 3000);
 						break;
 					default:
 						console.info("Invalid response type:", msg.type);
@@ -374,8 +375,9 @@
 			
 			// SEND to SERVER
 			function sendSocket(msg){
-				console.info("Sending: ", ob(msg))
+				console.info("Sending: ", msg);
 			    window.socket.send(msg);
+				Materialize.toast("Sending Message: " + msg.data.name + " says " + msg.data.message, 3000);
 			} 
 			
 			// Close the Socket
