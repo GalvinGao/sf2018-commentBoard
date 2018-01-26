@@ -2,6 +2,14 @@ const WebSocket = require('ws');
 const mysqlConn = require('mysql');
 const crypto = require('crypto');
 const xss = require('xss');
+const https = require('https');
+const fs = require('fs');
+
+// HTTPS Config
+const keypath = process.cwd()+'/server.key'; // HTTPS Server Certificate Key
+const certpath = process.cwd()+'/server.crt'; // HTTPS Server Certificate
+
+/*
 
 function insertSql(name, comment, time) {
   var ip = req.connection.remoteAddress;
@@ -13,7 +21,6 @@ function insertSql(name, comment, time) {
   });
 }
 
-/*
 
 var connection = mysqlConn.createConnection({
   host     : process.env.mysqlhost,
@@ -27,7 +34,18 @@ connection.connect();
 
 */
 
-const wss = new WebSocket.Server({ port: 8080 });
+var sslOptions = {
+  key: fs.readFileSync(keypath),
+  cert: fs.readFileSync(certpath)
+};
+
+var server = https.createServer(sslOptions, function (req, res) {
+    res.writeHead(403); // Response https connections
+    res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
+}).listen(443);
+ 
+
+const wss = new WebSocket.Server({ server: server });
 
 function noop() {}
 

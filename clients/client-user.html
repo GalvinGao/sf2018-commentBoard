@@ -170,7 +170,7 @@
 						Lorem Ipsum Dolor 1
 					</div>
 					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium. Proin non gravida justo. Phasellus mollis placerat lobortis. Fusce eget sodales augue, sit amet maximus neque. In hac habitasse platea dictumst. Phasellus ullamcorper magna vitae leo viverra luctus. Vivamus vitae dui sollicitudin, iaculis enim nec, finibus eros. Mauris eu finibus urna, id sodales mi.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh.
 					</div>
 				</div>
 				<div class="single-comment">
@@ -178,7 +178,7 @@
 						Lorem Ipsum Dolor 2
 					</div>
 					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium. Proin non gravida justo. Phasellus mollis placerat lobortis. Fusce eget sodales augue, sit amet maximus neque. In hac habitasse platea dictumst. Phasellus ullamcorper magna vitae leo viverra luctus. Vivamus vitae dui sollicitudin, iaculis enim nec, finibus eros. Mauris eu finibus urna, id sodales mi.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium.
 					</div>
 				</div>
 				<div class="single-comment">
@@ -186,7 +186,7 @@
 						Lorem Ipsum Dolor 3
 					</div>
 					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium. Proin non gravida justo. Phasellus mollis placerat lobortis. Fusce eget sodales augue, sit amet maximus neque. In hac habitasse platea dictumst. Phasellus ullamcorper magna vitae leo viverra luctus. Vivamus vitae dui sollicitudin, iaculis enim nec, finibus eros. Mauris eu finibus urna, id sodales mi.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh.
 					</div>
 				</div>
 				<div class="single-comment">
@@ -194,7 +194,7 @@
 						Lorem Ipsum Dolor 4
 					</div>
 					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium. Proin non gravida justo. Phasellus mollis placerat lobortis. Fusce eget sodales augue, sit amet maximus neque. In hac habitasse platea dictumst. Phasellus ullamcorper magna vitae leo viverra luctus. Vivamus vitae dui sollicitudin, iaculis enim nec, finibus eros. Mauris eu finibus urna, id sodales mi.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh.
 					</div>
 				</div>
 			</div>
@@ -213,8 +213,14 @@
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
 		<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
 		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script>
+		<script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js"></script>
 		<script id="main-script">
-		throttle = function(func, wait, options) {
+			var window.settings = {
+				historyPostApi: "get-history-posts.php"
+				wsurl: "ws://localhost:8080"
+			}
+		
+			throttle = function(func, wait, options) {
 				var context, args, result;
 				var timeout = null;
 				var previous = 0;
@@ -226,7 +232,7 @@
 						if (!timeout) context = args = null
 				};
 				return function() {
-					var now = _.now();
+					var now = new Date().getTime();
 					if (!previous && options.leading === false) previous = now;
 					var remaining = wait - (now - previous);
 					context = this;
@@ -245,10 +251,24 @@
 					return result
 				}
 			};
+			
+			$.get(window.settings.historyPostApi, function(data){
+				if (data) {
+					if (data.status === "ok") {
+						for (i in data.data) {
+							console.log("[History Fetch] (Data) [%i] (%s says %s at %s)", i, data.data[i].name, data.data[i].message, data.data[i].time);
+						}
+					} else {
+						console.warn("[History Fetch] Server send a un-normal status code", data.status)
+					}
+				} else {
+					console.log("[History Fetch] No response...")
+				}
+			})
 		
 			var socket;
 		    try {
-				window.socket = new ReconnectingWebSocket('ws://localhost:8080');
+				window.socket = new ReconnectingWebSocket(window.settings.wsurl);
             	socket.timeoutInterval = 3000;
 				socket.reconnectDecay = 1.2;
 				socket.timeoutInterval = 5000;
@@ -300,6 +320,8 @@
 				 window.prevName = name;
 				 window.prevMessage = message;
 				 window.prevTime = time;
+				 
+				 /*
 				 window.prevHash = md5({
 					data: {
 						name: filterXSS(name),
@@ -307,6 +329,7 @@
 					 	time: time
 					}
 				 });
+				 */
 			}
 			
 			// Connection Established.
