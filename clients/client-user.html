@@ -215,9 +215,9 @@
 		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script>
 		<script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js"></script>
 		<script id="main-script">
-			var window.settings = {
-				historyPostApi: "get-history-posts.php"
-				wsurl: "ws://localhost:8080"
+			window.settings = {
+				historyPostApi: "get-history-posts.php",
+				wsurl: "wss://sf2018.dev.iblueg.cn"
 			}
 		
 			throttle = function(func, wait, options) {
