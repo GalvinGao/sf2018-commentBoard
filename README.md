@@ -52,13 +52,13 @@ $ node server.js
 
 ```javascript
 {
-    "action": "post | ...",
-    "time": $current-client-time,
-    "data": {
-        "name": $name,
-        "message": $message,
-        "time": $message-send-time
-    }
+	"action": "post | ...",
+	"time": $current-client-time,
+	"data": {
+		"name": $name,
+		"message": $message,
+		"time": $message-send-time
+	}
 }
 ```
 
@@ -72,7 +72,7 @@ $ node server.js
 	"status": "ok | warn | error | fatal",
 	"time": $server-time,
 	"type": "received | newmessage | history(php-api)",
-    "hash": $data-md5-hash,
+	"hash": $data-md5-hash,
 	"data": @SEE-BELOW@
 }
 ```
