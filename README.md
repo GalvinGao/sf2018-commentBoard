@@ -52,13 +52,13 @@ $ node server.js
 
 ```javascript
 {
-	"action": "post | ...",
-	"time": $current-client-time,
-	"data": {
-		"name": $name,
-		"message": $message,
-		"time": $message-send-time
-	}
+    "action": "post | ...",
+    "time": $current-client-time,
+    "data": {
+        "name": $name,
+        "message": $message,
+        "time": $message-send-time
+    }
 }
 ```
 
@@ -69,11 +69,11 @@ $ node server.js
 
 ```javascript
 {
-	"status": "ok | warn | error | fatal",
-	"time": $server-time,
-	"type": "received | newmessage | history(php-api)",
-	"hash": $data-md5-hash,
-	"data": @SEE-BELOW@
+    "status": "ok | warn | error | fatal",
+    "time": $server-time,
+    "type": "received | newmessage | history(php-api)",
+    "hash": $data-md5-hash,
+    "data": @SEE-BELOW@
 }
 ```
 
@@ -83,9 +83,9 @@ $ node server.js
 
 ```javascript
 {
-	"name": $posted-name,
-	"comment": $posted-comment,
-	"time": $posted-time
+    "name": $posted-name,
+    "comment": $posted-comment,
+    "time": $posted-time
 }
 ```
 
@@ -93,8 +93,8 @@ $ node server.js
 
 ```javascript
 {
-	"count": $server-comments-count,
-	"counttime": $counted-at-this-time
+    "count": $server-comments-count,
+    "counttime": $counted-at-this-time
 }
 ```
 
@@ -103,9 +103,9 @@ $ node server.js
 
 ```javascript
 {
-	"name": $other-post-name,
-	"comment": $other-post-comment,
-	"time": $other-post-time
+    "name": $other-post-name,
+    "comment": $other-post-comment,
+    "time": $other-post-time
 }
 ```
 
@@ -117,13 +117,13 @@ $ node server.js
 
 ```javascript
 {
-	"status": "ok",
-	"type": "history",
-	"data": [
-		"name": $history-post-data-name,
-		"message": $history-post-data-message,
-		"time": $history-post-data-time
-	]
+    "status": "ok",
+    "type": "history",
+    "data": [
+        "name": $history-post-data-name,
+        "message": $history-post-data-message,
+        "time": $history-post-data-time
+    ]
 }
 ```
 
@@ -131,7 +131,7 @@ $ node server.js
 
 ```javascript
 {
-	"status": "error",
-	"message": $backend-error-message
+    "status": "error",
+    "message": $backend-error-message
 }
 ```
