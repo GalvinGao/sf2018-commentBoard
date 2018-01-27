@@ -4,6 +4,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 		<title>Science Fair 2018</title>
 		<style>
+			.loader{width:75pt;position:relative}.loader:before{content:'';display:block;padding-top:100%}.loader .circular{position:absolute;top:0;left:0;-webkit-animation:rotate 2s linear infinite;animation:rotate 2s linear infinite}.loader circle{-webkit-animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite;animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite}@-webkit-keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@-webkit-keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+		
 			.section {
 				border-radius: 0;
 				padding: 1em;
@@ -68,14 +70,14 @@
 				transition: all 0.3s ease-out;
 			}
 
-			.spinner {
+			.bouncer {
 			  margin: 5px auto 0;
 			  width: 70px;
 			  text-align: center;
 			  display: inline-block;
 			}
 
-			.spinner > div {
+			.bouncer > div {
 			  width: 18px;
 			  height: 18px;
 			  background-color: #fff;
@@ -86,12 +88,12 @@
 			  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
 			}
 
-			.spinner .bounce1 {
+			.bouncer .bounce1 {
 			  -webkit-animation-delay: -0.32s;
 			  animation-delay: -0.32s;
 			}
 
-			.spinner .bounce2 {
+			.bouncer .bounce2 {
 			  -webkit-animation-delay: -0.16s;
 			  animation-delay: -0.16s;
 			}
@@ -131,6 +133,24 @@
 			
 			.not-loading {
 				top: -70px;
+			}
+			
+			.spin {
+				position: fixed;
+				background: rgba(0, 0, 0, 0.5);
+				z-index: 10;
+				top: 0;
+				left: 0;
+				
+				height: 100%;
+				width: 100%;
+				
+			}
+			
+			.spinContainer {
+				background: #fff;
+				z-index: 15;
+				padding: 2em;
 			}
 		</style>
 		<link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
@@ -199,12 +219,22 @@
 				</div>
 			</div>
 			<div class="ue loading not-loading">
-				<div class="spinner">
+				<div class="bouncer">
 					<div class="bounce1"></div>
 					<div class="bounce2"></div>
 					<div class="bounce3"></div>
 				</div>
 				正在提交... / Submitting...
+			</div>
+			<div class="ue spin valign-wrapper">
+				<div class="spinContainer z-index-5">
+					<div class="loader" align="center">
+						<svg class="circular" viewBox="0 0 50 50">
+							<circle cx="25" cy="25" r="20" fill="none" stroke="#106CFA" stroke-width="5%" stroke-linecap="round"/>
+						</svg><br>
+						Loading...
+					</div>
+				</div>
 			</div>
 		</div>
 		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
@@ -218,6 +248,12 @@
 			window.settings = {
 				historyPostApi: "get-history-posts.php",
 				wsurl: "wss://sf2018.dev.iblueg.cn"
+			}
+			
+			window.statusMeta = {
+				expected: ["ok"],
+				unexpected: ["warn", "error", "fatal"],
+				error: ["error", "fatal"]
 			}
 		
 			throttle = function(func, wait, options) {
@@ -254,15 +290,17 @@
 			
 			$.get(window.settings.historyPostApi, function(data){
 				if (data) {
-					if (data.status === "ok") {
+					if (data.status in window.statusMeta.expected) {
 						for (i in data.data) {
-							console.log("[History Fetch] (Data) [%i] (%s says %s at %s)", i, data.data[i].name, data.data[i].message, data.data[i].time);
+							console.log("[historyFetch] (Data) [%i] (%s says %s at %s)", i, data.data[i].name, data.data[i].message, data.data[i].time);
 						}
+					} else if (data.status in window.statusMeta.unexpected) {
+						console.error("[historyFetch] Server Error. Code:", data.status)
 					} else {
-						console.warn("[History Fetch] Server send a un-normal status code", data.status)
+						console.warn("[historyFetch] Server send an un-normal status code:", data.status)
 					}
 				} else {
-					console.log("[History Fetch] No response...")
+					console.log("[historyFetch] No response...")
 				}
 			})
 		
@@ -346,25 +384,31 @@
 			function sMessage(msg){
             	var msg = JSON.parse(msg.data);
 			    console.info('Server Says: ', msg.data);
-				switch (msg.type){
-					case "received":
-						console.info("Message has been received by server.");
-						console.info("Checking message...");
-						window.msg = msg;
-						if (window.prevName === msg.data.name && window.prevMessage === msg.data.message && window.prevTime === msg.data.time) {
-							console.info("Message is Valid: Message is correctly sended to the server.");
-							hideLoadingBox();
-						} else {
-							console.warn("Message validation failed.");
-						}
-						break;
-					case "newmessage":
-						console.info("New Message received:", msg.data);
-						Materialize.toast("New Message: " + msg.data.name + " says " + msg.data.message, 3000);
-						break;
-					default:
-						console.info("Invalid response type:", msg.type);
-						break;
+			    if (msg.status in window.statusMeta.expected) {
+					switch (msg.type){
+						case "received":
+							console.info("Message has been received by server.");
+							console.info("Checking message...");
+							window.msg = msg;
+							if (window.prevName === msg.data.name && window.prevMessage === msg.data.message && window.prevTime === msg.data.time) {
+								console.info("Message is Valid: Message is correctly sended to the server.");
+								hideLoadingBox();
+							} else {
+								console.warn("Message validation failed.");
+							}
+							break;
+						case "newmessage":
+							console.info("New Message received:", msg.data);
+							Materialize.toast("New Message: " + msg.data.name + " says " + msg.data.message, 3000); //DEVMARK
+							break;
+						default:
+							console.info("Invalid response type:", msg.type);
+							break;
+					}
+				} else if (msg.status in window.statusMeta.unexpected) {
+					console.error("Server Error. Code:", msg.status);
+				} else {
+					console.error("Server Error. Unexpected Code:", msg.status);
 				}
 			}
 			
@@ -377,8 +421,8 @@
 			function sendSocket(msg){
 				console.info("Sending: ", msg);
 			    window.socket.send(msg);
-				var parsed = JSON.parse(msg);
-				Materialize.toast("Sending Message: " + parsed.data.name + " says " + parsed.data.message, 3000);
+				var parsed = JSON.parse(msg); //DEVMARK
+				Materialize.toast("Sending Message: " + parsed.data.name + " says " + parsed.data.message, 3000); //DEVMARK
 			} 
 			
 			// Close the Socket

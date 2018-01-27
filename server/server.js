@@ -42,7 +42,7 @@ var sslOptions = {
 var server = https.createServer(sslOptions, function (req, res) {
     //res.writeHead(403); // Response https connections
     //res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
-	res.end(fs.readFileSync("/home/sf2018/clients/client-user.html"));
+	res.end(fs.readFileSync("../clients/client-user.html"));
 }).listen(443);
  
 
