@@ -17,6 +17,7 @@
       "version": "1.0.2"
     },
     "crypto": "^1.0.1",
+    "http-proxy": "^1.16.2",
     "inherits": {
       "integrity": "sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=",
       "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz",

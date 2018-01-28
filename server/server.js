@@ -4,20 +4,25 @@ const crypto = require('crypto');
 const xss = require('xss');
 const https = require('https');
 const fs = require('fs');
+const httpProxy = require('http-proxy');
 
 // HTTPS Config
 const keypath = '/etc/letsencrypt/live/sf2018.dev.iblueg.cn/privkey.pem'; // HTTPS Server Certificate Key
 const certpath = '/etc/letsencrypt/live/sf2018.dev.iblueg.cn/fullchain.pem'; // HTTPS Server Certificate
 
+// HTTP jumps to HTTPS - Hostname Config
+// PLEASE MAKE SURE THIS IS CORRECTLY CONFIGURED!
+// NO NEED FOR "/" OR "http://"!
+const serverHostname = "sf2018.dev.iblueg.cn";
+
 /*
 
-function insertSql(name, comment, time) {
-  var ip = req.connection.remoteAddress;
+function insertSql(name, comment, time, ip) {
   var sqlParam = [ip, time, name, comment];
 
-  connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?)', sqlParam, function (error, results, fields) {
+  connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
     if (error) throw error;
-    console.log('MySQL Response: ', results);
+    log('Message Inserted. MySQL Response: ', results);
   });
 }
 
@@ -39,20 +44,24 @@ var sslOptions = {
   cert: fs.readFileSync(certpath)
 };
 
-var server = https.createServer(sslOptions, function (req, res) {
-    //res.writeHead(403); // Response https connections
-    //res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
-	res.end(fs.readFileSync("../clients/client-user.html"));
+var sslServer = https.createServer(sslOptions, function (req, res) {
+  //res.writeHead(403); // Response https connections
+  //res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
+  res.end(fs.readFileSync("../clients/client-user.html"));
 }).listen(443);
- 
 
-const wss = new WebSocket.Server({ server: server });
+var httpServer = http.createServer(function (req, res) {
+  res.writeHead(301, { 'Location': 'https://' + serverHostname + req.url });
+  res.end("Redirecting...");
+}).listen(80);
+ 
+const wss = new WebSocket.Server({ server: sslServer });
 
 function noop() {}
 
 function heartbeat() {
   this.isAlive = true;
-  log("Heartbeat package received.")
+  log("Heartbeat package received.");
 }
 
 wss.on('listening', function(){
@@ -60,12 +69,14 @@ wss.on('listening', function(){
 })
 
 wss.on('connection', function connection(ws) {
+  log("New Connection Established... Current Online: ", server.clients.length)
   ws.isAlive = true;
   ws.on('pong', heartbeat);
-  ws.on('message', function incoming(message) {
-    procReq(message, ws);
+  ws.on('message', function incoming(message, req) {
+    procReq(message, ws, req);
   });
   ws.on('error', (e) => console.log('Client connection error: [ code:', e.code, ', errno:', e.errno, ']. More details:\n', e));
+  ws.on('close', function close() { log('Connection Disconnected. Current Online:', server.clients.length); });
 });
 
 
@@ -88,7 +99,7 @@ function log(msg) {
 
 // procReq = processRequest
 
-function procReq(msg, wsObject) {
+function procReq(msg, wsObject, requestObject) {
   var message = JSON.parse(msg);
   console.log('received: %j', msg);
   var action = message.action;
@@ -98,7 +109,8 @@ function procReq(msg, wsObject) {
       console.log("message.name: %s", message.data.name);
       console.log("message.message: %s", message.data.message);
       console.log("message.time: %s", message.data.time);
-      //insertSql(message.name, message.message, message.time);
+      var userIp = requestObject.connection.remoteAddress;
+      //insertSql(message.name, message.message, message.time, userIp);
       var names = xss(message.data.name);
       var messages = xss(message.data.message);
       var times = message.data.time;
