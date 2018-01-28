@@ -18,8 +18,8 @@ const serverHostname = "sf2018.dev.iblueg.cn";
 
 /*
 
-function insertSql(name, comment, time, ip) {
-  var sqlParam = [ip, time, name, comment];
+function insertSql(name, comment, time) {
+  var sqlParam = [userIp, time, name, comment];
 
   connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
     if (error) throw error;
@@ -48,6 +48,7 @@ var sslOptions = {
 var sslServer = https.createServer(sslOptions, function (req, res) {
   //res.writeHead(403); // Response https connections
   //res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
+  const userIp = req.connection.remoteAddress;
   res.end(fs.readFileSync("../clients/client-user.html"));
 }).listen(443);
 
@@ -74,8 +75,7 @@ wss.on('connection', function connection(ws) {
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
-    var userIp = req.connection.remoteAddress || "0.0.0.0";
-    procReq(message, ws, userIp);
+    procReq(message, ws);
   });
   ws.on('error', (e) => console.log('Client connection error: [ code:', e.code, ', errno:', e.errno, ']. More details:\n', e));
   ws.on('close', function close() { log('Connection Disconnected. Current Online:', server.clients.length); });
