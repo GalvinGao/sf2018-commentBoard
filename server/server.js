@@ -70,7 +70,7 @@ wss.on('listening', function(){
 })
 
 wss.on('connection', function connection(ws) {
-  log("New Connection Established... Current Online: ", server.clients.length)
+  log("New Connection Established. Current Online: ", wss.clients.length)
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
