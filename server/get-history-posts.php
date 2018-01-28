@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 //Header("Content-Type: plain/text"); 
 Header("Expires: Wed, 01 Jan 1970 00:00:01 GMT"); 
 Header("Cache-Control: no-cache"); 
