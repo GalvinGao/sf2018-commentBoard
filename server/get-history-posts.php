@@ -54,12 +54,20 @@ if(! $retval ) {
 
 $output = "";
 
+/*
+
 while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) {
      $output += "[".
          "name: \"{$row['name']}\",".
          "message: \"{$row['comment']}\",".
          "time: \"{$row['time']}\" ".
          "],";
+}
+
+*/
+
+while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) {
+     $output += $row['name'] . " " . $row['comment'] . " " . $row['time'] . " | "
 }
 
 $data = substr($output,0,-1);
