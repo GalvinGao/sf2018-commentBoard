@@ -56,7 +56,7 @@ var httpServer = http.createServer(function (req, res) {
   res.end("Redirecting...");
 }).listen(80);
  
-const wss = new WebSocket.Server({ server: sslServer });
+const wss = new WebSocket.Server({ server: sslServer, clientTracking: true });
 
 function noop() {}
 
