@@ -63,22 +63,22 @@ function noop() {}
 
 function heartbeat() {
   this.isAlive = true;
-  log("Heartbeat package received.");
+  log("Heartbeat package received.", "DEBUG");
 }
 
 wss.on('listening', function(){
-  log('Listening for incoming WebSockets...');
+  log("Listening for incoming WebSockets...", "DEBUG");
 })
 
 wss.on('connection', function connection(ws) {
-  log("New Connection Established. Current Online: ", wss.clients)
+  log("New Connection Established. Current Online: " + wss.clients, "DEBUG");
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
     procReq(message, ws);
   });
   ws.on('error', (e) => console.log('Client connection error: [ code:', e.code, ', errno:', e.errno, ']. More details:\n', e));
-  ws.on('close', function close() { log('Connection Disconnected. Current Online:', wss.clients); });
+  ws.on('close', function close() { log('Connection Disconnected. Current Online:' + wss.clients, "DEBUG"); });
 });
 
 
@@ -90,13 +90,13 @@ const interval = setInterval(function ping() {
   });
 }, 15000);
 
-function log(msg) {
+function log(msg, state) {
   var time = new Date();
   var hour = time.getHours();
   var min = time.getMinutes();
   var sec = time.getSeconds();
   var ms = time.getMilliseconds();
-  console.log("[%i:%i:%i.%i] %s", hour, min, sec, ms, msg);
+  console.log("[%i:%i:%i.%i] [%s] %s", state, hour, min, sec, ms, msg);
 }
 
 // procReq = processRequest
@@ -108,9 +108,9 @@ function procReq(msg, wsObject, userIp) {
 
   switch (action) {
     case "post":
-      console.log("message.name: %s", message.data.name);
-      console.log("message.message: %s", message.data.message);
-      console.log("message.time: %s", message.data.time);
+      //console.log("message.name: %s", message.data.name);
+      //console.log("message.message: %s", message.data.message);
+      //console.log("message.time: %s", message.data.time);
       //insertSql(message.name, message.message, message.time, userIp);
       var names = xss(message.data.name);
       var messages = xss(message.data.message);
