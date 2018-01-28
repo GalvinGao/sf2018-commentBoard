@@ -20,11 +20,11 @@ error_reporting(E_ALL | E_STRICT);
 //ini_set("display_errors", "Off");
 //error_reporting(0);
 
-$sql_usr = $_ENV["mysqluser"]; //SQL Username
-$sql_pwd = $_ENV["mysqlpassword"]; //SQL Password
-$sql_add = $_ENV["mysqlhost"]; //SQL Address
-$sql_prt = $_ENV["mysqlport"]; //SQL Port
-$sql_base = $_ENV["mysqldatabase"]; //SQL DATABASE
+$sql_usr = "sf2018"; //SQL Username
+$sql_pwd = "sf2018"; //SQL Password
+$sql_add = "localhost"; //SQL Address
+$sql_prt = "3306"; //SQL Port
+$sql_base = "sfcomments"; //SQL DATABASE
 
 $con = mysqli_connect($sql_add, $sql_usr, $sql_pwd, $sql_base, $sql_prt);
 
