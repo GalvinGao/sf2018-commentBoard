@@ -60,6 +60,9 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         res.end();
       });
       break;
+    default:
+      res.writeHead(404, { 'Location': 'https://' + serverHostname + "/" });
+      res.end("404 Not Found. Redirecting...");
   }
 }).listen(443);
 
