@@ -74,7 +74,8 @@ wss.on('connection', function connection(ws) {
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
-    procReq(message, ws, req);
+    var userIp = req.connection.remoteAddress || "0.0.0.0";
+    procReq(message, ws, userIp);
   });
   ws.on('error', (e) => console.log('Client connection error: [ code:', e.code, ', errno:', e.errno, ']. More details:\n', e));
   ws.on('close', function close() { log('Connection Disconnected. Current Online:', server.clients.length); });
@@ -100,7 +101,7 @@ function log(msg) {
 
 // procReq = processRequest
 
-function procReq(msg, wsObject, requestObject) {
+function procReq(msg, wsObject, userIp) {
   var message = JSON.parse(msg);
   console.log('received: %j', msg);
   var action = message.action;
@@ -110,7 +111,6 @@ function procReq(msg, wsObject, requestObject) {
       console.log("message.name: %s", message.data.name);
       console.log("message.message: %s", message.data.message);
       console.log("message.time: %s", message.data.time);
-      var userIp = requestObject.connection.remoteAddress;
       //insertSql(message.name, message.message, message.time, userIp);
       var names = xss(message.data.name);
       var messages = xss(message.data.message);
