@@ -96,7 +96,7 @@ function log(msg, state) {
   var min = time.getMinutes();
   var sec = time.getSeconds();
   var ms = time.getMilliseconds();
-  console.log("[%i:%i:%i.%i] [%s] %s", state, hour, min, sec, ms, msg);
+  console.log("[%i:%i:%i.%i] [%s] %s", hour, min, sec, ms, state, msg);
 }
 
 // procReq = processRequest
