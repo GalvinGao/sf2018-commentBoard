@@ -52,13 +52,15 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
   switch (req.url) {
     case "/":
       res.write(fs.readFileSync("../clients/client-user.html"));
+      res.end();
+      break;
     case "/api/history":
       request('http://network.qn.iblueg.cn/echo', function (error, response, body) {
         res.write(body);
+        res.end;
       });
       break;
   }
-  res.end();
 }).listen(443);
 
 var httpServer = http.createServer(function (req, res) {
