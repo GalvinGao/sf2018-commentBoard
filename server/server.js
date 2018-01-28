@@ -55,7 +55,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.end();
       break;
     case "/api/history":
-      request('http://network.qn.iblueg.cn/echo', function (error, response, body) {
+      request('http://www.google.com/robots.txt', function (error, response, body) {
         res.write(body);
         res.end;
       });
