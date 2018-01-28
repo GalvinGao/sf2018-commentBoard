@@ -5,7 +5,7 @@ const xss = require('xss');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
-const httpProxy = require('http-proxy');
+const request = require("request");
 
 // HTTPS Config
 const keypath = '/etc/letsencrypt/live/sf2018.dev.iblueg.cn/privkey.pem'; // HTTPS Server Certificate Key
@@ -49,7 +49,16 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
   //res.writeHead(403); // Response https connections
   //res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
   const userIp = req.connection.remoteAddress;
-  res.end(fs.readFileSync("../clients/client-user.html"));
+  switch (req.url) {
+    case "/":
+      res.write(fs.readFileSync("../clients/client-user.html"));
+    case "/api/history":
+      request('http://network.qn.iblueg.cn/echo', function (error, response, body) {
+        res.write(body);
+      });
+      break;
+  }
+  res.end();
 }).listen(443);
 
 var httpServer = http.createServer(function (req, res) {
