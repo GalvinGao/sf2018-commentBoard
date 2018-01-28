@@ -71,14 +71,14 @@ wss.on('listening', function(){
 })
 
 wss.on('connection', function connection(ws) {
-  log("New Connection Established. Current Online: ", wss.clients.length)
+  log("New Connection Established. Current Online: ", wss.clients)
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
     procReq(message, ws);
   });
   ws.on('error', (e) => console.log('Client connection error: [ code:', e.code, ', errno:', e.errno, ']. More details:\n', e));
-  ws.on('close', function close() { log('Connection Disconnected. Current Online:', server.clients.length); });
+  ws.on('close', function close() { log('Connection Disconnected. Current Online:', wss.clients); });
 });
 
 
