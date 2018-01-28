@@ -57,7 +57,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
     case "/api/history":
       request('http://www.google.com/robots.txt', function (error, response, body) {
         res.write(body);
-        res.end;
+        res.end();
       });
       break;
   }
