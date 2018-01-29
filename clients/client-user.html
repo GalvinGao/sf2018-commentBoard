@@ -335,6 +335,7 @@
 			
 			$.get(window.settings.historyPostApi, function(data){
 				if (data) {
+					data = JSON.parse(data);
 					if (data.status in window.statusMeta.expected) {
 						for (i in data.data) {
 							console.log("[historyFetch] (Data) [%i] (%s says %s at %s)", i, data.data[i].name, data.data[i].message, data.data[i].time);
