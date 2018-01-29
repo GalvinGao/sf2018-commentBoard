@@ -52,7 +52,7 @@ if(! $retval ) {
 	die('{"status": "error", "message": "数据读取失败。错误代码 ERR_INVALID_RESPONSE. 请联系管理员。"} ');
 }
 
-$output = "";
+$output = "hi";
 
 /*
 
