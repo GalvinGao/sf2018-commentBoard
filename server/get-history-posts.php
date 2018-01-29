@@ -83,9 +83,6 @@ echo $output;
 
 */
 
-$rowdebug = mysqli_fetch_array($retval, MYSQLI_BOTH);
-var_dump($rowdebug);
-
 /* fetch associative array */
 while ($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
   echo "[[Running While, row]]";
