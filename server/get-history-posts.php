@@ -94,6 +94,8 @@ while ($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
     "\"time\": \"{$row['time']}\" ".
   "],";
   var_dump($row);
+  echo "Output:";
+  var_dump($output);
 }
 
 /* free result set */
