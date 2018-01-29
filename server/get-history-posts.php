@@ -69,8 +69,8 @@ while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) {
 */
 
 while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) {
-     $output += $row['name'] . $row['comment'] . $row['time'] . " "
-    echo $output;
+  $output += $row['name'] . $row['comment'] . $row['time'] . " ";
+  echo $output;
 }
 
 $data = substr($output,0,-1);
