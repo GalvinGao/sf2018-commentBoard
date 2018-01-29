@@ -48,8 +48,6 @@ $sql = 'SELECT name, comment, time FROM comments;';
 // mysqli_select_db( $conn, 'sfcomments' );
 $retval = mysqli_query( $con, $sql );
 
-echo $retval;
-
 if(! $retval ) {
 	die('{"status": "error", "message": "数据读取失败。错误代码 ERR_INVALID_RESPONSE. 请联系管理员。"} ');
 }
