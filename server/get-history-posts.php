@@ -81,11 +81,10 @@ echo $output;
 */
 
 $rowdebug = mysqli_fetch_array($retval, MYSQLI_BOTH);
-echo $rowdebug;
+var_dump($rowdebug);
 
 /* fetch associative array */
 while ($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
-  echo $row;
   $output = $output + " [".
     "\"name\": \"{$row['name']}\",".
     "\"message\": \"{$row['comment']}\",".
