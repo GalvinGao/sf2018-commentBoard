@@ -65,6 +65,7 @@ while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) {
 }
 
 */
+/*
 echo "[begin while]";
 while($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
   echo "[while time]";
@@ -76,5 +77,18 @@ while($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
 }
 echo "[end while]";
 echo $output;
+
+*/
+
+/* fetch associative array */
+while ($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
+    printf ("(%s) says (%s) at (%i)\n", $row["name"], $row["comment"], $row["time"]);
+}
+
+/* free result set */
+mysqli_free_result($retval);
+
+mysqli_close($link);
+
 //$data = substr($output,0,-1);
 //formatOut("ok", $data);
