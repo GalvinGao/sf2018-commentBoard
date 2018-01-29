@@ -38,7 +38,7 @@ function formatOut($status="ok", $data="[]" ) {
 	{
 		"status": {$status},
 		"type": "history",
-		"data": {$data}
+		"data": [{$data}]
 	}
 EOF;
 }
@@ -82,11 +82,11 @@ echo $output;
 
 /* fetch associative array */
 while ($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
-  $output = $output . " [".
+  $output = $output . " {".
     "\"name\": \"{$row['name']}\",".
     "\"message\": \"{$row['comment']}\",".
     "\"time\": \"{$row['time']}\" ".
-  "],";
+  "},";
 }
 
 /* free result set */
