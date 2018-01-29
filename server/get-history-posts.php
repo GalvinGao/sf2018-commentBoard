@@ -66,7 +66,7 @@ while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) {
 
 */
 echo "[begin while]";
-while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC)) {
+while($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
   echo "[while time]";
      $output += "[".
          "name: \"{$row['name']}\",".
