@@ -75,6 +75,6 @@ while($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
          "],";
 }
 echo "[end while]";
-
-$data = substr($output,0,-1);
-formatOut("ok", $data);
+echo $output;
+//$data = substr($output,0,-1);
+//formatOut("ok", $data);
