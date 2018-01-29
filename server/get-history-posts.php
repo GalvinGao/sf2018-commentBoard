@@ -47,12 +47,15 @@ $sql = 'SELECT name, comment, time FROM comments;';
 
 // mysqli_select_db( $conn, 'sfcomments' );
 $retval = mysqli_query( $con, $sql );
+var_dump($retval);
 
 if(! $retval ) {
 	die('{"status": "error", "message": "数据读取失败。错误代码 ERR_INVALID_RESPONSE. 请联系管理员。"} ');
 }
 
 $output = "";
+
+var_dump($output);
 
 /*
 
@@ -90,6 +93,7 @@ while ($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
     "\"message\": \"{$row['comment']}\",".
     "\"time\": \"{$row['time']}\" ".
   "],";
+  var_dump($row);
 }
 
 /* free result set */
