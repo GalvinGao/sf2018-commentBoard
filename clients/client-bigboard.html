@@ -4,8 +4,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 		<title>Science Fair 2018</title>
 		<style>
-			.loader{width:75pt;position:relative}.loader:before{content:'';display:block;padding-top:100%}.loader .circular{position:absolute;top:0;left:0;-webkit-animation:rotate 2s linear infinite;animation:rotate 2s linear infinite}.loader circle{-webkit-animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite;animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite}@-webkit-keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@-webkit-keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
-		
 			.section {
 				border-radius: 0;
 				padding: 1em;
@@ -17,272 +15,120 @@
 			}
 
 			body {
-				padding: 0.3em;
 				text-align: left;
 				font-family: 'Product Sans', 'Open Sans', serif;
-				background: #000000;
+				background: #000 no-repeat top center;
+				font-family: Merriweather, Product Sans, Apple Sothic SD Neo, Segoe UI, Helvetica, sans-serif;
 			}
 
 			.header {
-				text-align: center;
+				text-align: left;
 				font-size: 2em;
 				padding: 0.75em;
 				text-shadow: 0 0 3px #fff;
-			}
-
-			.single-comment .name {
-				font-size: 1.5em;
-				margin-bottom: 0.3em;
-			}
-
-			.single-comment .content {
-				margin-left: 0.5em;
-			}
-
-			.single-comment {
-				padding: 1em;
-				border-bottom: 2px solid rgba(0, 0, 0, 0.5);
-			}
-
-			.single-comment:last-child {
-				padding: none;
-				border-bottom: none;
-			}
-
-			.heading {
-				font-size: 2em;
-				padding: 0.25em;
-			}
-
-			.loading {
-				position: fixed;
-				top: -140px;
-				left: 0;
-				right: 0;
-				text-align: center;
-				font-weight: 400;
-				font-family: 'Kefa';
-				background: rgba(0, 0, 0, 0.75);
-				font-size: 1em;
 				color: #fff;
-				padding: 1em 0.5em;
-				margin: 0;
-				transition: all 0.3s ease-out;
+				display: flex;  
+				flex-flow: row;
+				flex: 1 100%;
+				justify-content: flex-start;
 			}
 			
-			.sk-folding-cube {
-			  margin: 20px auto;
-			  width: 40px;
-			  height: 40px;
-			  position: relative;
-			  -webkit-transform: rotateZ(45deg);
-					  transform: rotateZ(45deg);
-			}
-
-			.sk-folding-cube .sk-cube {
-			  float: left;
-			  width: 50%;
-			  height: 50%;
-			  position: relative;
-			  -webkit-transform: scale(1.1);
-				  -ms-transform: scale(1.1);
-					  transform: scale(1.1); 
-			}
-			.sk-folding-cube .sk-cube:before {
-			  content: '';
-			  position: absolute;
-			  top: 0;
-			  left: 0;
-			  width: 100%;
-			  height: 100%;
-			  background-color: #fff;
-			  -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
-					  animation: sk-foldCubeAngle 2.4s infinite linear both;
-			  -webkit-transform-origin: 100% 100%;
-				  -ms-transform-origin: 100% 100%;
-					  transform-origin: 100% 100%;
-			}
-			.sk-folding-cube .sk-cube2 {
-			  -webkit-transform: scale(1.1) rotateZ(90deg);
-					  transform: scale(1.1) rotateZ(90deg);
-			}
-			.sk-folding-cube .sk-cube3 {
-			  -webkit-transform: scale(1.1) rotateZ(180deg);
-					  transform: scale(1.1) rotateZ(180deg);
-			}
-			.sk-folding-cube .sk-cube4 {
-			  -webkit-transform: scale(1.1) rotateZ(270deg);
-					  transform: scale(1.1) rotateZ(270deg);
-			}
-			.sk-folding-cube .sk-cube2:before {
-			  -webkit-animation-delay: 0.3s;
-					  animation-delay: 0.3s;
-			}
-			.sk-folding-cube .sk-cube3:before {
-			  -webkit-animation-delay: 0.6s;
-					  animation-delay: 0.6s; 
-			}
-			.sk-folding-cube .sk-cube4:before {
-			  -webkit-animation-delay: 0.9s;
-					  animation-delay: 0.9s;
-			}
-			@-webkit-keyframes sk-foldCubeAngle {
-			  0%, 10% {
-				-webkit-transform: perspective(140px) rotateX(-180deg);
-						transform: perspective(140px) rotateX(-180deg);
-				opacity: 0; 
-			  } 25%, 75% {
-				-webkit-transform: perspective(140px) rotateX(0deg);
-						transform: perspective(140px) rotateX(0deg);
-				opacity: 1; 
-			  } 90%, 100% {
-				-webkit-transform: perspective(140px) rotateY(180deg);
-						transform: perspective(140px) rotateY(180deg);
-				opacity: 0; 
-			  } 
-			}
-
-			@keyframes sk-foldCubeAngle {
-			  0%, 10% {
-				-webkit-transform: perspective(140px) rotateX(-180deg);
-						transform: perspective(140px) rotateX(-180deg);
-				opacity: 0; 
-			  } 25%, 75% {
-				-webkit-transform: perspective(140px) rotateX(0deg);
-						transform: perspective(140px) rotateX(0deg);
-				opacity: 1; 
-			  } 90%, 100% {
-				-webkit-transform: perspective(140px) rotateY(180deg);
-						transform: perspective(140px) rotateY(180deg);
-				opacity: 0; 
-			  }
-			}
-
-			.submit #name, .submit #comment {
-				border-color: #e51c23;
-				border-style: solid;
-				border: none;
+			.title {
+				flex: 3;
 			}
 			
-			.submitForm {
-				padding: 1em;
+			.subtitle {
+				flex: 8;
 			}
 			
-			.is-loading, .not-loading {
-				transition: all 0.3s ease-in-out;
+			.comment {
+				padding: 1em 2em;
 			}
 			
-			.is-loading {
-				top: 0;
+			.commentBlock {
+				border-bottom: 0.4em solid tomato;
+				padding: 1em 2em;
+				margin-bottom: 2em;
 			}
 			
-			.not-loading {
-				top: -140px;
+			.comment .large {
+				font-size: 5em;
 			}
 			
-			.spin {
-				position: fixed;
-				background: rgba(0, 0, 0, 0.5);
-				z-index: 10;
-				top: 0;
-				left: 0;
-				height: 100%;
-				width: 100%;
-				
+			.comment .large .time {
+				margin-top: 1em;
+				font-size: 0.3em;
 			}
 			
-			.spinContainer {
-				background: #fff;
-				z-index: 15;
-				padding: 2em;
+			.comment .message {
+				font-size: 2.5em;
+				text-indent: 1em;
 			}
+			
+			/* Salvattore Plugin */
+			
+			@media screen and (max-width: 480px) {
+				#grid[data-columns]::before {
+					content: '1 .column.size-1of1';
+				}
+			}
+			
+			@media screen and (min-width: 481px) and (max-width: 768px) {
+				#grid[data-columns]::before {
+					content: '2 .column.size-1of2';
+				}
+			}
+			
+			@media screen and (min-width: 769px) {
+				#grid[data-columns]::before {
+					content: '3 .column.size-1of3';
+				}
+			}
+			
+			.column { float: left; }
+			.size-1of1 { width: 100%; }
+			.size-1of2 { width: 50%; }
+			.size-1of3 { width: 33.333%; }
 		</style>
 		<link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
 		<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
 	</head>
 	<body>
-		<div class="container">
-			<div class="section header">
+		<div class="header">
+			<div class="title">
 				Science Fair 2018
 			</div>
-			<div class="section submit">
-				<div class="heading">
-					Submit
-				</div>
-				<div class="submitForm row">
-					<div class="input-field col s12">
-						<input placeholder="John Appleseed" id="name" type="text"></input>
-						<label for="name">姓名 / Name</label>
-					</div>
-					<div class="input-field col s12">
-						<textarea id="comment" class="materialize-textarea" placeholder="请在此输入留言 / Please input comments at here"></textarea>
-						<label for="comment">留言 / Comments</label>
-					</div>
-					<div class="col s12">
-						<button class="btn waves-effect waves-light sendCommentButton">
-							提交 / Send
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="section comment">
-				<div class="heading">
-					Comments
-				</div>
-				<div class="single-comment">
-					<div class="name">
-						Lorem Ipsum Dolor 1
-					</div>
-					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh.
-					</div>
-				</div>
-				<div class="single-comment">
-					<div class="name">
-						Lorem Ipsum Dolor 2
-					</div>
-					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium.
-					</div>
-				</div>
-				<div class="single-comment">
-					<div class="name">
-						Lorem Ipsum Dolor 3
-					</div>
-					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh.
-					</div>
-				</div>
-				<div class="single-comment">
-					<div class="name">
-						Lorem Ipsum Dolor 4
-					</div>
-					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh.
-					</div>
-				</div>
-			</div>
-			<div class="ue loading not-loading">
-				<div class="sk-folding-cube">
-				  <div class="sk-cube1 sk-cube"></div>
-				  <div class="sk-cube2 sk-cube"></div>
-				  <div class="sk-cube4 sk-cube"></div>
-				  <div class="sk-cube3 sk-cube"></div>
-				</div>
-				正在提交... / Submitting...
-			</div>
-			<div class="ue spin valign-wrapper hide">
-				<div class="spinContainer z-index-5">
-					<div class="loader" align="center">
-						<svg class="circular" viewBox="0 0 50 50">
-							<circle cx="25" cy="25" r="20" fill="none" stroke="#106CFA" stroke-width="5%" stroke-linecap="round"/>
-						</svg><br>
-						Loading...
-					</div>
-				</div>
+			<div class="subtitle">
+				Lorem Ipsum Dolor Lorem Ipsum Dolor Lorem Ipsum Dolor 
 			</div>
 		</div>
-	<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
+		<div class="comment grid" data-columns>
+			<article class="commentBlock">
+				<div class="large blue-text">
+					我是哈哈
+					<div class="time right blue-text text-accent-3">
+						2018.1.29 10:00
+					</div>
+				</div>
+				<div class="message">
+					经过了一番实践和一些基本的兼容处理，至少在移动端flexbox还是有可为的（安卓4.0+，2.3+没测试，ios都还行）。但是坑也确实还有很多。1，flexbox有多个
+				</div>
+			</article>
+			<article class="commentBlock">
+				Lorem Ipsum Dolor
+			</article>
+			<article class="commentBlock">
+				Lorem Ipsum Dolor
+			</article>
+			<article class="commentBlock">
+				Lorem Ipsum Dolor
+			</article>
+			<article class="commentBlock">
+				Lorem Ipsum Dolor
+			</article>
+		</div>
+		<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
 		<script>
 		var canvas,
 			ctx,
@@ -462,9 +308,6 @@
 		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
 		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
-		<!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
-		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script>
-		<script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js"></script>
 		<script id="main-script">
 			window.settings = {
 				historyPostApi: "/api/history",
@@ -476,6 +319,8 @@
 				unexpected: {warn: "", error: "", fatal: ""},
 				error: {error: "", fatal: ""}
 			}
+			
+			window.commentTemplate = "<article class=\"commentBlock\"><div class=\"large blue-text\">{{name}}<div class=\"time right blue-text text-accent-3\">{{time}}</div></div><div class=\"message\">{{message}}</div></article>";
 		
 			throttle = function(func, wait, options) {
 				var context, args, result;
@@ -515,6 +360,9 @@
 					if (data.status in window.statusMeta.expected) {
 						for (i in data.data) {
 							console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].message, data.data[i].time);
+							var grid = document.querySelector('.grid');
+							var item = document.createElement('article');
+							salvattore.appendElements(grid, [item]);
 						}
 					} else if (data.status in window.statusMeta.unexpected) {
 						console.error("[historyFetch] Server Error. Code:", data.status)
