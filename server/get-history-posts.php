@@ -36,7 +36,7 @@ if(!$con)
 function formatOut($status="ok", $data="[]" ) {
 	echo <<<EOF
 	{
-		"status": {$status},
+		"status": "{$status}",
 		"type": "history",
 		"data": [{$data}]
 	}
