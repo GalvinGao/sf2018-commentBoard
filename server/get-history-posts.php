@@ -33,7 +33,7 @@ if(!$con)
 	die('{"status": "error", "message": "数据库连接失败。错误代码 ERR_DATABASE_DOWN。请联系管理员。"} ');
 }
 
-function formatOut($status="ok", $data="{}" ) {
+function formatOut($status="ok", $data="[]" ) {
 	echo <<<EOF
 	{
 		"status": {$status},
@@ -52,7 +52,7 @@ if(! $retval ) {
 	die('{"status": "error", "message": "数据读取失败。错误代码 ERR_INVALID_RESPONSE. 请联系管理员。"} ');
 }
 
-$output = "hi";
+$output = "";
 
 /*
 
@@ -80,12 +80,16 @@ echo $output;
 
 */
 
+$rowdebug = mysqli_fetch_array($retval, MYSQLI_BOTH);
+echo $rowdebug;
+
 /* fetch associative array */
 while ($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
-  $output = $output + "[".
-    "name: \"{$row['name']}\",".
-    "message: \"{$row['comment']}\",".
-    "time: \"{$row['time']}\" ".
+  echo $row;
+  $output = $output + " [".
+    "\"name\": \"{$row['name']}\",".
+    "\"message\": \"{$row['comment']}\",".
+    "\"time\": \"{$row['time']}\" ".
   "],";
 }
 
