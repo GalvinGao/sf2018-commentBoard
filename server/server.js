@@ -16,6 +16,11 @@ const certpath = '/etc/letsencrypt/live/sf2018.dev.iblueg.cn/fullchain.pem'; // 
 // NO NEED FOR "/" OR "http://"!
 const serverHostname = "sf2018.dev.iblueg.cn";
 
+// Use request to get the api and then echo it.
+// MAKE SURE this is CORRECTLY CONFIGURED
+// Otherwise History Message WILL NOT WORK
+const historyMessageApi = "http://localhost:8888/";
+
 /*
 
 function insertSql(name, comment, time) {
@@ -55,7 +60,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.end();
       break;
     case "/api/history":
-      request('http://www.google.com/robots.txt', function (error, response, body) {
+      request(historyMessageApi, function (error, response, body) {
         res.write(body);
         res.end();
       });
