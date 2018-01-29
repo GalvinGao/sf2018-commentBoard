@@ -88,13 +88,14 @@ var_dump($rowdebug);
 
 /* fetch associative array */
 while ($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
+  echo "[[Running While, row]]";
   $output = $output . " [".
     "\"name\": \"{$row['name']}\",".
     "\"message\": \"{$row['comment']}\",".
     "\"time\": \"{$row['time']}\" ".
   "],";
   var_dump($row);
-  echo "Output:";
+  echo "Output: ";
   var_dump($output);
 }
 
