@@ -82,13 +82,17 @@ echo $output;
 
 /* fetch associative array */
 while ($row = mysqli_fetch_array($retval, MYSQLI_BOTH)) {
-    printf ("(%s) says (%s) at (%i)\n", $row["name"], $row["comment"], $row["time"]);
+  $output = $output + "[".
+    "name: \"{$row['name']}\",".
+    "message: \"{$row['comment']}\",".
+    "time: \"{$row['time']}\" ".
+  "],";
 }
 
 /* free result set */
 mysqli_free_result($retval);
 
-mysqli_close($link);
+$data = substr($output, 0, -1);
+formatOut("ok", $data);
 
-//$data = substr($output,0,-1);
-//formatOut("ok", $data);
+mysqli_close($con);
