@@ -66,8 +66,9 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       });
       break;
     default:
-      res.writeHead(404, { 'Location': 'https://' + serverHostname + "/" });
-      res.end("404 Not Found. Redirecting...");
+      res.writeHead(404);
+      res.write(fs.readFileSync("../clients/404.html"))
+      res.end();
   }
 }).listen(443);
 
