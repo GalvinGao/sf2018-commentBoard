@@ -4,6 +4,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 		<title>Science Fair 2018</title>
 		<style>
+        	/* Material Design Spinner */
 			.loader{width:75pt;position:relative}.loader:before{content:'';display:block;padding-top:100%}.loader .circular{position:absolute;top:0;left:0;-webkit-animation:rotate 2s linear infinite;animation:rotate 2s linear infinite}.loader circle{-webkit-animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite;animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite}@-webkit-keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@-webkit-keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
 		
 			.section {
@@ -197,8 +198,8 @@
 				padding: 2em;
 			}
 		</style>
-		<link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
-		<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" integrity="sha384-gGIdbE3rejhnmhbMZyasqhmdgF/Wza7NbuLq2eAVP92BbPF/ziwfO1LtP7E/ai36" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
 	</head>
 	<body>
 		<div class="container">
@@ -282,7 +283,7 @@
 				</div>
 			</div>
 		</div>
-	<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
+		<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;" id="canvas"></canvas>
 		<script>
 		var canvas,
 			ctx,
@@ -461,10 +462,10 @@
 
 		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
 		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
-  		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+  		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha384-FtJyC+/3fgtPbqlacLHdGwBrmPjKoYBsiqNF5/BEprsnIXB4xtXLCJRx7Xx+TWKP" crossorigin="anonymous"></script>
 		<!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
-		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script>
-		<script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js"></script>
+		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js" integrity="sha384-RydurAhVLkWOTB6JAAzjuVHy6VsmznzaDLHvqffwz9DPG0PgMpVlVSu3faIetRFa" crossorigin="anonymous"></script>
+		<script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js" integrity="sha384-ujpAYcyxFaJsZN5668lLgOpEH8vtWrbOq8fvj+WZ2kD71LJwGa/9QP/suPPF1hTI" crossorigin="anonymous"></script>
 		<script id="main-script">
 			window.settings = {
 				historyPostApi: "/api/history",

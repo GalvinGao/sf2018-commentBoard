@@ -55,10 +55,21 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
   //res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
   switch (req.url) {
     case "/":
+      req.setHeader('Content-Type', 'text/html');
+      req.setHeader("Access-Control-Allow-Origin: *");
+      req.setHeader("Access-Control-Allow-Methods: GET");
+      req.setHeader("Content-Encoding: utf-8");
       res.write(fs.readFileSync("../clients/client-user.html"));
       res.end();
       break;
     case "/api/history":
+      req.setHeader('Content-Type', 'application/json');
+      req.setHeader("Expires: Thu, 01 Jan 1970 00:00:01 GMT"); 
+      req.setHeader("Cache-Control: no-cache"); 
+      req.setHeader("Cache-Control: must-revalidate");
+      req.setHeader("Access-Control-Allow-Origin: *");
+      req.setHeader("Access-Control-Allow-Methods: GET");
+      req.setHeader("Content-Encoding: utf-8");
       request.get(historyMessageApi).pipe(res);
       break;
     default:
