@@ -511,7 +511,7 @@
 			
 			$.get(window.settings.historyPostApi, function(data){
 				if (data) {
-					data = JSON.parse(data);
+					data = safeJson(data);
 					if (data.status in window.statusMeta.expected) {
 						for (i in data.data) {
 							console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].message, data.data[i].time);
@@ -525,6 +525,15 @@
 					console.log("[historyFetch] No response...")
 				}
 			})
+			
+			function safeJson(jsonString) {
+				try {
+					var parsedJSON = JSON.parse(jsonString);
+				} catch (e) {
+					return jsonString;
+				}
+				return parsedJSON;
+			}
 		
 			var socket;
 		    try {
