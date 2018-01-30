@@ -122,6 +122,8 @@ function log(msg, state) {
 // procReq = processRequest
 
 function procReq(msg, wsObject, userIp) {
+  console.log('Received (JSON): %j', msg);
+  console.log('Received (String): %s', msg);
   try {
     var message = JSON.parse(msg);
   } catch (e) {
@@ -129,7 +131,6 @@ function procReq(msg, wsObject, userIp) {
     wsObject.send("{status: \"error\", message: \"Invalid JSON\"}");
     return;
   }
-  console.log('received: %j', msg);
   var action = message.action;
 
   switch (action) {
