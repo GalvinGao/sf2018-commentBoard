@@ -259,6 +259,10 @@
 			  display: inline-block;
 			  line-height: 1em;
 			}
+			
+			.sendCommentButton {
+				border: 1px solid grey !important;
+			}
 		</style>
 		<link rel="stylesheet" href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" integrity="sha384-gGIdbE3rejhnmhbMZyasqhmdgF/Wza7NbuLq2eAVP92BbPF/ziwfO1LtP7E/ai36" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
@@ -290,7 +294,7 @@
 						<label for="comment">留言 / Comments</label>
 					</div>
 					<div class="col s12">
-						<button class="btn waves-effect waves-light sendCommentButton">
+						<button class="btn-flat btn-large white-text waves-effect waves-light sendCommentButton">
 							提交 / Send
 						</button>
 					</div>
@@ -536,6 +540,7 @@
 		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
 		<script src="https://cdn.bootcss.com/animejs/2.2.0/anime.min.js" integrity="sha384-BnFYVbw3PHhz5qWXTCSL12MjPc3KxjdKPx7R4R5JjIzxFmYX267NDyJ9B/nZANdg" crossorigin="anonymous"></script>
 		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
+		<script src="https://cdn.bootcss.com/modernizr/2.8.3/modernizr.min.js" integrity="sha384-bPV3mA2eo3edoq56VzcPBmG1N1QVUfjYMxVIJPPzyFJyFZ8GFfN7Npt06Zr23qts" crossorigin="anonymous"></script>
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha384-FtJyC+/3fgtPbqlacLHdGwBrmPjKoYBsiqNF5/BEprsnIXB4xtXLCJRx7Xx+TWKP" crossorigin="anonymous"></script>
 		<!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
 		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js" integrity="sha384-RydurAhVLkWOTB6JAAzjuVHy6VsmznzaDLHvqffwz9DPG0PgMpVlVSu3faIetRFa" crossorigin="anonymous"></script>
@@ -613,9 +618,8 @@
 			var socket;
 		    try {
 				window.socket = new ReconnectingWebSocket(window.settings.wsurl);
-            	socket.timeoutInterval = 3000;
-				socket.reconnectDecay = 1.2;
-				socket.timeoutInterval = 5000;
+            	window.socket.timeoutInterval = 10000;
+				window.window.socket.reconnectDecay = 1.15;
 		    } catch ( e ) {  
 				alert('WebSocket 连接错误，请尝试刷新页面。详细信息：', e);
 		    }
@@ -747,6 +751,7 @@
 				// Hides the Loading Animation
 				$(".loading").removeClass("is-loading");
 				$(".loading").addClass("not-loading");
+				// Clears the input
 			}
 			
 			function friendlyError(errorMsg, noticeSelector) {
