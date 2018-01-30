@@ -60,7 +60,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.end();
       break;
     case "/api/history":
-      request(historyMessageApi, function (error, response, body) {
+      request(historyMessageApi, function (body) {
         res.write(body);
         res.end();
       });
@@ -122,7 +122,13 @@ function log(msg, state) {
 // procReq = processRequest
 
 function procReq(msg, wsObject, userIp) {
-  var message = JSON.parse(msg);
+  try {
+    var message = JSON.parse(msg);
+  } catch (e) {
+    console.log("Not a JSON request.");
+    wsObject.send("{status: \"error\", message: \"Invalid JSON\"}");
+    return;
+  }
   console.log('received: %j', msg);
   var action = message.action;
 
