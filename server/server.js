@@ -68,11 +68,6 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
   }
 }).listen(443);
 
-sslServer.on('connection', function(sock) {
-  var userIp = sock.remoteAddress;
-  log('New connection from: ' + sock.remoteAddress, "INFO");
-});
-
 var httpServer = http.createServer(function (req, res) {
   res.writeHead(301, { 'Location': 'https://' + serverHostname + req.url });
   res.end("Redirecting...");
