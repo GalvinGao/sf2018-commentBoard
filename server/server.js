@@ -64,8 +64,8 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
 }).listen(443);
 
 sslServer.on('connection', function(sock) {
-  var userIp = sock.remoteAddress
-  log('New SSL connection from: ' + sock.remoteAddress, "INFO");
+  var userIp = sock.remoteAddress;
+  log('New connection from: ' + sock.remoteAddress, "INFO");
 });
 
 var httpServer = http.createServer(function (req, res) {
@@ -79,15 +79,15 @@ function noop() {}
 
 function heartbeat() {
   this.isAlive = true;
-  log("Heartbeat package received.", "DEBUG");
+  log("WebSocket Heartbeat package received.", "DEBUG");
 }
 
 wss.on('listening', function(){
-  log("Listening for incoming WebSockets...", "DEBUG");
+  log("Listening for incoming WebSockets...", "INFO");
 })
 
 wss.on('connection', function connection(ws) {
-  log("New Connection Established. Current Online: " + JSON.stringify(wss.clients), "DEBUG");
+  log("New WebSocket Connection Established.", "INFO");
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
@@ -119,11 +119,11 @@ function log(msg, state) {
 
 function procReq(msg, wsObject) {
   console.log('Received (JSON): %j', msg);
-  console.log('Received (String): %s', msg);
+  // console.log('Received (String): %s', msg);
   try {
     var message = JSON.parse(msg);
   } catch (e) {
-    console.log("Not a JSON request.");
+    log("Not a valid JSON client request.", "ERROR");
     wsObject.send("{status: \"error\", message: \"Invalid JSON\"}");
     return;
   }
@@ -147,18 +147,18 @@ function procReq(msg, wsObject) {
       boardcast(dexss, "newmessage");
       break;
     default:
-      console.info("Invalid action type: ", action);
+      console.info("Invalid client action type: " + action, "ERROR");
   }
 
 }
 
 function boardcast(message, type) {
+  console.log("Broadcasting: " + respParse(message, type), "INFO");
   wss.clients.forEach(function each(client) {
     if (client !== wss && client.readyState === WebSocket.OPEN) {
       client.send(respParse(message, type));
     }
   });
-  console.log("Sending: %s", respParse(message, type))
 }
 
 function formatSend(message, type) {
