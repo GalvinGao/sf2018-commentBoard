@@ -56,20 +56,20 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
   switch (req.url) {
     case "/":
       res.setHeader('Content-Type', 'text/html');
-      res.setHeader("Access-Control-Allow-Origin: *");
-      res.setHeader("Access-Control-Allow-Methods: GET");
-      res.setHeader("Content-Encoding: utf-8");
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Allow-Methods", "GET");
+      res.setHeader("Content-Encoding", "utf-8");
       res.write(fs.readFileSync("../clients/client-user.html"));
       res.end();
       break;
     case "/api/history":
       res.setHeader('Content-Type', 'application/json');
-      res.setHeader("Expires: Thu, 01 Jan 1970 00:00:01 GMT"); 
-      res.setHeader("Cache-Control: no-cache"); 
-      res.setHeader("Cache-Control: must-revalidate");
-      res.setHeader("Access-Control-Allow-Origin: *");
-      res.setHeader("Access-Control-Allow-Methods: GET");
-      res.setHeader("Content-Encoding: utf-8");
+      res.setHeader("Expires", "Thu, 01 Jan 1970 00:00:01 GMT"); 
+      res.setHeader("Cache-Control", "no-cache"); 
+      res.setHeader("Cache-Control", "must-revalidate");
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Allow-Methods", "GET");
+      res.setHeader("Content-Encoding", "utf-8");
       request.get(historyMessageApi).pipe(res);
       break;
     default:
