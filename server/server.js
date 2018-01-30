@@ -21,29 +21,24 @@ const serverHostname = "sf2018.dev.iblueg.cn";
 // Otherwise History Message WILL NOT WORK
 const historyMessageApi = "http://localhost:8888/";
 
-/*
-
 function insertSql(name, comment, time) {
   var sqlParam = [userIp, time, name, comment];
 
   connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
     if (error) throw error;
-    log('Message Inserted. MySQL Response: ', results);
+    log('Message Inserted. MySQL Response: ' + results, "INFO");
   });
 }
 
-
 var connection = mysqlConn.createConnection({
-  host     : process.env.mysqlhost,
-  port     : process.env.mysqlport,
-  user     : process.env.mysqluser,
-  password : process.env.mysqlpassword,
-  database : process.env.mysqldatabase
+  host     : "localhost",
+  port     : "3306",
+  user     : "sf2018",
+  password : "sf2018",
+  database : "sfcomments"
 });
 
 connection.connect();
-
-*/
 
 var sslOptions = {
   key: fs.readFileSync(keypath),
@@ -118,7 +113,7 @@ function log(msg, state) {
 
 // procReq = processRequest
 
-function procReq(msg, wsObject, userIp) {
+function procReq(msg, wsObject) {
   console.log('Received (JSON): %j', msg);
   console.log('Received (String): %s', msg);
   try {
@@ -135,10 +130,10 @@ function procReq(msg, wsObject, userIp) {
       //console.log("message.name: %s", message.data.name);
       //console.log("message.message: %s", message.data.message);
       //console.log("message.time: %s", message.data.time);
-      //insertSql(message.name, message.message, message.time, userIp);
       var names = xss(message.data.name);
       var messages = xss(message.data.message);
       var times = message.data.time;
+      insertSql(names, messages, times);
       var dexss = {
         name: names,
         message: messages,
