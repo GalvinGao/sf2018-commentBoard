@@ -8,11 +8,14 @@
 			.loader{width:75pt;position:relative}.loader:before{content:'';display:block;padding-top:100%}.loader .circular{position:absolute;top:0;left:0;-webkit-animation:rotate 2s linear infinite;animation:rotate 2s linear infinite}.loader circle{-webkit-animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite;animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite}@-webkit-keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@-webkit-keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
 		
 			.section {
-				border-radius: 0;
-				padding: 1em;
-				background: rgba(255, 255, 255, 0.7);
+				color: #fff;
+				border-radius: 0.8em;
+				padding: 1.5em;
+				/* background: rgba(255, 255, 255, 0.7); */
+				/*
 				-webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.14), 0 0 14px 2px rgba(0, 0, 0, 0.12), 0 0 5px -3px rgba(0, 0, 0, 0.3);
 				box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.14), 0 0 14px 2px rgba(0, 0, 0, 0.12), 0 0 5px -3px rgba(0, 0, 0, 0.3);
+				*/
 				margin: 2em 0;
 				font-size: 1em;
 			}
@@ -30,6 +33,10 @@
 				padding: 0.75em;
 				text-shadow: 0 0 3px #fff;
 			}
+			
+			.header .text {
+				padding-bottom: 0.1em;
+			}
 
 			.single-comment .name {
 				font-size: 1.5em;
@@ -42,7 +49,7 @@
 
 			.single-comment {
 				padding: 1em;
-				border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+				border-bottom: 2px solid rgba(255, 255, 255, 0.5);
 			}
 
 			.single-comment:last-child {
@@ -158,12 +165,6 @@
 				opacity: 0; 
 			  }
 			}
-
-			.submit #name, .submit #comment {
-				border-color: #e51c23;
-				border-style: solid;
-				border: none;
-			}
 			
 			.submitForm {
 				padding: 1em;
@@ -197,19 +198,88 @@
 				z-index: 15;
 				padding: 2em;
 			}
+			
+			.title {
+			  font-weight: 200;
+			  font-size: 1em;
+			}
+
+			.title .text-wrapper {
+			  position: relative;
+			  display: inline-block;
+			  padding-top: 0.1em;
+			  padding-right: 0.05em;
+			  padding-bottom: 0.15em;
+			}
+
+			.title .line {
+			  opacity: 0;
+			  position: absolute;
+			  left: 0;
+			  height: 2px;
+			  width: 100%;
+			  background-color: #fff;
+			  transform-origin: 100% 100%;
+			  bottom: 0;
+			}
+
+			.title .letter {
+			  display: inline-block;
+			  line-height: 1em;
+			}
+			
+			.heading {
+			  font-weight: 200;
+			}
+
+			.heading .text-wrapper {
+			  position: relative;
+			  display: inline-block;
+			  padding-top: 0.1em;
+			  padding-right: 0.05em;
+			  padding-bottom: 0.15em;
+			}
+
+			.heading .line {
+			  opacity: 0;
+			  position: absolute;
+			  left: 0;
+			  height: 100%;
+			  width: 3px;
+			  background-color: #fff;
+			  transform-origin: 0 50%;
+			}
+
+			.heading .line1 { 
+			  top: 0; 
+			  left: 0;
+			}
+
+			.heading .letter {
+			  display: inline-block;
+			  line-height: 1em;
+			}
 		</style>
 		<link rel="stylesheet" href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" integrity="sha384-gGIdbE3rejhnmhbMZyasqhmdgF/Wza7NbuLq2eAVP92BbPF/ziwfO1LtP7E/ai36" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
 	</head>
 	<body>
-		<div class="container">
+		<div class="container flow-text">
 			<div class="section header">
-				Science Fair 2018
+				<div class="title">
+					<div class="text-wrapper">
+						<div class="letters">Science Fair 2018</div>
+						<div class="line"></div>
+					</div>
+				</div>
 			</div>
 			<div class="section submit">
-				<div class="heading">
-					Submit
-				</div>
+				<h1 class="heading">
+					<span class="text-wrapper">
+						<span class="line line1"></span>
+						<span class="letters">Submit</span>
+					</span>
+				</h1>
 				<div class="submitForm row">
 					<div class="input-field col s12">
 						<input placeholder="John Appleseed" id="name" type="text"></input>
@@ -227,9 +297,12 @@
 				</div>
 			</div>
 			<div class="section comment">
-				<div class="heading">
-					Comments
-				</div>
+				<h1 class="heading">
+					<span class="text-wrapper">
+						<span class="line line1"></span>
+						<span class="letters">Comments</span>
+					</span>
+				</h1>
 				<div class="single-comment">
 					<div class="name">
 						Lorem Ipsum Dolor 1
@@ -283,7 +356,7 @@
 				</div>
 			</div>
 		</div>
-		<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;" id="canvas"></canvas>
+		<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1; filter: blur(5px);" id="canvas"></canvas>
 		<script>
 		var canvas,
 			ctx,
@@ -295,8 +368,8 @@
 
 		function line() {
 			this.path = [];
-			this.speed = rand(10, 20);
-			this.count = randInt(10, 30);
+			this.speed = rand(5, 15);
+			this.count = randInt(5, 40);
 			this.x = width / 2, +1;
 			this.y = height / 2 + 1;
 			this.target = {
@@ -331,7 +404,7 @@
 				this.path.shift();
 			}
 
-			this.life -= 0.001;
+			this.life -= 0.002;
 
 			if (this.life <= 0) {
 				this.path = null;
@@ -376,7 +449,7 @@
 				ctx[(j === 0) ? 'moveTo' : 'lineTo'](this.path[j].x + rand(-rando, rando), this.path[j].y + rand(-rando, rando));
 			}
 			ctx.strokeStyle = 'hsla(' + rand(this.hue, this.hue + 30) + ', 80%, 55%, ' + (this.life / 3) + ')';
-			ctx.lineWidth = rand(0.1, 2);
+			ctx.lineWidth = rand(0.2, 2.5);
 			ctx.stroke();
 		};
 
@@ -408,7 +481,7 @@
 		}
 
 		function create() {
-			if (tick % 10 === 0) {
+			if (tick % 5 === 0) {
 				lines.push(new line());
 			}
 		}
@@ -430,8 +503,8 @@
 		function draw() {
 			ctx.save();
 			ctx.translate(width / 2, height / 2);
-			ctx.rotate(tick * 0.001);
-			var scale = 0.8 + Math.cos(tick * 0.02) * 0.2;
+			ctx.rotate(tick * 0.002);
+			var scale = 1.4 + Math.cos(tick * 0.02) * 0.2;
 			ctx.scale(scale, scale);
 			ctx.translate(-width / 2, -height / 2);
 			var i = lines.length;
@@ -461,6 +534,7 @@
 		</script>
 
 		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
+		<script src="https://cdn.bootcss.com/animejs/2.2.0/anime.min.js" integrity="sha384-BnFYVbw3PHhz5qWXTCSL12MjPc3KxjdKPx7R4R5JjIzxFmYX267NDyJ9B/nZANdg" crossorigin="anonymous"></script>
 		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha384-FtJyC+/3fgtPbqlacLHdGwBrmPjKoYBsiqNF5/BEprsnIXB4xtXLCJRx7Xx+TWKP" crossorigin="anonymous"></script>
 		<!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
@@ -692,6 +766,81 @@
 			/* Alias Explained:
 			 * UE: User Experience
 			 */
+			
+			// Wrap every letter in a span
+			$('.title .letters').each(function(){
+			  $(this).html($(this).text().replace(/([^\x00-\x80]|\w)/g, "<span class='letter'>$&</span>"));
+			});
+
+			anime.timeline()
+			  .add({
+				targets: '.title .line',
+				scaleX: [0,1],
+				opacity: [0.5,1],
+				easing: "easeInOutExpo",
+				duration: 900
+			  }).add({
+				targets: '.title .letter',
+				opacity: [0,1],
+				translateX: [40,0],
+				translateZ: 0,
+				scaleX: [0.3, 1],
+				easing: "easeOutExpo",
+				duration: 800,
+				offset: '-=600',
+				delay: function(el, i) {
+				  return 150 + 25 * i;
+				}
+			  }).add({
+				targets: '.title .line',
+				scaleX: [1,0.3],
+				opacity: [1,0.5],
+				easing: "easeInOutExpo",
+				duration: 600,
+				offset: '-=300'
+			  })
+			/*.add({
+				targets: '.ml14',
+				opacity: 0,
+				duration: 1000,
+				easing: "easeOutExpo",
+				delay: 1000
+			  });*/
+			
+			// Wrap every letter in a span
+			$('.heading .letters').each(function(){
+			  $(this).html($(this).text().replace(/([^\x00-\x80]|\w)/g, "<span class='letter'>$&</span>"));
+			});
+
+			anime.timeline()
+			  .add({
+				targets: '.heading .line',
+				scaleY: [0,1],
+				opacity: [0.5,1],
+				easing: "easeOutExpo",
+				duration: 700
+			  })
+			  .add({
+				targets: '.heading .line',
+				translateX: [0,$(".heading .letters").width()+20],
+				opacity: [1,0],
+				easing: "easeOutExpo",
+				duration: 700
+			  }).add({
+				targets: '.heading .letter',
+				opacity: [0,1],
+				easing: "easeOutExpo",
+				duration: 600,
+				offset: '-=775',
+				delay: function(el, i) {
+				  return 34 * (i+1)
+				}
+			  })
+			
+			anime({
+				targets: "."
+			})
+			
 		</script>
 	</body>
 </html>
