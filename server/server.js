@@ -21,9 +21,14 @@ const serverHostname = "sf2018.dev.iblueg.cn";
 // Otherwise History Message WILL NOT WORK
 const historyMessageApi = "http://localhost:8888/";
 
-function insertSql(name, comment, time) {
-  var sqlParam = [userIp, time, name, comment];
+// IP cause Problems...
+// Believe me.
+var userIp = "";
 
+function insertSql(name, comment, time) {
+  ip = (userIp) ? userIp : "0.0.0.0";
+  var sqlParam = [ip, time, name, comment];
+  
   connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
     if (error) throw error;
     log('Message Inserted. MySQL Response: ' + results, "INFO");
