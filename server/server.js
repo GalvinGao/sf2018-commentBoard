@@ -61,7 +61,6 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       break;
     case "/api/history":
       request.get(historyMessageApi).pipe(res);
-      res.end();
       break;
     default:
       res.writeHead(404);
