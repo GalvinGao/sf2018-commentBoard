@@ -48,7 +48,6 @@ var sslOptions = {
 var sslServer = https.createServer(sslOptions, function (req, res) {
   //res.writeHead(403); // Response https connections
   //res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
-  const userIp = req.connection.remoteAddress;
   switch (req.url) {
     case "/":
       res.write(fs.readFileSync("../clients/client-user.html"));
@@ -63,6 +62,11 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.end();
   }
 }).listen(443);
+
+sslServer.on('connection', function(sock) {
+  var userIp = sock.remoteAddress
+  log('New SSL connection from: ' + sock.remoteAddress, "INFO");
+});
 
 var httpServer = http.createServer(function (req, res) {
   res.writeHead(301, { 'Location': 'https://' + serverHostname + req.url });
