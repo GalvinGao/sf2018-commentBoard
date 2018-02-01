@@ -32,6 +32,7 @@
 				font-size: 2em;
 				padding: 0.75em;
 				text-shadow: 0 0 3px #fff;
+				margin-bottom: 1em;
 			}
 			
 			.header .text {
@@ -171,7 +172,7 @@
 			}
 			
 			.is-loading, .not-loading {
-				transition: all 0.3s ease-in-out;
+				transition: all 0.3s cubic-bezier(0.8, 0.25, 0.25, 0.8); 
 			}
 			
 			.is-loading {
@@ -179,7 +180,7 @@
 			}
 			
 			.not-loading {
-				top: -140px;
+				top: -200px;
 			}
 			
 			.spin {
@@ -363,7 +364,7 @@
 				</div>
 			</div>
 		</div>
-		<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1; filter: blur(5px);" id="canvas"></canvas>
+		<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -2; opacity: 1; filter: blur(4px);" id="canvas"></canvas>
 		<script>
 		var canvas,
 			ctx,
@@ -471,7 +472,7 @@
 		function init() {
 			canvas = document.getElementById('canvas');
 			ctx = canvas.getContext('2d');
-			size = 30;
+			size = 25;
 			lines = [];
 			reset();
 			loop();
@@ -488,7 +489,7 @@
 		}
 
 		function create() {
-			if (tick % 5 === 0) {
+			if (tick % 10 === 0) {
 				lines.push(new line());
 			}
 		}
@@ -548,6 +549,7 @@
 		<!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
 		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js" integrity="sha384-RydurAhVLkWOTB6JAAzjuVHy6VsmznzaDLHvqffwz9DPG0PgMpVlVSu3faIetRFa" crossorigin="anonymous"></script>
 		<script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js" integrity="sha384-ujpAYcyxFaJsZN5668lLgOpEH8vtWrbOq8fvj+WZ2kD71LJwGa/9QP/suPPF1hTI" crossorigin="anonymous"></script>
+		
 		<script id="main-script">
 			window.settings = {
 				historyPostApi: "/api/history",
@@ -559,38 +561,6 @@
 				unexpected: {warn: "", error: "", fatal: ""},
 				error: {error: "", fatal: ""}
 			}
-		
-			throttle = function(func, wait, options) {
-				var context, args, result;
-				var timeout = null;
-				var previous = 0;
-				if (!options) options = {};
-				var later = function() {
-						previous = options.leading === false ? 0 : _.now();
-						timeout = null;
-						result = func.apply(context, args);
-						if (!timeout) context = args = null
-				};
-				return function() {
-					var now = new Date().getTime();
-					if (!previous && options.leading === false) previous = now;
-					var remaining = wait - (now - previous);
-					context = this;
-					args = arguments;
-					if (remaining <= 0 || remaining > wait) {
-						if (timeout) {
-							clearTimeout(timeout);
-							timeout = null
-						}
-						previous = now;
-						result = func.apply(context, args);
-						if (!timeout) context = args = null
-					} else if (!timeout && options.trailing !== false) {
-						timeout = setTimeout(later, remaining)
-					}
-					return result
-				}
-			};
 			
 			$.get(window.settings.historyPostApi, function(data){
 				if (data) {
@@ -755,6 +725,7 @@
 				$(".loading").removeClass("is-loading");
 				$(".loading").addClass("not-loading");
 				// Clears the input
+				$("#comment").val("");
 			}
 			
 			function friendlyError(errorMsg, noticeSelector) {
@@ -844,11 +815,7 @@
 				  return 34 * (i+1)
 				}
 			  })
-			
-			anime({
-				targets: "."
-			})
-			
+			  
 		</script>
 	</body>
 </html>

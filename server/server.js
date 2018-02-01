@@ -25,6 +25,14 @@ const historyMessageApi = "http://localhost:8888/";
 // Believe me.
 var userIp = "";
 
+String.prototype.replaceAll = function(s1, s2) {
+	return this.replace(new RegExp(s1, "gm"), s2);
+}
+
+String.prototype.replaceReturn = function() {
+	return this.replaceAll("\n", "<br />");
+}
+
 function insertSql(name, comment, time) {
   ip = (userIp) ? userIp : "0.0.0.0";
   var sqlParam = [ip, time, name, comment];
@@ -43,7 +51,19 @@ var connection = mysqlConn.createConnection({
   database : "sfcomments"
 });
 
-connection.connect();
+connection.connect(handleError);
+connection.on('error', handleError);
+
+function handleError (err) {
+  if (err) {
+    // 如果是连接断开，自动重新连接
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      connect();
+    } else {
+      console.error(err.stack || err);
+    }
+  }
+}
 
 var sslOptions = {
   key: fs.readFileSync(keypath),
@@ -145,9 +165,9 @@ function procReq(msg, wsObject) {
       //console.log("message.name: %s", message.data.name);
       //console.log("message.message: %s", message.data.message);
       //console.log("message.time: %s", message.data.time);
-      var names = xss(message.data.name);
-      var messages = xss(message.data.message);
-      var times = message.data.time;
+      var names = xss(message.data.name.replaceReturn());
+      var messages = xss(message.data.message.replaceReturn());
+      var times = xss(message.data.time.replaceReturn());
       insertSql(names, messages, times);
       var dexss = {
         name: names,
