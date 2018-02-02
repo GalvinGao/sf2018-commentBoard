@@ -23,7 +23,8 @@
 			body {
 				padding: 0.3em;
 				text-align: left;
-				font-family: 'Product Sans', 'Open Sans', serif;
+				font-display: swap;
+				font-family: 'chinese-font', 'Product Sans', 'Open Sans', serif;
 				background: #000000;
 			}
 
@@ -267,6 +268,11 @@
 				height: 4em !important;
 				width: 11em !important;
 			}
+			
+			.progress-indeterminate {
+				position: fixed;
+				top: 100;
+			}
 		</style>
 		<link rel="stylesheet" href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" integrity="sha384-gGIdbE3rejhnmhbMZyasqhmdgF/Wza7NbuLq2eAVP92BbPF/ziwfO1LtP7E/ai36" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
@@ -288,7 +294,7 @@
 						<span class="letters">Submit</span>
 					</span>
 				</h1>
-				<div class="submitForm row">
+				<div class="submitForm row section-box">
 					<div class="input-field col s12">
 						<input placeholder="John Appleseed" id="name" type="text"></input>
 						<label for="name">姓名 / Name</label>
@@ -304,43 +310,45 @@
 					</div>
 				</div>
 			</div>
-			<div class="section comment">
+			<div class="section comment section-box">
 				<h1 class="heading">
 					<span class="text-wrapper">
 						<span class="line line1"></span>
 						<span class="letters">Comments</span>
 					</span>
 				</h1>
-				<div class="single-comment">
-					<div class="name">
-						Lorem Ipsum Dolor 1
+				<div class="section-box">
+					<div class="single-comment">
+						<div class="name">
+							Lorem Ipsum Dolor 1
+						</div>
+						<div class="content">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh.
+						</div>
 					</div>
-					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh.
+					<div class="single-comment">
+						<div class="name">
+							Lorem Ipsum Dolor 2
+						</div>
+						<div class="content">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium.
+						</div>
 					</div>
-				</div>
-				<div class="single-comment">
-					<div class="name">
-						Lorem Ipsum Dolor 2
+					<div class="single-comment">
+						<div class="name">
+							Lorem Ipsum Dolor 3
+						</div>
+						<div class="content">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh.
+						</div>
 					</div>
-					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh. Curabitur sed lacus ut dolor dictum pretium.
-					</div>
-				</div>
-				<div class="single-comment">
-					<div class="name">
-						Lorem Ipsum Dolor 3
-					</div>
-					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh.
-					</div>
-				</div>
-				<div class="single-comment">
-					<div class="name">
-						Lorem Ipsum Dolor 4
-					</div>
-					<div class="content">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh.
+					<div class="single-comment">
+						<div class="name">
+							Lorem Ipsum Dolor 4
+						</div>
+						<div class="content">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh.
+						</div>
 					</div>
 				</div>
 			</div>
@@ -361,6 +369,11 @@
 						</svg><br>
 						Loading...
 					</div>
+				</div>
+			</div>
+			<div class="ue progress-indeterminate hide">
+				<div class="progress">
+					<div class="indeterminate"></div>
 				</div>
 			</div>
 		</div>
@@ -731,6 +744,10 @@
 			function friendlyError(errorMsg, noticeSelector) {
 				hideLoadingBox();
 				Materialize.toast(errorMsg, 3000);
+				if ($(noticeSelector).hasClass("animated")) {
+					$(noticeSelector).removeClass("animated");
+					$(noticeSelector).removeClass("shake");
+				}
 				$(noticeSelector).addClass("animated shake");
 			}
 			
@@ -815,6 +832,19 @@
 				  return 34 * (i+1)
 				}
 			  })
+			
+			anime({
+				targets: ".section-box .input-field, .section-box .single-comment",
+				translateY: [-150, 0],
+				translateX: [-100, 0],
+				scaleX: [0.2, 1],
+				opacity: [0, 1],
+				easing: "easeOutExpo",
+				duration: 1250,
+				delay: function(el, i) {
+				  return 175 * i
+				}
+			})
 			  
 		</script>
 	</body>
