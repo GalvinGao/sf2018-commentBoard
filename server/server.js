@@ -214,8 +214,8 @@ function procReq(msg, wsObject) {
       //console.log("message.message: %s", message.data.message);
       //console.log("message.time: %s", message.data.time);
       var names = formatData(message.data.name);
-      var messages = formatData(message.data.message.replaceReturn());
-      var times = formatData(message.data.time.replaceReturn());
+      var messages = formatData(message.data.message);
+      var times = formatData(message.data.time);
       insertSql(names, messages, times);
       var dexss = {
         name: names,
