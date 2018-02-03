@@ -6,6 +6,24 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const request = require("request");
+const bunyan = require('bunyan');
+const url = require('url');
+const config = require('./config'); // Personal Configuration File
+
+// Initialize Starts Here //
+
+// Seriously without config file I will be out of my mind lol...
+if (typeof config === 'undefined') {
+  console.error("Where's ur config file bro? I'm leaving now...");
+  process.exit();
+}
+
+// Log Module by bunyan
+const logMysql = bunyan.createLogger({name: "MySQL"});
+const logWss = bunyan.createLogger({name: "WebSocket-Server"});
+const logWsscp = bunyan.createLogger({name: "WebSocket-ContentParse"});
+const logHttp = bunyan.createLogger({name: "HTTP-Server"});
+const logHttps = bunyan.createLogger({name: "HTTPS-Server"});
 
 // HTTPS Config
 const keypath = '/etc/letsencrypt/live/sf2018.dev.iblueg.cn/privkey.pem'; // HTTPS Server Certificate Key
@@ -21,16 +39,21 @@ const serverHostname = "sf2018.dev.iblueg.cn";
 // Otherwise History Message WILL NOT WORK
 const historyMessageApi = "http://localhost:8888/";
 
+// WebSocket Ping Interval (miliseconds)
+const pingInterval = 15000;
+
 // IP cause Problems...
 // Believe me.
 var userIp = "";
 
-String.prototype.replaceAll = function(s1, s2) {
-	return this.replace(new RegExp(s1, "gm"), s2);
+// Initialize Ends Over Here ~ //
+
+function replaceReturn(str) {
+	return this.replace(new RegExp("\n", "gm"), "<br>");
 }
 
-String.prototype.replaceReturn = function() {
-	return this.replaceAll("\n", "<br />");
+function formatData(str) {
+	return xss(replaceReturn(str));
 }
 
 function insertSql(name, comment, time) {
@@ -43,7 +66,7 @@ function insertSql(name, comment, time) {
   });
 }
 
-var connection = mysqlConn.createConnection({
+const connection = mysqlConn.createConnection({
   host     : "localhost",
   port     : "3306",
   user     : "sf2018",
@@ -58,9 +81,11 @@ function handleError (err) {
   if (err) {
     // 如果是连接断开，自动重新连接
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-      connect();
+      log("MySQL Connection Lost. Reconnecting...", "WARN");
+      connection.connect();
     } else {
-      console.error(err.stack || err);
+      log("MySQL Error:", "FATAL");
+      logMysql.error(err.stack || err);
     }
   }
 }
@@ -73,7 +98,8 @@ var sslOptions = {
 var sslServer = https.createServer(sslOptions, function (req, res) {
   //res.writeHead(403); // Response https connections
   //res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
-  switch (req.url) {
+  reqPath = url.parse(req.url)['pathname'];
+  switch (reqPath) {
     case "/":
       res.setHeader('Content-Type', 'text/html');
       res.setHeader("Access-Control-Allow-Origin", "*");
@@ -91,6 +117,28 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.setHeader("Access-Control-Allow-Methods", "GET");
       res.setHeader("Content-Encoding", "utf-8");
       request.get(historyMessageApi).pipe(res);
+      break;
+    case config.adminUrl:
+      var token = function(){
+      	try {
+      	  var tokenParsed = querystring.parse(url.parse(req.url)['query'])['token'];
+      	  logHttps.info("Token %s received", tokenParsed);
+      	  return tokenParsed;
+      	} catch (e) {
+      	  logHttps.warn("Query string parse error.");
+      	  return;
+      	}
+      }
+      if (token === config.adminToken) {
+      	// Authed.
+      	logHttps.info("Admin Stats page authed using token %s", "PFaHq1hC");
+      	res.end("You have been authed baby! Yeah!");
+      } else {
+      	// Pretend to be Nothing Happened LOLLLLLLL.
+      	res.writeHead(404);
+        res.write(fs.readFileSync("../clients/404.html"))
+        res.end();
+      }
       break;
     default:
       res.writeHead(404);
@@ -135,7 +183,7 @@ const interval = setInterval(function ping() {
     ws.isAlive = false;
     ws.ping(noop);
   });
-}, 15000);
+}, pingInterval);
 
 function log(msg, state) {
   var time = new Date();
@@ -165,9 +213,9 @@ function procReq(msg, wsObject) {
       //console.log("message.name: %s", message.data.name);
       //console.log("message.message: %s", message.data.message);
       //console.log("message.time: %s", message.data.time);
-      var names = xss(message.data.name.replaceReturn());
-      var messages = xss(message.data.message.replaceReturn());
-      var times = xss(message.data.time.replaceReturn());
+      var names = formatData(message.data.name);
+      var messages = formatData(message.data.message.replaceReturn());
+      var times = formatData(message.data.time.replaceReturn());
       insertSql(names, messages, times);
       var dexss = {
         name: names,
@@ -178,13 +226,13 @@ function procReq(msg, wsObject) {
       boardcast(dexss, "newmessage");
       break;
     default:
-      console.info("Invalid client action type: " + action, "ERROR");
+      log("Invalid client action type: " + action, "ERROR");
   }
 
 }
 
 function boardcast(message, type) {
-  console.log("Broadcasting: " + respParse(message, type), "INFO");
+  log("Broadcasting: " + respParse(message, type), "INFO");
   wss.clients.forEach(function each(client) {
     if (client !== wss && client.readyState === WebSocket.OPEN) {
       client.send(respParse(message, type));

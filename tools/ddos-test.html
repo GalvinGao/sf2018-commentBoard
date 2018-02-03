@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+		<title>Pressure Test</title>
+	</head>
+	<body>
+		<button onclick="deactivate();window.close();">DEACTIVATE!</button>
+		<script>
+		window.deactivate = "0";
+		function deactivate() {
+			window.deactivate = "1";
+			window.close();
+		}
+		var url = "https://sf2018.dev.iblueg.cn";
+		for (i = 0; i < 100; i++) {
+			if (window.deactivate == "0") {
+				window.open(url);
+			}
+		}
+		</script>
+	</body>
+</html>
