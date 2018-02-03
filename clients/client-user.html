@@ -751,6 +751,7 @@
 			}
 			
 			function friendlyError(errorMsg, noticeSelector) {
+				console.info("Friendly Error Message [%s], will Notice Element [%s]", errorMsg, noticeSelector);
 				hideLoadingBox();
 				Materialize.toast(errorMsg, 3000);
 				if ($(noticeSelector).hasClass("animated")) {
