@@ -11,6 +11,7 @@
       "resolved": "https://registry.npmjs.org/bignumber.js/-/bignumber.js-4.0.4.tgz",
       "version": "4.0.4"
     },
+    "bunyan": "^1.8.12",
     "core-util-is": {
       "integrity": "sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=",
       "resolved": "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz",

@@ -49,7 +49,7 @@ var userIp = "";
 // Initialize Ends Over Here ~ //
 
 function replaceReturn(str) {
-	return this.replace(new RegExp("\n", "gm"), "<br>");
+	return str.replace(new RegExp("\n", "gm"), "<br>");
 }
 
 function formatData(str) {
