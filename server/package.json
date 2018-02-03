@@ -30,6 +30,7 @@
       "version": "1.0.0"
     },
     "mysql": "^2.15.0",
+    "node-gyp": "^3.6.2",
     "process-nextick-args": {
       "integrity": "sha1-FQ4gt1ZZCtP5EJPyWk8q2L/zC6M=",
       "resolved": "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz",
