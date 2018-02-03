@@ -48,14 +48,6 @@ var userIp = "";
 
 // Initialize Ends Over Here ~ //
 
-function replaceReturn(str) {
-	return str.replace(new RegExp("\n", "gm"), "<br>");
-}
-
-function formatData(str) {
-	return xss(replaceReturn(str));
-}
-
 function insertSql(name, comment, time) {
   ip = (userIp) ? userIp : "0.0.0.0";
   var sqlParam = [ip, time, name, comment];
@@ -213,9 +205,9 @@ function procReq(msg, wsObject) {
       //console.log("message.name: %s", message.data.name);
       //console.log("message.message: %s", message.data.message);
       //console.log("message.time: %s", message.data.time);
-      var names = formatData(message.data.name);
-      var messages = formatData(message.data.message);
-      var times = formatData(message.data.time);
+      var names = xss(message.data.name);
+      var messages = xss(message.data.message);
+      var times = xss(message.data.time);
       insertSql(names, messages, times);
       var dexss = {
         name: names,

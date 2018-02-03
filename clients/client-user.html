@@ -631,8 +631,8 @@
 				 
 				 loadingBox();
 				 
-				 var name = $(".submit #name").val() || friendlyError("请输入'家长名称'。 / Please complete 'name' field.", "#name");
-				 var message = $(".submit #comment").val() || friendlyError("请输入留言。 / Please complete 'comments' field.", "#comment");
+				 var name = $(".submit #name").val().replace(new RegExp("\n", "gm"), "<br>"); || friendlyError("请输入'家长名称'。 / Please complete 'name' field.", "#name");
+				 var message = $(".submit #comment").val().replace(new RegExp("\n", "gm"), "<br>"); || friendlyError("请输入留言。 / Please complete 'comments' field.", "#comment");
 				 var time = new Date().getTime() || 1;
 				 
 				 if (!name || !message) {
@@ -757,6 +757,10 @@
 			
 			function ob(object) {
 				return JSON.stringify(object, null, 4);
+			}
+			
+			function replaceReturn(str) {
+				return str.replace(new RegExp("\n", "gm"), "<br>");
 			}
 			
 			/* Alias Explained:
