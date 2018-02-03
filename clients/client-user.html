@@ -631,12 +631,20 @@
 				 
 				 loadingBox();
 				 
-				 var name = $(".submit #name").val().replace(new RegExp("\n", "gm"), "<br>"); || friendlyError("请输入'家长名称'。 / Please complete 'name' field.", "#name");
-				 var message = $(".submit #comment").val().replace(new RegExp("\n", "gm"), "<br>"); || friendlyError("请输入留言。 / Please complete 'comments' field.", "#comment");
-				 var time = new Date().getTime() || 1;
+				 var name = $(".submit #name").val() || friendlyError("请输入'家长名称'。 / Please complete 'name' field.", "#name"); return false;
+				 var message = $(".submit #comment").val() || friendlyError("请输入留言。 / Please complete 'comments' field.", "#comment"); return false;
+				 var time = new Date().getTime() || 0;
 				 
 				 if (!name || !message) {
 				 	return false;
+				 }
+				
+				 try {
+					 name = name.replace(new RegExp("\n", "gm"), "<br>");
+					 message = message.replace(new RegExp("\n", "gm"), "<br>");
+				 } catch (e) {
+					 console.error("Name / Message return replace failed.");
+					 return false;
 				 }
 				 
 				 var data = {
