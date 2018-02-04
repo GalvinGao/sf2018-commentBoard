@@ -126,7 +126,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       	logHttps.info("Admin Stats page authed using token %s", "PFaHq1hC");
       	res.end("You have been authed baby! Yeah!");
       } else {
-      	logHttps.warn("Admin Stats page is not authed due to wrong token %s.", token);
+      	logHttps.warn("Admin Stats page is not authed due to wrong token" + token);
       	// Pretend to be Nothing Happened LOLLLLLLL.
       	res.writeHead(404);
         res.write(fs.readFileSync("../clients/404.html"))
@@ -141,6 +141,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
 }).listen(443);
 
 var httpServer = http.createServer(function (req, res) {
+  logHttp.info({req: req}, 'HTTP Request received.');
   res.writeHead(301, { 'Location': 'https://' + serverHostname + req.url });
   res.end("Redirecting...");
 }).listen(80);
