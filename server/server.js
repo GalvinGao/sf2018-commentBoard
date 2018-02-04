@@ -121,12 +121,12 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       	  return;
       	}
       }
-      if (token === config.adminToken) {
+      if (token() === config.adminToken) {
       	// Authed.
-      	logHttps.info("Admin Stats page authed using token %s", "PFaHq1hC");
+      	logHttps.info("Admin Stats page authed using token %s.", "PFaHq1hC");
       	res.end("You have been authed baby! Yeah!");
       } else {
-      	logHttps.warn("Admin Stats page is not authed due to wrong token" + token);
+      	logHttps.warn("Admin Stats page is not authed due to wrong token %s.", token());
       	// Pretend to be Nothing Happened LOLLLLLLL.
       	res.writeHead(404);
         res.write(fs.readFileSync("../clients/404.html"))
