@@ -121,6 +121,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       	  return;
       	}
       }
+      debugger;
       if (token() === config.adminToken) {
       	// Authed.
       	logHttps.info("Admin Stats page authed using token %s.", "PFaHq1hC");
