@@ -115,7 +115,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       var token = function(){
       	try {
       	  var tokenParsed = querystring.parse(url.parse(req.url)['query'])['token'];
-      	  logHttps.info("Token %s received", tokenParsed);
+      	  logHttps.info("Token is %s", tokenParsed);
       	  return tokenParsed;
       	} catch (e) {
       	  logHttps.warn("Query string parse error: %s.", e);
@@ -124,25 +124,25 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       }
       if (token() === config.adminToken) {
       	// Authed.
-      	logHttps.info("Admin Stats page authed using token %s.", "PFaHq1hC");
-      	res.end("You have been authed baby! Yeah!");
+        res.end("You have been authed! Yeah, baby!")
+      	logHttps.info("Admin Stats page authed using token %s.", token());
       } else {
       	logHttps.warn("Admin Stats page is not authed due to wrong token %s.", token());
       	// Pretend to be Nothing Happened LOLLLLLLL.
       	res.writeHead(404);
-        res.write(fs.readFileSync("../clients/404.html"))
+        res.write(fs.readFileSync("../clients/404.html"));
         res.end();
       }
       break;
     default:
       res.writeHead(404);
-      res.write(fs.readFileSync("../clients/404.html"))
+      res.write(fs.readFileSync("../clients/404.html"));
       res.end();
   }
 }).listen(443);
 
 var httpServer = http.createServer(function (req, res) {
-  logHttp.info({req: req}, 'HTTP Request received.');
+  logHttp.info({reqUrl: req.url}, 'HTTP Request received.');
   res.writeHead(301, { 'Location': 'https://' + serverHostname + req.url });
   res.end("Redirecting...");
 }).listen(80);
@@ -161,16 +161,17 @@ wss.on('listening', function(){
 })
 
 wss.on('connection', function connection(ws) {
-  log("New WebSocket Connection Established.", "INFO");
+  logWss.info("New WebSocket Connection Established.");
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
     procReq(message, ws);
   });
-  ws.on('error', (e) => console.log('Client connection error: [ code:', e.code, ', errno:', e.errno, ']. More details:\n', e));
-  ws.on('close', function close() { log('Connection Disconnected. Current Online:' + JSON.stringify(wss.clients), "DEBUG"); });
+  ws.on('error', (e) => logWss.warn('Client connection error: [ code:', e.code, ', errno:', e.errno, ' ]. More details:', e));
+  ws.on('close', function close() {
+    logWss.info('Connection Disconnected. Current Online: ', JSON.stringify(wss.clients));
+  });
 });
-
 
 const interval = setInterval(function ping() {
   wss.clients.forEach(function each(ws) {
