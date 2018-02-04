@@ -117,8 +117,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       	  logHttps.info("Token %s received", tokenParsed);
       	  return tokenParsed;
       	} catch (e) {
-      	  logHttps.warn("Query string parse error.");
-          debugger;
+      	  logHttps.warn("Query string parse error: %s.", e);
       	  return;
       	}
       }
