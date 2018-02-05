@@ -108,6 +108,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       if (token() === config.adminToken) {
       	// Authed.
         adminStats(res);
+        res.end();
       	logHttps.info("Admin Stats page authed using token %s.", token());
       } else {
       	logHttps.warn("Admin Stats page is not authed due to wrong token %s.", token());
