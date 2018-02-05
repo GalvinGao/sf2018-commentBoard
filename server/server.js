@@ -126,7 +126,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
 }).listen(443);
 
 var httpServer = http.createServer(function (req, res) {
-  logHttp.trace({reqUrl: req.url}, 'HTTP Request received.');
+  logHttp.debug({reqUrl: req.url}, 'HTTP Request received.');
   res.writeHead(301, { 'Location': 'https://' + config.serverHostname + req.url });
   res.end("Redirecting...");
 }).listen(80);
@@ -137,7 +137,7 @@ function noop() {}
 
 function heartbeat() {
   this.isAlive = true;
-  logWss.trace("WebSocket Heartbeat package received.");
+  logWss.debug("WebSocket Heartbeat package received.");
 }
 
 wss.on('listening', function(){
@@ -145,7 +145,7 @@ wss.on('listening', function(){
 })
 
 wss.on('connection', function connection(ws) {
-  logWss.trace("New WebSocket Connection Established.");
+  logWss.debug("New WebSocket Connection Established.");
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
@@ -177,12 +177,12 @@ function log(msg, state) {
 // procReq = processRequest
 
 function procReq(msg, wsObject) {
-  logWsscp.trace('Received WebSocket Data (formatted JSON): %j', msg);
+  logWsscp.debug('Received WebSocket Data (formatted JSON): %j', msg);
   // console.log('Received (String): %s', msg);
   try {
     var message = JSON.parse(msg);
   } catch (e) {
-    logWsscp.trace("Not a valid client request (JSON).");
+    logWsscp.debug("Not a valid client request (JSON).");
     wsObject.send("{ status: \"error\", message: \"Invalid JSON\" }");
     return;
   }
@@ -197,7 +197,7 @@ function procReq(msg, wsObject) {
       var names = xss(message.data.name);
       var messages = xss(message.data.message);
       var times = xss(message.data.time);
-      logWsscp.trace("New Message dexss: %s, %s, %s", names, messages, times);
+      logWsscp.debug("New Message dexss: %s, %s, %s", names, messages, times);
       insertSql(names, messages, times);
       var dexss = {
         name: names,
