@@ -16,7 +16,7 @@ const config = require('./config'); // Personal Configuration File
 // Seriously without config file I will be out of my mind lol...
 if (typeof config === 'undefined') {
   console.error("Where's ur config file bro? I'm leaving now...");
-  process.exit();
+  process.exit(-1);
 }
 
 // Log Module by bunyan
@@ -26,26 +26,9 @@ const logWsscp = bunyan.createLogger({name: "WebSocket-ContentParse"});
 const logHttp = bunyan.createLogger({name: "HTTP-Server"});
 const logHttps = bunyan.createLogger({name: "HTTPS-Server"});
 
-// HTTPS Config
-const keypath = '/etc/letsencrypt/live/sf2018.dev.iblueg.cn/privkey.pem'; // HTTPS Server Certificate Key
-const certpath = '/etc/letsencrypt/live/sf2018.dev.iblueg.cn/fullchain.pem'; // HTTPS Server Certificate
-
-// HTTP jumps to HTTPS - Hostname Config
-// PLEASE MAKE SURE THIS IS CORRECTLY CONFIGURED!
-// NO NEED FOR "/" OR "http://"!
-const serverHostname = "sf2018.dev.iblueg.cn";
-
-// Use request to get the api and then echo it.
-// MAKE SURE this is CORRECTLY CONFIGURED
-// Otherwise History Message WILL NOT WORK
-const historyMessageApi = "http://localhost:8888/";
-
-// WebSocket Ping Interval (miliseconds)
-const pingInterval = 15000;
-
 // IP cause Problems...
 // Believe me.
-var userIp = "";
+userIp: ""
 
 // Initialize Ends Over Here ~ //
 
@@ -55,7 +38,7 @@ function insertSql(name, comment, time) {
   
   connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
     if (error) throw error;
-    log('Message Inserted. MySQL Response: ' + results, "INFO");
+    logMysql.info('Message Inserted. MySQL Response: ' + results);
   });
 }
 
@@ -74,18 +57,18 @@ function handleError (err) {
   if (err) {
     // 如果是连接断开，自动重新连接
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-      log("MySQL Connection Lost. Reconnecting...", "WARN");
-      connection.connect();
+      logMysql.warn("MySQL Connection Lost. Reconnecting...");
+      connection.connect(handleError);
     } else {
-      log("MySQL Error:", "FATAL");
-      logMysql.error(err.stack || err);
+      logMysql.fatal("MySQL Connection Error %s. Trying to reconnect...", err.stack || err);
+      connection.connect(handleError);
     }
   }
 }
 
 var sslOptions = {
-  key: fs.readFileSync(keypath),
-  cert: fs.readFileSync(certpath)
+  key: fs.readFileSync(config.keypath),
+  cert: fs.readFileSync(config.certpath)
 };
 
 var sslServer = https.createServer(sslOptions, function (req, res) {
@@ -109,7 +92,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Access-Control-Allow-Methods", "GET");
       res.setHeader("Content-Encoding", "utf-8");
-      request.get(historyMessageApi).pipe(res);
+      request.get(config.historyMessageApi).pipe(res);
       break;
     case config.adminUrl:
       var token = function(){
@@ -124,7 +107,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       }
       if (token() === config.adminToken) {
       	// Authed.
-        res.end("You have been authed! Yeah, baby!")
+        adminStats(res);
       	logHttps.info("Admin Stats page authed using token %s.", token());
       } else {
       	logHttps.warn("Admin Stats page is not authed due to wrong token %s.", token());
@@ -142,8 +125,8 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
 }).listen(443);
 
 var httpServer = http.createServer(function (req, res) {
-  logHttp.info({reqUrl: req.url}, 'HTTP Request received.');
-  res.writeHead(301, { 'Location': 'https://' + serverHostname + req.url });
+  logHttp.trace({reqUrl: req.url}, 'HTTP Request received.');
+  res.writeHead(301, { 'Location': 'https://' + config.serverHostname + req.url });
   res.end("Redirecting...");
 }).listen(80);
  
@@ -153,15 +136,15 @@ function noop() {}
 
 function heartbeat() {
   this.isAlive = true;
-  log("WebSocket Heartbeat package received.", "DEBUG");
+  logWss.trace("WebSocket Heartbeat package received.");
 }
 
 wss.on('listening', function(){
-  log("Listening for incoming WebSockets...", "INFO");
+  logWss.info("Listening for incoming WebSockets...");
 })
 
 wss.on('connection', function connection(ws) {
-  logWss.info("New WebSocket Connection Established.");
+  logWss.trace("New WebSocket Connection Established.");
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
@@ -179,7 +162,7 @@ const interval = setInterval(function ping() {
     ws.isAlive = false;
     ws.ping(noop);
   });
-}, pingInterval);
+}, config.pingInterval);
 
 function log(msg, state) {
   var time = new Date();
@@ -193,25 +176,27 @@ function log(msg, state) {
 // procReq = processRequest
 
 function procReq(msg, wsObject) {
-  console.log('Received (JSON): %j', msg);
+  logWsscp.trace('Received WebSocket Data (formatted JSON): %j', msg);
   // console.log('Received (String): %s', msg);
   try {
     var message = JSON.parse(msg);
   } catch (e) {
-    log("Not a valid JSON client request.", "ERROR");
-    wsObject.send("{status: \"error\", message: \"Invalid JSON\"}");
+    logWsscp.trace("Not a valid client request (JSON).");
+    wsObject.send("{ status: \"error\", message: \"Invalid JSON\" }");
     return;
   }
   var action = message.action;
 
   switch (action) {
     case "post":
+      logWsscp.info("Get new message: %s, %s, %s", message.data.name, message.data.message, message.data.time);
       //console.log("message.name: %s", message.data.name);
       //console.log("message.message: %s", message.data.message);
       //console.log("message.time: %s", message.data.time);
       var names = xss(message.data.name);
       var messages = xss(message.data.message);
       var times = xss(message.data.time);
+      logWsscp.trace("New Message dexss: %s, %s, %s", names, messages, times);
       insertSql(names, messages, times);
       var dexss = {
         name: names,
@@ -222,13 +207,13 @@ function procReq(msg, wsObject) {
       boardcast(dexss, "newmessage");
       break;
     default:
-      log("Invalid client action type: " + action, "ERROR");
+      logWsscp.info("Invalid client action type: %s", action);
   }
 
 }
 
 function boardcast(message, type) {
-  log("Broadcasting: " + respParse(message, type), "INFO");
+  logWss.info("Broadcasting message: " + respParse(message, type));
   wss.clients.forEach(function each(client) {
     if (client !== wss && client.readyState === WebSocket.OPEN) {
       client.send(respParse(message, type));
@@ -255,4 +240,8 @@ function respParse(dataObject, type) {
 
 function md5(text) {
 	return crypto.createHash('md5').update(text).digest('hex');
+}
+
+function adminStats(resObject) {
+	resObject.write("You have been authed! Yeah, baby!");
 }
