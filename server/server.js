@@ -28,7 +28,7 @@ const logHttps = bunyan.createLogger({name: "HTTPS-Server"});
 
 // IP cause Problems...
 // Believe me.
-userIp: ""
+var userIp = "";
 
 // Initialize Ends Over Here ~ //
 
