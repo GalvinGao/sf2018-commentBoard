@@ -318,6 +318,7 @@
 					</span>
 				</h1>
 				<div class="section-box">
+					<!--
 					<div class="single-comment">
 						<div class="name">
 							Lorem Ipsum Dolor 1
@@ -348,6 +349,19 @@
 						</div>
 						<div class="content">
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut lacinia lorem, vel vehicula nibh. Sed venenatis, massa eget euismod ornare, justo neque gravida purus, sed pulvinar velit turpis pellentesque magna. Sed vulputate sodales varius. Fusce ullamcorper dignissim nibh.
+						</div>
+					</div>
+				</div>
+				-->
+				<div id="app" _desc="Vue.js App Framework" style="opacity: 0;">
+					<div v-for="comment in comments">
+						<div class="single-comment">
+							<div class="name">
+								{{ comment.name }}
+							</div>
+							<div class="content">
+								{{ comment.message }}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -561,9 +575,11 @@
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha384-FtJyC+/3fgtPbqlacLHdGwBrmPjKoYBsiqNF5/BEprsnIXB4xtXLCJRx7Xx+TWKP" crossorigin="anonymous"></script>
 		<!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
 		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js" integrity="sha384-RydurAhVLkWOTB6JAAzjuVHy6VsmznzaDLHvqffwz9DPG0PgMpVlVSu3faIetRFa" crossorigin="anonymous"></script>
-		<script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js" integrity="sha384-ujpAYcyxFaJsZN5668lLgOpEH8vtWrbOq8fvj+WZ2kD71LJwGa/9QP/suPPF1hTI" crossorigin="anonymous"></script>
+		<script src="https://cdn.bootcss.com/vue/2.5.13/vue.js"></script>
 		
 		<script id="main-script">
+			/* === Config === */
+			
 			window.settings = {
 				historyPostApi: "/api/history",
 				wsurl: "wss://sf2018.dev.iblueg.cn"
@@ -575,22 +591,40 @@
 				error: {error: "", fatal: ""}
 			}
 			
+			/* === [Main Logic] History Fetch === */
+			
 			$.get(window.settings.historyPostApi, function(data){
 				if (data) {
 					data = safeJson(data);
 					if (data.status in window.statusMeta.expected) {
 						for (i in data.data) {
 							console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].message, data.data[i].time);
+							app.comments.unshift({name: data.data[i].name, message: data.data[i].message, time: data.data[i].time});
 						}
+						animateComments();
 					} else if (data.status in window.statusMeta.unexpected) {
 						console.error("[historyFetch] Server Error. Code:", data.status)
 					} else {
-						console.warn("[historyFetch] Server send an un-normal status code:", data.status)
+						console.error("[historyFetch] Server send an un-normal status code:", data.status);
 					}
 				} else {
-					console.log("[historyFetch] No response...")
+					console.error("[historyFetch] No response...")
 				}
 			})
+				.done(function() {
+					setTimeout('animateComments();', 1000);
+				})
+			
+			/* === [Main Logic] History Fetch Data Parser & Render {Vue.js} === */
+			
+			var app = new Vue({
+				el: "#app",
+				data: {
+					comments: []
+				}
+			})
+			
+			/* === Code Helpers === */
 			
 			function safeJson(jsonString) {
 				try {
@@ -600,6 +634,8 @@
 				}
 				return parsedJSON;
 			}
+			
+			/* === WebSocket Connection & Basic Initiation === */
 		
 			var socket;
 		    try {
@@ -617,6 +653,8 @@
 		    $(".sendCommentButton").click(function(){
 		    	submitComment();
 		    });
+			
+			/* === [Main Logic] Submit Comment === */
 			    
 			function submitComment() {
 				/* Feature Logic
@@ -675,6 +713,8 @@
 				 */
 			}
 			
+			/* === WebSocket Event Handlers === */
+			
 			// Connection Established.
 			function sOpen(){
 			    console.info('Connection has been Established.');
@@ -695,16 +735,17 @@
 							console.info("Message has been received by server.");
 							console.info("Checking message...");
 							window.msg = msg;
-							if (window.prevName === msg.data.name && window.prevMessage === msg.data.message && window.prevTime === msg.data.time) {
+							if (window.prevName === msg.data.name && window.prevMessage === msg.data.message && window.prevTime == msg.data.time) {
 								console.info("Message is Valid: Message is correctly sended to the server.");
 								hideLoadingBox();
 							} else {
-								console.warn("Message validation failed.");
+								console.warn("Message validation failed. [%s,%s,%s,%s,%s,%s] [%s,%s,%s,%s,%s,%s]", window.prevName, msg.data.name, window.prevMessage, msg.data.message, window.prevTime, msg.data.time, typeof window.prevName, typeof msg.data.name, typeof window.prevMessage, typeof msg.data.message, typeof window.prevTime, typeof msg.data.time );
 							}
 							break;
 						case "newmessage":
 							console.info("New Message received:", msg.data);
 							Materialize.toast("New Message: " + msg.data.name + " says " + msg.data.message, 3000); //DEVMARK
+							app.comments.unshift({name: msg.data.name, message: msg.data.message, time: msg.data.time});
 							break;
 						default:
 							console.info("Invalid response type:", msg.type);
@@ -750,16 +791,17 @@
 				$("#comment").val("");
 			}
 			
+			/* === User Experience === */
+			
 			function friendlyError(errorMsg, noticeSelector) {
 				console.info("Friendly Error Message [%s], will Notice Element [%s]", errorMsg, noticeSelector);
 				hideLoadingBox();
 				Materialize.toast(errorMsg, 3000);
-				if ($(noticeSelector).hasClass("animated")) {
-					$(noticeSelector).removeClass("animated");
-					$(noticeSelector).removeClass("shake");
-				}
 				$(noticeSelector).addClass("animated shake");
+				setTimeout('$("' + noticeSelector + '").removeClass("animated"); $("' + noticeSelector + '").removeClass("shake");', 1500);
 			}
+			
+			/* === Debug Helpers === */
 			
 			function odb(object) {
 				console.info(JSON.stringify(object, null, 4));
@@ -773,9 +815,7 @@
 				return str.replace(new RegExp("\n", "gm"), "<br>");
 			}
 			
-			/* Alias Explained:
-			 * UE: User Experience
-			 */
+			/* === Animation === */
 			
 			// Wrap every letter in a span
 			$('.title .letters').each(function(){
@@ -845,21 +885,36 @@
 				delay: function(el, i) {
 				  return 34 * (i+1)
 				}
-			  })
+			  });
 			
-			anime({
-				targets: ".section-box .input-field, .section-box .single-comment",
-				translateY: [-150, 0],
-				translateX: [-100, 0],
-				scaleX: [0.2, 1],
-				opacity: [0, 1],
-				easing: "easeOutExpo",
-				duration: 1250,
-				delay: function(el, i) {
-				  return 175 * i
-				}
-			})
-			  
+			  anime({
+					targets: ".section-box .input-field, .section-box .single-comment",
+					translateY: [-150, 0],
+					translateX: [-100, 0],
+					scaleX: [0.2, 1],
+					opacity: [0, 1],
+					easing: "easeOutExpo",
+					duration: 1250,
+					delay: function(el, i) {
+					  return 175 * i
+					}
+				})
+			
+			function animateComments() {
+				$("#app").css("opacity", 1);
+				anime({
+					targets: ".single-comment",
+					translateY: [-150, 0],
+					translateX: [-100, 0],
+					scaleX: [0.2, 1],
+					opacity: [0, 1],
+					easing: "easeOutExpo",
+					duration: 1250,
+					delay: function(el, i) {
+					  return 200 * i
+					}
+				})
+			}
 		</script>
 	</body>
 </html>
