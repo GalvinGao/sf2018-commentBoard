@@ -20,11 +20,11 @@ if (typeof config === 'undefined') {
 }
 
 // Log Module by bunyan
-const logMysql = bunyan.createLogger({name: "MySQL"});
-const logWss = bunyan.createLogger({name: "WebSocket-Server"});
-const logWsscp = bunyan.createLogger({name: "WebSocket-ContentParse"});
-const logHttp = bunyan.createLogger({name: "HTTP-Server"});
-const logHttps = bunyan.createLogger({name: "HTTPS-Server"});
+const logMysql = bunyan.createLogger({ name: "MySQL", src: config.debug, streams: config.logStreams });
+const logWss = bunyan.createLogger({ name: "WebSocket-Server", src: config.debug, streams: config.logStreams });
+const logWsscp = bunyan.createLogger({ name: "WebSocket-ContentParse", src: config.debug, streams: config.logStreams });
+const logHttp = bunyan.createLogger({ name: "HTTP-Server", src: config.debug, streams: config.logStreams });
+const logHttps = bunyan.createLogger({ name: "HTTPS-Server", src: config.debug, streams: config.logStreams });
 
 // IP cause Problems...
 // Believe me.
@@ -38,7 +38,7 @@ function insertSql(name, comment, time) {
   
   connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
     if (error) throw error;
-    logMysql.info('Message Inserted. MySQL Response: ' + results);
+    logMysql.trace('Message Inserted. MySQL Response: ' + results);
   });
 }
 
@@ -58,10 +58,10 @@ function handleError (err) {
     // 如果是连接断开，自动重新连接
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
       logMysql.warn("MySQL Connection Lost. Reconnecting...");
-      connection.connect(handleError);
+      connection.connect();
     } else {
-      logMysql.fatal("MySQL Connection Error %s. Trying to reconnect...", err.stack || err);
-      connection.connect(handleError);
+      logMysql.fatal("MySQL Connection Error Occurred. Trying to reconnect... Detail: %s", err.stack || err);
+      connection.connect();
     }
   }
 }
@@ -126,7 +126,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
 }).listen(443);
 
 var httpServer = http.createServer(function (req, res) {
-  logHttp.info({reqUrl: req.url}, 'HTTP Request received.');
+  logHttp.trace({reqUrl: req.url}, 'HTTP Request received.');
   res.writeHead(301, { 'Location': 'https://' + config.serverHostname + req.url });
   res.end("Redirecting...");
 }).listen(80);
@@ -137,7 +137,7 @@ function noop() {}
 
 function heartbeat() {
   this.isAlive = true;
-  logWss.info("WebSocket Heartbeat package received.");
+  logWss.trace("WebSocket Heartbeat package received.");
 }
 
 wss.on('listening', function(){
@@ -145,7 +145,7 @@ wss.on('listening', function(){
 })
 
 wss.on('connection', function connection(ws) {
-  logWss.info("New WebSocket Connection Established.");
+  logWss.debug("New WebSocket Connection Established.");
   ws.isAlive = true;
   ws.on('pong', heartbeat);
   ws.on('message', function incoming(message, req) {
@@ -153,7 +153,7 @@ wss.on('connection', function connection(ws) {
   });
   ws.on('error', (e) => logWss.warn('Client connection error: [ code:', e.code, ', errno:', e.errno, ' ]. More details:', e));
   ws.on('close', function close() {
-    logWss.info('Connection Disconnected. Current Online: ', JSON.stringify(wss.clients));
+    logWss.debug('Connection Disconnected. Current Online: ', JSON.stringify(wss.clients));
   });
 });
 
@@ -165,7 +165,8 @@ const interval = setInterval(function ping() {
   });
 }, config.pingInterval);
 
-function log(msg, state) {
+function _log(msg, state) {
+  // DEPRECATED //
   var time = new Date();
   var hour = time.getHours();
   var min = time.getMinutes();
@@ -177,27 +178,28 @@ function log(msg, state) {
 // procReq = processRequest
 
 function procReq(msg, wsObject) {
-  logWsscp.info('Received WebSocket Data (formatted JSON): %j', msg);
+  logWsscp.debug('Received WebSocket Data (formatted JSON): %j', msg);
   // console.log('Received (String): %s', msg);
   try {
     var message = JSON.parse(msg);
   } catch (e) {
-    logWsscp.info("Not a valid client request (JSON).");
+    logWsscp.debug("Request invalid, parse error. Not a valid client request (JSON). Parsing Error [%s], message content [%s].", e, msg);
     wsObject.send("{ status: \"error\", message: \"Invalid JSON\" }");
     return;
   }
+  
   var action = message.action;
 
   switch (action) {
     case "post":
-      logWsscp.info("Get new message: %s, %s, %s", message.data.name, message.data.message, message.data.time);
+      logWsscp.info("Got a new message: %s, %s, %s", message.data.name, message.data.message, message.data.time);
       //console.log("message.name: %s", message.data.name);
       //console.log("message.message: %s", message.data.message);
       //console.log("message.time: %s", message.data.time);
       var names = xss(message.data.name);
       var messages = xss(message.data.message);
       var times = xss(message.data.time);
-      logWsscp.info("New Message dexss: %s, %s, %s", names, messages, times);
+      logWsscp.debug("New Message dexss: %s, %s, %s", names, messages, times);
       insertSql(names, messages, times);
       var dexss = {
         name: names,
@@ -208,22 +210,18 @@ function procReq(msg, wsObject) {
       boardcast(dexss, "newmessage");
       break;
     default:
-      logWsscp.info("Invalid client action type: %s", action);
+      logWsscp.debug("Invalid client action type: %s", action);
   }
 
 }
 
 function boardcast(message, type) {
-  logWss.info("Broadcasting message: " + respParse(message, type));
+  logWss.info("Broadcasting message: %s", respParse(message, type));
   wss.clients.forEach(function each(client) {
     if (client !== wss && client.readyState === WebSocket.OPEN) {
       client.send(respParse(message, type));
     }
   });
-}
-
-function formatSend(message, type) {
-  wss.send(respParse(message, type));
 }
 
 function respParse(dataObject, type) {

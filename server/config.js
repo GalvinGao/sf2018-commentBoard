@@ -13,5 +13,26 @@ const config = {
 	historyMessageApi: "http://localhost:8888/",
 	// WebSocket Ping Interval (miliseconds)
 	pingInterval: 15000,
+	// Debug Switcher
+	// if true then when log (bunyan) it will trace the file
+	debug: true,
+	// Bunyan Log Stream, supports a lot of streams.
+	// Detailed at: https://github.com/trentm/node-bunyan#adding-a-stream
+	logStreams: [
+		{
+			level: 'info',
+			stream: process.stdout
+		},
+		{
+			path: 'log/latest.log'
+		},
+		{
+			type: 'rotating-file',
+			path: 'log/main.log',
+			period: '1h',
+			count: 100
+		}
+	]
 }
+
 module.exports = config;
