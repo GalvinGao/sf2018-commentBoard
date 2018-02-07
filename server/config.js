@@ -24,13 +24,11 @@ const config = {
 			stream: process.stdout
 		},
 		{
-			path: 'log/latest.log'
-		},
-		{
 			type: 'rotating-file',
+			level: 'trace',
 			path: 'log/main.log',
 			period: '1h',
-			count: 100
+			count: 1000
 		}
 	]
 }
