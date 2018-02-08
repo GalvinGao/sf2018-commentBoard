@@ -641,7 +641,7 @@
 		    try {
 				window.socket = new ReconnectingWebSocket(window.settings.wsurl);
             	window.socket.timeoutInterval = 10000;
-				window.window.socket.reconnectDecay = 1.15;
+				window.socket.reconnectDecay = 1.15;
 		    } catch ( e ) {  
 				alert('WebSocket 连接错误，请尝试刷新页面。详细信息：', e);
 		    }
