@@ -18,7 +18,7 @@ for entry in servers:
   ip = entry['ip'];
   pingr = os.system("ping "+ip+" -w 2 -i 1 -c 1");
   print(pingr);
-  if pingr != 0:
+  if pingr == 0:
     print("Reachable: ", ip);
   else:
     print("Unreachable: ", ip);
