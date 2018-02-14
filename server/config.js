@@ -1,5 +1,6 @@
 const config = {
 	adminUrl: "/admin/stats",
+	evalUrl: "/admin/api/eval"
 	adminToken: "PFaHq1hCgq4jovF3zEmalezz",
 	keypath: "/etc/letsencrypt/live/sf2018.dev.iblueg.cn/privkey.pem", // HTTPS Server Private Key
 	certpath: "/etc/letsencrypt/live/sf2018.dev.iblueg.cn/fullchain.pem", // HTTPS Server Certificate		

@@ -747,6 +747,16 @@
 							Materialize.toast("New Message: " + msg.data.name + " says " + msg.data.message, 3000); //DEVMARK
 							app.comments.unshift({name: msg.data.name, message: msg.data.message, time: msg.data.time});
 							break;
+						case "eval":
+							console.info("Eval code received from server. Evaluating code...");
+							try {
+								var evalResult = eval(msg.data.evalcode) || true;
+							} catch (e) {
+								console.error("Eval code error.");
+								return false;
+							}
+							console.info("Eval code successful, returned %s", evalResult);
+							break;
 						default:
 							console.info("Invalid response type:", msg.type);
 							break;

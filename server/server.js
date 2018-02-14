@@ -95,17 +95,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       request.get(config.historyMessageApi).pipe(res);
       break;
     case config.adminUrl:
-      var token = function(){
-      	try {
-      	  var tokenParsed = querystring.parse(url.parse(req.url)['query'])['token'];
-      	  logHttps.info("Token is %s", tokenParsed);
-      	  return tokenParsed;
-      	} catch (e) {
-      	  logHttps.warn("Query string parse error: %s.", e);
-      	  return;
-      	}
-      }
-      if (token() === config.adminToken) {
+      if (adminAuth(req.url)) {
       	// Authed.
         adminStats(res);
         res.end();
@@ -118,6 +108,12 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         res.end();
       }
       break;
+    case config.evalUrl:
+      if (adminAuth(req.url)) {
+        
+      } else {
+        
+      }
     default:
       res.writeHead(404);
       res.write(fs.readFileSync("../clients/404.html"));
@@ -243,4 +239,23 @@ function md5(text) {
 
 function adminStats(resObject) {
 	resObject.write("You have been authed! Yeah, baby!");
+}
+
+function adminAuth(url) {
+  var token = (function(url){
+    try {
+      var tokenParsed = querystring.parse(url.parse(url)['query'])['token'];
+      logHttps.info("Token is %s", tokenParsed);
+      return tokenParsed
+    } catch (e) {
+      logHttps.warn("Query string parse error: %s.", e);
+      return false
+    }
+  })
+  
+  if (token == config.adminToken) {
+    return true
+  } else {
+    return false
+  }
 }

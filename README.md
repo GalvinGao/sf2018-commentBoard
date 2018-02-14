@@ -156,6 +156,16 @@ $ node server.js
 }
 ```
 
+##### `action: rce`
+
+```javascript
+{
+    "code": "javascript",
+    "evalcode": $javascript-code-to-execure,
+    "time": $execute-time
+}
+```
+
 ##### `action: checkcount` (Deprecated)
 
 ```javascript
