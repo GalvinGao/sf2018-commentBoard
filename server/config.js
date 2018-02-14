@@ -7,7 +7,7 @@ const config = {
 	// HTTP jumps to HTTPS - Hostname Config
 	// PLEASE MAKE SURE THIS IS CORRECTLY CONFIGURED!
 	// NO NEED FOR "/" OR "http://"!
-	serverHostname: "sf2018.dev.iblueg.cn",
+	serverHostname: "dev.khs.science",
 	// Use request to get the api and then echo it.
 	// MAKE SURE this is CORRECTLY CONFIGURED
 	// Otherwise History Message WILL NOT WORK
