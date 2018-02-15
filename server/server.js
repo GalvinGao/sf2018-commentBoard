@@ -296,8 +296,8 @@ function adminAuth(uurl) {
   
   var expected = md5(config.adminToken + timestamp);
   logService.debug("Expected MD5: %s. Dataset: [%s, %s]", expected, config.adminToken, timestamp);
-  var userinput = md5(token + timestamp);
-  logService.debug("User Input MD5: %s. Dataset: [%s, %s]", userinput, token, timestamp);
+  var userinput = token;
+  logService.debug("User Input MD5: %s", userinput);
   
   if (expected == userinput) {
     return true
