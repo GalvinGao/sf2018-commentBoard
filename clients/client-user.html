@@ -575,7 +575,7 @@
   		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha384-FtJyC+/3fgtPbqlacLHdGwBrmPjKoYBsiqNF5/BEprsnIXB4xtXLCJRx7Xx+TWKP" crossorigin="anonymous"></script>
 		<!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
 		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js" integrity="sha384-RydurAhVLkWOTB6JAAzjuVHy6VsmznzaDLHvqffwz9DPG0PgMpVlVSu3faIetRFa" crossorigin="anonymous"></script>
-		<script src="https://cdn.bootcss.com/vue/2.5.13/vue.js"></script>
+		<script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
 		
 		<script id="main-script">
 			/* === Config === */
@@ -598,8 +598,8 @@
 					data = safeJson(data);
 					if (data.status in window.statusMeta.expected) {
 						for (i in data.data) {
-							console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].message, data.data[i].time);
-							app.comments.unshift({name: data.data[i].name, message: data.data[i].message, time: data.data[i].time});
+							console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
+							app.comments.unshift({name: data.data[i].name, message: data.data[i].comment, time: data.data[i].time});
 						}
 						animateComments();
 					} else if (data.status in window.statusMeta.unexpected) {
@@ -924,6 +924,17 @@
 					  return 150 * i
 					}
 				})
+			}
+			
+			/* === Time Formatter === */
+			
+			function timeConverter(UNIX_timestamp){
+			  var a = new Date(UNIX_timestamp * 1000);
+			  var hour = a.getHours();
+			  var min = a.getMinutes();
+			  var sec = a.getSeconds();
+			  var time = hour + ':' + min + ':' + sec ;
+			  return time;
 			}
 		</script>
 	</body>

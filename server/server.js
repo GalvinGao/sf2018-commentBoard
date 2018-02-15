@@ -37,8 +37,10 @@ function insertSql(name, comment, time) {
   var sqlParam = [ip, time, name, comment];
   
   connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
-    if (error) throw error;
-    logMysql.trace('Message Inserted. MySQL Response: ' + results);
+    if (error) {
+      logMysql.error("Insert Error: %s", error)
+	}
+    logMysql.trace('Message Inserted Successfully.');
   });
 }
 
@@ -93,9 +95,9 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.setHeader("Access-Control-Allow-Methods", "GET");
       res.setHeader("Content-Encoding", "utf-8");
       //request.get(config.historyMessageApi).pipe(res);
-      connection.query("SELECT * FROM comments", function (err, result, fields) {
+      connection.query("SELECT name, comment, time FROM comments", function (err, result, fields) {
         if (err) {
-          logMysql.error(err);
+          logMysql.error("historyFetch Error: %s", err);
           return;
         }
         logMysql.trace(result);
@@ -141,7 +143,7 @@ function noop() {}
 
 function heartbeat() {
   this.isAlive = true;
-  logWss.trace("WebSocket Heartbeat package received.");
+  //logWss.trace("WebSocket Heartbeat package received.");
 }
 
 wss.on('listening', function(){
@@ -157,7 +159,7 @@ wss.on('connection', function connection(ws) {
   });
   ws.on('error', (e) => logWss.warn('Client connection error: [ code:', e.code, ', errno:', e.errno, ' ]. More details:', e));
   ws.on('close', function close() {
-    logWss.debug('Connection Disconnected. Current Online: ', JSON.stringify(wss.clients));
+    logWss.debug('Connection Disconnected.');
   });
 });
 
@@ -235,14 +237,9 @@ function respParse(dataObject, type) {
     "status": "ok",
     "time": time,
     "type": type,
-    "hash": md5(JSON.stringify(dataObject)),
     "data": dataObject
   }
   return JSON.stringify(object);
-}
-
-function md5(text) {
-	return crypto.createHash('md5').update(text).digest('hex');
 }
 
 function adminStats(resObject) {
