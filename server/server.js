@@ -117,7 +117,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         res.end();
       	logHttps.info("Admin page authed.");
       } else {
-      	logHttps.warn("Admin page NOT authed: Token Invalid.");
+      	logHttps.debug("Admin page NOT authed: Token Invalid.");
       	// Pretend to be Nothing Happened LOLLLLLLL.
       	res.writeHead(404);
         res.write(fs.readFileSync("../clients/404.html"));
@@ -269,7 +269,7 @@ function respParse(dataObject, type) {
 }
 
 function adminAuth(uurl) {
-  var token = (function(uurl){
+  var getToken = (function(uurl){
     try {
       var tokenParsed = querystring.parse(url.parse(uurl)['query'])['token'];
       logHttps.debug("Token is %s", tokenParsed);
@@ -280,7 +280,7 @@ function adminAuth(uurl) {
     }
   })
   
-  var timestamp = (function(uurl){
+  var getTimestamp = (function(uurl){
     try {
       var tokenParsed = querystring.parse(url.parse(uurl)['query'])['t'];
       logHttps.debug("Timestamp is %s", tokenParsed);
@@ -291,7 +291,10 @@ function adminAuth(uurl) {
     }
   })
   
-  if (md5(config.adminToken + timestamp()) == md5(token() + timestamp())) {
+  var token = getToken(uurl);
+  var timestamp = getTimestamp(uurl);
+  
+  if (md5(config.adminToken + timestamp) == md5(token + timestamp)) {
     return true
   } else {
     return false
