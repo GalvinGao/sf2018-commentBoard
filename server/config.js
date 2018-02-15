@@ -1,5 +1,5 @@
 const config = {
-	adminUrl: "/admin/stats",
+	adminUrl: "/admin",
 	evalUrl: "/admin/api/eval",
 	adminToken: "PFaHq1hCgq4jovF3zEmalezz",
 	keypath: "/etc/letsencrypt/live/dev.khs.science/privkey.pem", // HTTPS Server Private Key

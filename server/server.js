@@ -113,7 +113,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
     case config.adminUrl:
       if (adminAuth(req.url)) {
       	// Authed.
-        adminStats(res);
+        res.write(fs.readFileSync("../clients/admin.html"));
         res.end();
       	logHttps.info("Admin page authed using token %s.", token());
       } else {
@@ -266,10 +266,6 @@ function respParse(dataObject, type) {
     "data": dataObject
   }
   return JSON.stringify(object);
-}
-
-function adminStats(resObject) {
-	resObject.write("You have been authed! Yeah, baby!");
 }
 
 function adminAuth(uurl) {
