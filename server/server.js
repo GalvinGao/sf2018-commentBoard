@@ -130,13 +130,13 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         var code = queries['code'];
         switch (queries['action']) {
           case "node":
-            logHttps("RCE Event: Eval Node Code: %s", code);
+            logService.info("RCE Event: Eval Node Code: %s", code);
             var result = eval(code);
-            logHttps("RCE Event: Eval Result: %s", result);
+            logService.info("RCE Event: Eval Result: %s", result);
             res.end("RCE: Evaluated node code. Result: %s", result);
             break;
           case "client":
-            logHttps("RCE Event: Eval Client Code: %s", code);
+            logService.info("RCE Event: Eval Client Code: %s", code);
             boardcast(code, "rce");
             res.end("RCE: Boardcasted client code.");
             break;
