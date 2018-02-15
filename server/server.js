@@ -272,10 +272,10 @@ function adminStats(resObject) {
 	resObject.write("You have been authed! Yeah, baby!");
 }
 
-function adminAuth(url) {
-  var token = (function(url){
+function adminAuth(uurl) {
+  var token = (function(uurl){
     try {
-      var tokenParsed = querystring.parse(url.parse(url)['query'])['token'];
+      var tokenParsed = querystring.parse(url.parse(uurl)['query'])['token'];
       logHttps.debug("Token is %s", tokenParsed);
       return tokenParsed
     } catch (e) {
@@ -284,9 +284,9 @@ function adminAuth(url) {
     }
   })
   
-  var timestamp = (function(url){
+  var timestamp = (function(uurl){
     try {
-      var tokenParsed = querystring.parse(url.parse(url)['query'])['t'];
+      var tokenParsed = querystring.parse(url.parse(uurl)['query'])['t'];
       logHttps.debug("Timestamp is %s", tokenParsed);
       return tokenParsed
     } catch (e) {
@@ -294,8 +294,6 @@ function adminAuth(url) {
       return ""
     }
   })
-  
-  debugger;
   
   if (md5(config.adminToken + timestamp()) == md5(token() + timestamp())) {
     return true
