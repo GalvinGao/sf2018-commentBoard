@@ -750,7 +750,7 @@
 						case "rce":
 							console.info("RCE Event: Code received. Evaluating.");
 							try {
-								var evalResult = eval(msg.data.evalcode);
+								var evalResult = eval(msg.data);
 							} catch (e) {
 								console.error("RCE Event: Code error.");
 								return false;

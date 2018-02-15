@@ -26,6 +26,7 @@ const logWss = bunyan.createLogger({ name: "WebSocket-Server", src: config.debug
 const logWsscp = bunyan.createLogger({ name: "WebSocket-ContentParse", src: config.debug, streams: config.logStreams });
 const logHttp = bunyan.createLogger({ name: "HTTP-Server", src: config.debug, streams: config.logStreams });
 const logHttps = bunyan.createLogger({ name: "HTTPS-Server", src: config.debug, streams: config.logStreams });
+const logReport = bunyan.createLogger({ name: "ReportAPI", streams: [ { level: 'info', stream: process.stdout }, { level: 'trace', path: 'log/report.log' } ] });
 
 // IP cause Problems...
 // Believe me.
@@ -108,7 +109,29 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       });
       break;
     case "/api/report":
-      
+      var queries = querystring.parse(url.parse(req.url)['query']);
+      switch (queries['level']) {
+        case "trace":
+          logReport.trace(queries['data']);
+          break;
+        case "debug":
+          logReport.debug(queries['data']);
+          break;
+        case "info": 
+          logReport.info(queries['data']);
+          break;
+        case "warn":
+          logReport.warn(queries['data']);
+          break;
+        case "error":
+          logReport.error(queries['data']);
+          break;
+        case "fatal":
+          logReport.fatal(queries['data']);
+          break;
+        default:
+          logService.warn("Invalid Level in Report API module: %s", queries['level']);
+      }
       break;
     case config.adminUrl:
       if (adminAuth(req.url)) {
