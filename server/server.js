@@ -92,7 +92,15 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Access-Control-Allow-Methods", "GET");
       res.setHeader("Content-Encoding", "utf-8");
-      request.get(config.historyMessageApi).pipe(res);
+      //request.get(config.historyMessageApi).pipe(res);
+      connection.query("SELECT * FROM comments", function (err, result, fields) {
+        if (err) {
+          logMysql.error(err);
+          return;
+        }
+        logMysql.trace(result);
+        res.end(respParse(result, "history"));
+      });
       break;
     case config.adminUrl:
       if (adminAuth(req.url)) {
