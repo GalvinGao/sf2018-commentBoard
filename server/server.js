@@ -115,9 +115,9 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       	// Authed.
         res.write(fs.readFileSync("../clients/admin.html"));
         res.end();
-      	logHttps.info("Admin page authed using token %s.", token());
+      	logHttps.info("Admin page authed.");
       } else {
-      	logHttps.warn("Admin page NOT authed: Invalid token %s.", token());
+      	logHttps.warn("Admin page NOT authed: Token Invalid.");
       	// Pretend to be Nothing Happened LOLLLLLLL.
       	res.writeHead(404);
         res.write(fs.readFileSync("../clients/404.html"));
