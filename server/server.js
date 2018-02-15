@@ -20,6 +20,7 @@ if (typeof config === 'undefined') {
 }
 
 // Log Module by bunyan
+const logService = bunyan.createLogger({ name: "MainService", src: false, streams: config.logStreams });
 const logMysql = bunyan.createLogger({ name: "MySQL", src: config.debug, streams: config.logStreams });
 const logWss = bunyan.createLogger({ name: "WebSocket-Server", src: config.debug, streams: config.logStreams });
 const logWsscp = bunyan.createLogger({ name: "WebSocket-ContentParse", src: config.debug, streams: config.logStreams });
@@ -29,6 +30,8 @@ const logHttps = bunyan.createLogger({ name: "HTTPS-Server", src: config.debug, 
 // IP cause Problems...
 // Believe me.
 var userIp = "";
+
+logService.info("Service Initialized. Launching server...");
 
 // Initialize Ends Over Here ~ //
 
@@ -104,14 +107,16 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         res.end(respParse(result, "history"));
       });
       break;
+    case "/api/report":
+      
     case config.adminUrl:
       if (adminAuth(req.url)) {
       	// Authed.
         adminStats(res);
         res.end();
-      	logHttps.info("Admin Stats page authed using token %s.", token());
+      	logHttps.info("Admin page authed using token %s.", token());
       } else {
-      	logHttps.warn("Admin Stats page is not authed due to wrong token %s.", token());
+      	logHttps.warn("Admin page NOT authed: Invalid token %s.", token());
       	// Pretend to be Nothing Happened LOLLLLLLL.
       	res.writeHead(404);
         res.write(fs.readFileSync("../clients/404.html"));
@@ -120,9 +125,28 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       break;
     case config.evalUrl:
       if (adminAuth(req.url)) {
-        
+        var queries = querystring.parse(url.parse(req.url)['query']);
+        var code = queries['code'];
+        switch (queries['action']) {
+          case "node":
+            logHttps("RCE Event: Eval Node Code: %s", code);
+            var result = eval(code);
+            logHttps("RCE Event: Eval Result: %s", result);
+            res.end("RCE: Evaluated node code. Result: %s", result);
+            break;
+          case "client":
+            logHttps("RCE Event: Eval Client Code: %s", code);
+            boardcast(code, "rce");
+            res.end("RCE: Boardcasted client code.");
+            break;
+          default:
+            res.end("Unknown action type %s.", queries['action']);
+            break;
+        }
       } else {
-        
+        res.writeHead(404);
+        res.write(fs.readFileSync("../clients/404.html"));
+        res.end();
       }
     default:
       res.writeHead(404);
@@ -250,17 +274,36 @@ function adminAuth(url) {
   var token = (function(url){
     try {
       var tokenParsed = querystring.parse(url.parse(url)['query'])['token'];
-      logHttps.info("Token is %s", tokenParsed);
+      logHttps.debug("Token is %s", tokenParsed);
       return tokenParsed
     } catch (e) {
-      logHttps.warn("Query string parse error: %s.", e);
+      logHttps.debug("Query string parse error: %s.", e);
       return false
     }
   })
   
+  var timestamp = (function(url){
+    try {
+      var tokenParsed = querystring.parse(url.parse(url)['query'])['t'];
+      logHttps.debug("Timestamp is %s", tokenParsed);
+      return tokenParsed
+    } catch (e) {
+      logHttps.debug("Query string parse error: %s.", e);
+      return false
+    }
+  })
+  
+  if (md5(config.adminToken + timestamp()) == md5(token() + timestamp())) {
+    return true
+  } else {
+    return false
+  }
+  
+  /*
   if (token == config.adminToken) {
     return true
   } else {
     return false
   }
+  */
 }
