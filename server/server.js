@@ -108,6 +108,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       });
       break;
     case "/api/report":
+      
       break;
     case config.adminUrl:
       if (adminAuth(req.url)) {
@@ -307,4 +308,8 @@ function adminAuth(url) {
     return false
   }
   */
+}
+
+function md5(text) {
+  return crypto.createHash('md5').update(text).digest('hex');
 }
