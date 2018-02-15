@@ -294,7 +294,12 @@ function adminAuth(uurl) {
   var token = getToken(uurl);
   var timestamp = getTimestamp(uurl);
   
-  if (md5(config.adminToken + timestamp) == md5(token + timestamp)) {
+  var expected = md5(config.adminToken + timestamp);
+  logService.debug("Expected MD5: %s. Dataset: [%s, %s]", expected, config.adminToken, timestamp);
+  var userinput = md5(token + timestamp);
+  logService.debug("User Input MD5: %s. Dataset: [%s, %s]", userinput, token, timestamp);
+  
+  if (expected == userinput) {
     return true
   } else {
     return false
