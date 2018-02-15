@@ -108,7 +108,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       });
       break;
     case "/api/report":
-      
+      break;
     case config.adminUrl:
       if (adminAuth(req.url)) {
       	// Authed.
@@ -148,6 +148,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         res.write(fs.readFileSync("../clients/404.html"));
         res.end();
       }
+      break;
     default:
       res.writeHead(404);
       res.write(fs.readFileSync("../clients/404.html"));
