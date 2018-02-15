@@ -280,7 +280,7 @@ function adminAuth(url) {
       return tokenParsed
     } catch (e) {
       logHttps.debug("Query string parse error: %s.", e);
-      return false
+      return ""
     }
   })
   
@@ -291,9 +291,11 @@ function adminAuth(url) {
       return tokenParsed
     } catch (e) {
       logHttps.debug("Query string parse error: %s.", e);
-      return false
+      return ""
     }
   })
+  
+  debugger;
   
   if (md5(config.adminToken + timestamp()) == md5(token() + timestamp())) {
     return true
