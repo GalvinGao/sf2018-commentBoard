@@ -25,6 +25,7 @@ const config = {
 			stream: process.stdout
 		},
 		{
+			level: 'trace',
 			path: 'log/main.log'
 		}
 	]
