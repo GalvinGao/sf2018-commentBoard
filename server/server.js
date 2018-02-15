@@ -110,6 +110,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       break;
     case "/api/report":
       var queries = querystring.parse(url.parse(req.url)['query']);
+      var success = true;
       switch (queries['level']) {
         case "trace":
           logReport.trace(queries['data']);
@@ -130,7 +131,13 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
           logReport.fatal(queries['data']);
           break;
         default:
-          logService.warn("Invalid Level in Report API module: %s", queries['level']);
+          logService.warn("ReportAPI: Invalid level %s.", queries['level']);
+          var success = false;
+      }
+      if (success) {
+        res.end("Logged.");
+      } else {
+        res.end("Error.")
       }
       break;
     case config.adminUrl:
