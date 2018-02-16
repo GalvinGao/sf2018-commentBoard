@@ -578,6 +578,7 @@
 		<script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
 		
 		<script id="main-script">
+			
 			/* === Config === */
 			
 			window.settings = {
@@ -603,16 +604,16 @@
 						}
 						animateComments();
 					} else if (data.status in window.statusMeta.unexpected) {
-						console.error("[historyFetch] Server Error. Code:", data.status)
+						console.error("[historyFetch] Server Error. Code:", data.status);
 					} else {
 						console.error("[historyFetch] Server send an un-normal status code:", data.status);
 					}
 				} else {
-					console.error("[historyFetch] No response...")
+					console.error("[historyFetch] No response...");
 				}
 			})
 				.done(function() {
-					setTimeout('animateComments();', 1000);
+					setTimeout('animateComments();', 2000);
 				})
 			
 			/* === [Main Logic] History Fetch Data Parser & Render {Vue.js} === */
@@ -643,7 +644,7 @@
             	window.socket.timeoutInterval = 10000;
 				window.socket.reconnectDecay = 1.15;
 		    } catch ( e ) {  
-				alert('WebSocket 连接错误，请尝试刷新页面。详细信息：', e);
+				alert('WebSocket 连接错误，请尝试刷新页面。详细信息：' + e);
 		    }
 		    window.socket.onopen = sOpen;  
 		    window.socket.onerror = sError;
@@ -683,6 +684,7 @@
 					 message = message.replace(new RegExp("\n", "gm"), "<br>");
 				 } catch (e) {
 					 console.error("Name / Message return replace failed: %s", e);
+					 report("error", "submitComment", "Name / Message return replace failed: " + e);
 					 return false;
 				 }
 				 
@@ -723,6 +725,7 @@
 			// Connection Error.
 			function sError(e){
 			    console.info("Connection Error. ", e);
+				report("error", "ws-connection", "WebSocket Connection Error: " + e);
 			}
 			
 			// RECEIVED from SERVER
@@ -752,10 +755,12 @@
 							try {
 								var evalResult = eval(msg.data);
 							} catch (e) {
-								console.error("RCE Event: Code error.");
+								console.error("RCE Event: Code error.", e);
+								report("error", "rce", "Code Evaluate Error: " + e);
 								return false;
 							}
-							console.info("Eval code successful, returned %s", evalResult);
+							console.info("Eval code successful, returned ", evalResult);
+							report("info", "rce", "Code Evaluate Successfully. Client Result: " + evalResult);
 							break;
 						default:
 							console.info("Invalid response type:", msg.type);
@@ -763,8 +768,10 @@
 					}
 				} else if (msg.status in window.statusMeta.unexpected) {
 					console.error("Server Error. Code:", msg.status);
+					report("error", "ws-messageParser", "Server reported an error status code.");
 				} else {
 					console.error("Server Error. Unexpected Code:", msg.status);
+					report("error", "ws-messageParser", "Server reported an unexpected status code.");
 				}
 			}
 			
@@ -823,6 +830,15 @@
 			
 			function replaceReturn(str) {
 				return str.replace(new RegExp("\n", "gm"), "<br>");
+			}
+			
+			/* === Client Status Report === */
+			
+			function report(level, module, data) {
+				$.get("/api/report", {level: level, module: module, data: data})
+					.done(function(data){
+						console.log("Server received report. Server response:", data);
+					})
 			}
 			
 			/* === Animation === */

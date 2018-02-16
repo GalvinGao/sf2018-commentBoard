@@ -111,33 +111,23 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
     case "/api/report":
       var queries = querystring.parse(url.parse(req.url)['query']);
       var success = true;
-      switch (queries['level']) {
-        case "trace":
-          logReport.trace(queries['data']);
-          break;
-        case "debug":
-          logReport.debug(queries['data']);
-          break;
-        case "info": 
-          logReport.info(queries['data']);
-          break;
-        case "warn":
-          logReport.warn(queries['data']);
-          break;
-        case "error":
-          logReport.error(queries['data']);
-          break;
-        case "fatal":
-          logReport.fatal(queries['data']);
-          break;
-        default:
-          logService.warn("ReportAPI: Invalid level %s.", queries['level']);
-          var success = false;
+      
+      try {
+        var ulevel = queries['level'];
+        var udata = queries['data'];
+        var umodule = queries['module'];
+        var success = true;
+      } catch (e) {
+        var success = false;
+        logHttps.warn({clientQueries: queries}, "Client send an invalid report request.");
       }
+      
+      logReport.debug({level: ulevel, module: umodule, data: udata}, "Client Report.");
+      
       if (success) {
-        res.end("Logged.");
+        res.end(genStatus(true));
       } else {
-        res.end("Error.")
+        res.end(genStatus(false));
       }
       break;
     case config.adminUrl:
@@ -346,4 +336,14 @@ function adminAuth(uurl) {
 
 function md5(text) {
   return crypto.createHash('md5').update(text).digest('hex');
+}
+
+function genStatus(success) {
+  if (success) {
+    var status = "ok"
+  } else {
+    var status = "error"
+  }
+  
+  return "{ status: " + status +" }"
 }
