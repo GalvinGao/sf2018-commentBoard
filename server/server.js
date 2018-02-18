@@ -40,7 +40,7 @@ function insertSql(name, comment, time) {
   ip = (userIp) ? userIp : "0.0.0.0";
   var sqlParam = [ip, time, name, comment];
   
-  global.connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
+  connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
     if (error) {
       logMysql.error("Insert Error: %s", error)
 	}
@@ -57,8 +57,8 @@ function connectMysql() {
     database : "sfcomments"
   });
 
-  global.connection.connect(handleError);
-  global.connection.on('error', handleError);
+  connection.connect(handleError);
+  connection.on('error', handleError);
 }
 connectMysql()
 
@@ -102,7 +102,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.setHeader("Access-Control-Allow-Methods", "GET");
       res.setHeader("Content-Encoding", "utf-8");
       //request.get(config.historyMessageApi).pipe(res);
-      global.connection.query("SELECT name, comment, time FROM comments", function (err, result, fields) {
+      connection.query("SELECT name, comment, time FROM comments", function (err, result, fields) {
         if (err) {
           logMysql.error("historyFetch Error: %s", err);
           return;
