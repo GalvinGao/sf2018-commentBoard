@@ -63,7 +63,7 @@ function handleError (err) {
   if (err) {
     // 如果是连接断开，自动重新连接
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-      logMysql.warn("MySQL Connection Lost. Reconnecting...");
+      logMysql.warn("MySQL Connection Lost. Error [%s]. Reconnecting...", JSON.stringify(err));
       connection.connect();
     } else {
       logMysql.fatal("MySQL Connection Error Occurred. Trying to reconnect... Detail: %s", err.stack || err);
