@@ -49,7 +49,7 @@ function insertSql(name, comment, time) {
 }
 
 function connectMysql() {
-  var global.connection = mysqlConn.createConnection({
+  global.connection = mysqlConn.createConnection({
     host     : "localhost",
     port     : "3306",
     user     : "sf2018",
