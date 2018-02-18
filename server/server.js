@@ -151,7 +151,12 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         switch (queries['action']) {
           case "node":
             logService.info("RCE Event: Eval Node Code: %s", code);
-            var result = eval(code);
+            try {
+              var result = eval(code)
+            } catch (e) {
+              logService.warn("RCE Event: Evaluate Node code error: %s", e)
+            }
+            //var result = eval(code);
             logService.info("RCE Event: Eval Result: %s", result);
             res.end("RCE: Evaluated node code. Result: %s", result);
             break;
