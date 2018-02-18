@@ -48,26 +48,29 @@ function insertSql(name, comment, time) {
   });
 }
 
-const connection = mysqlConn.createConnection({
-  host     : "localhost",
-  port     : "3306",
-  user     : "sf2018",
-  password : "sf2018",
-  database : "sfcomments"
-});
+function connectMysql() {
+  const connection = mysqlConn.createConnection({
+    host     : "localhost",
+    port     : "3306",
+    user     : "sf2018",
+    password : "sf2018",
+    database : "sfcomments"
+  });
 
-connection.connect(handleError);
-connection.on('error', handleError);
+  connection.connect(handleError);
+  connection.on('error', handleError);
+}
+connectMysql()
 
 function handleError (err) {
   if (err) {
     // 如果是连接断开，自动重新连接
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
       logMysql.warn("MySQL Connection Lost. Error [%s]. Reconnecting...", JSON.stringify(err));
-      connect();
+      connectMysql();
     } else {
       logMysql.fatal("MySQL Connection Error Occurred. Trying to reconnect... Detail: %s", err.stack || err);
-      connect();
+      connectMysql();
     }
   }
 }
