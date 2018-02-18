@@ -48,7 +48,7 @@ function insertSql(name, comment, time) {
   });
 }
 
-vat connection = mysqlConn.createConnection({
+var connection = mysqlConn.createConnection({
   host     : "localhost",
   port     : "3306",
   user     : "sf2018",
