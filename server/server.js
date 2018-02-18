@@ -40,7 +40,7 @@ function insertSql(name, comment, time) {
   ip = (userIp) ? userIp : "0.0.0.0";
   var sqlParam = [ip, time, name, comment];
   
-  connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
+  global.connection.query('INSERT INTO comments(id,ip,time,name,comment) VALUES(0,?,?,?,?);', sqlParam, function (error, results, fields) {
     if (error) {
       logMysql.error("Insert Error: %s", error)
 	}
@@ -48,44 +48,29 @@ function insertSql(name, comment, time) {
   });
 }
 
-var connection = mysqlConn.createConnection({
-  host     : "localhost",
-  port     : "3306",
-  user     : "sf2018",
-  password : "sf2018",
-  database : "sfcomments"
-});
+function connectMysql() {
+  var global.connection = mysqlConn.createConnection({
+    host     : "localhost",
+    port     : "3306",
+    user     : "sf2018",
+    password : "sf2018",
+    database : "sfcomments"
+  });
 
-connection.connect(handleError);
-connection.on('error', handleError);
+  global.connection.connect(handleError);
+  global.connection.on('error', handleError);
+}
+connectMysql()
 
 function handleError (err) {
   if (err) {
     // 如果是连接断开，自动重新连接
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
       logMysql.warn("MySQL Connection Lost. Error [%s]. Reconnecting...", JSON.stringify(err));
-      var connection = mysqlConn.createConnection({
-        host     : "localhost",
-        port     : "3306",
-        user     : "sf2018",
-        password : "sf2018",
-        database : "sfcomments"
-      });
-
-      connection.connect(handleError);
-      connection.on('error', handleError);
+      connectMysql()
     } else {
       logMysql.fatal("MySQL Connection Error Occurred. Trying to reconnect... Detail: %s", err.stack || err);
-      var connection = mysqlConn.createConnection({
-        host     : "localhost",
-        port     : "3306",
-        user     : "sf2018",
-        password : "sf2018",
-        database : "sfcomments"
-      });
-
-      connection.connect(handleError);
-      connection.on('error', handleError);
+      connectMysql()
     }
   }
 }
@@ -117,7 +102,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.setHeader("Access-Control-Allow-Methods", "GET");
       res.setHeader("Content-Encoding", "utf-8");
       //request.get(config.historyMessageApi).pipe(res);
-      connection.query("SELECT name, comment, time FROM comments", function (err, result, fields) {
+      global.connection.query("SELECT name, comment, time FROM comments", function (err, result, fields) {
         if (err) {
           logMysql.error("historyFetch Error: %s", err);
           return;
