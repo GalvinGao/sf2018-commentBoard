@@ -125,7 +125,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         logHttps.warn({clientQueries: queries}, "Client send an invalid report request.");
       }
       
-      logReport.debug({level: ulevel, module: umodule, data: udata}, "Client Report.");
+      logReport.info({level: ulevel, module: umodule, data: udata}, "Client Report.");
       
       if (success) {
         res.end(genStatus(true));
