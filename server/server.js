@@ -122,7 +122,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         var success = true;
       } catch (e) {
         var success = false;
-        logHttps.warn({clientQueries: queries}, "Client send an invalid report request.");
+        logHttps.warn({clientQueries: queries, parseErrorMsg: e}, "Client send an invalid report request, parse error.");
       }
       
       logReport.info({level: ulevel, module: umodule, data: udata}, "Client Report.");

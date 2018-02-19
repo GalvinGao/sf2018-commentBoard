@@ -1,5 +1,7 @@
 # sf-2018 Comment Board
 
+![https://david-dm.org/GalvinGao/sf2018-commentBoard.svg](David)
+
 ## Features
 
 - Uses **NodeJS**, **PHP**, **MySQL** as backend and flavored with **WebSocket**.
