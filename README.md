@@ -1,4 +1,6 @@
 # sf-2018 Comment Board
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FGalvinGao%2Fsf2018-commentBoard.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FGalvinGao%2Fsf2018-commentBoard?ref=badge_shield)
+
 
 ## Features
 
@@ -212,3 +214,6 @@ $ node server.js
     "message": $backend-error-message
 }
 ```
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FGalvinGao%2Fsf2018-commentBoard.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FGalvinGao%2Fsf2018-commentBoard?ref=badge_large)
