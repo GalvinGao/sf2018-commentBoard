@@ -1,6 +1,6 @@
 # sf-2018 Comment Board
 
-![https://david-dm.org/GalvinGao/sf2018-commentBoard.svg](David)
+![David](https://david-dm.org/GalvinGao/sf2018-commentBoard.svg)
 
 ## Features
 
