@@ -134,7 +134,8 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       }
       break;
     case config.adminUrl:
-      if (adminAuth(req.url)) {
+      var queries = querystring.parse(url.parse(req.url)['query']);
+      if (queries['passwd'] == config.adminPasswd) {
       	// Authed.
         res.write(fs.readFileSync("../clients/admin.html"));
         res.end();
@@ -177,6 +178,10 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         res.write(fs.readFileSync("../clients/404.html"));
         res.end();
       }
+      break;
+    case config.bigBoardUrl:
+      res.write(fs.readFileSync("../clients/client-bigboard.html"));
+      res.end();
       break;
     default:
       res.writeHead(404);

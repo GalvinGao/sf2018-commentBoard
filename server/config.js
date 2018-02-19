@@ -1,7 +1,9 @@
 const config = {
 	adminUrl: "/admin",
 	evalUrl: "/admin/api/eval",
+	bigBoardUrl: "/view/board",
 	adminToken: "PFaHq1hCgq4jovF3zEmalezz",
+	adminPasswd: "Galvin-Gao-sf2018-ADMIN",
 	keypath: "/etc/letsencrypt/live/dev.khs.science/privkey.pem", // HTTPS Server Private Key
 	certpath: "/etc/letsencrypt/live/dev.khs.science/fullchain.pem", // HTTPS Server Certificate		
 	// HTTP jumps to HTTPS - Hostname Config
