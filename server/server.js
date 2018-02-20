@@ -83,6 +83,7 @@ var sslOptions = {
 var sslServer = https.createServer(sslOptions, function (req, res) {
   //res.writeHead(403); // Response https connections
   //res.end("403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.");
+  logHttps.trace({request: req}, 'HTTPS Request received.');
   reqPath = url.parse(req.url)['pathname'];
   switch (reqPath) {
     case "/":
@@ -191,7 +192,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
 }).listen(443);
 
 var httpServer = http.createServer(function (req, res) {
-  logHttp.trace({reqUrl: req.url}, 'HTTP Request received.');
+  logHttp.trace({request: req}, 'HTTP Request received.');
   res.writeHead(301, { 'Location': 'https://' + config.serverHostname + req.url });
   res.end("Redirecting...");
 }).listen(80);
