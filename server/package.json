@@ -1,4 +1,19 @@
 {
+  "name": "sf2018 Comment Board",
+  "version": "0.0.1",
+  "description": "Science Fair 2018 - Public Comment Board Interactive Program",
+  "main": "server.js",
+  "scripts": {
+    "bunyan": "./node_modules/.bin/bunyan -o short -l info",
+    "start": "./deploy.js"
+  },
+  "repository": "github:GalvinGao/sf2018-commentBoard",
+  "author": "GalvinGao <2403901511@qq.com> (https://github.com/GalvinGao)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GalvinGao/sf2018-commentBoard.git/issues"
+  },
+  "homepage": "https://github.com/GalvinGao/sf2018-commentBoard#readme",
   "requires": true,
   "dependencies": {
     "async-limiter": {
