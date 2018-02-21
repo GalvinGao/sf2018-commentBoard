@@ -1,6 +1,6 @@
 # sf-2018 Comment Board
 
-![David](https://david-dm.org/GalvinGao/sf2018-commentBoard.svg)
+![David Dependencies Watcher](https://david-dm.org/GalvinGao/sf2018-commentBoard.svg)[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Features
 
@@ -19,7 +19,7 @@ Vultr's **Bare Metal Instance**
 - CPU: E3-1270v6 (8 Cores @ 3.8GHz)
 - Memory: 32768MB
 - Bandwidth: 5000GB
-- SSD Disk: 2x240 Software RAID1
+- SSD Disk: 2x240 Software RAID10
 
 ## Artitecture
 
