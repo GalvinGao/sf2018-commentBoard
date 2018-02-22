@@ -613,7 +613,10 @@
 				if (data) {
 					data = safeJson(data);
 					if (data.status in window.statusMeta.expected) {
-						app.comments.concat(data.data)
+						for (i in data.data) {
+							console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
+							app.comments.unshift({name: data.data[i].name, message: data.data[i].comment, time: data.data[i].time});
+						}
 						animateComments();
 					} else if (data.status in window.statusMeta.unexpected) {
 						console.error("[historyFetch] Server Error. Code:", data.status);
@@ -678,7 +681,10 @@
 						if (data) {
 							data = safeJson(data);
 							if (data.status in window.statusMeta.expected) {
-								app.comments.concat(data.data)
+                                for (i in data.data) {
+                                    console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
+                                    app.comments.unshift({name: data.data[i].name, message: data.data[i].comment, time: data.data[i].time});
+                                }
 							} else if (data.status in window.statusMeta.unexpected) {
 								console.error("[historyFetch] Server Error. Code:", data.status);
 							} else {
