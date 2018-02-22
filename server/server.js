@@ -106,7 +106,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       } catch (err) {
         logHttps.debug('historyFetch Param Parsing error: ', err)
       }
-      connection.query('SELECT name, comment, time FROM comments ORDER BY id DESC LIMIT ?, ?', sqlParam, function (err, result, fields) {
+      connection.query('SELECT name, comment, time FROM `comments` ORDER BY `comments`.`id` DESC LIMIT ?, ?', sqlParam, function (err, result, fields) {
         if (err) {
           logMysql.error('historyFetch Error: %s', err)
           res.end(genStatus(false))
