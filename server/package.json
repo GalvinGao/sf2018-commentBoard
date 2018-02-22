@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "bunyan": "./node_modules/.bin/bunyan -o short -l info",
-    "start": "./deploy.js"
+    "start": "./deploy.sh"
   },
   "repository": "github:GalvinGao/sf2018-commentBoard",
   "author": "GalvinGao <2403901511@qq.com> (https://github.com/GalvinGao)",

@@ -100,8 +100,8 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       // request.get(config.historyMessageApi).pipe(res)
       var queries = querystring.parse(url.parse(req.url)['query'])
       try {
-        var eachpage = queries['eachpage'] || 20
-        var page = queries['page'] * eachpage || 1
+        var eachpage = parseInt(queries['eachpage']) || 20
+        var page = parseInt(queries['page']) * eachpage || 1
         var sqlParam = [ page, eachpage ]
       } catch (err) {
         logHttps.debug('historyFetch Param Parsing error: ', err)
@@ -109,6 +109,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       connection.query('SELECT name, comment, time FROM comments ORDER BY id DESC LIMIT ?, ?', sqlParam, function (err, result, fields) {
         if (err) {
           logMysql.error('historyFetch Error: %s', err)
+          res.end(genStatus(false))
           return
         }
         logMysql.trace(result)
