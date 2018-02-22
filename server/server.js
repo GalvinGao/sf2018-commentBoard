@@ -101,7 +101,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       var queries = querystring.parse(url.parse(req.url)['query'])
       try {
         var eachpage = parseInt(queries['eachpage']) || 20
-        var page = parseInt(queries['page']) * eachpage || 1
+        var page = ( parseInt(queries['page']) - 1 ) * eachpage || 1
         var sqlParam = [ page, eachpage ]
       } catch (err) {
         logHttps.debug('historyFetch Param Parsing error: ', err)
