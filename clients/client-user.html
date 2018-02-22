@@ -364,8 +364,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="new-page-loader">&nbsp;</div>
 				</div>
+				<div class="new-page-loader"></div>
 			</div>
 			<div class="ue loading not-loading">
 				<div class="sk-folding-cube">
@@ -596,6 +596,7 @@
 			
 			window.pageNumber = 1
 			window.finishedFirstAjax = false
+			window.gotAllHistory = false
 			
 			/* === [Main Logic] History Fetch Data Parser & Render {Vue.js} === */
 			
@@ -618,6 +619,9 @@
 							console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
 							app.comments.unshift({name: data.data[i].name, message: data.data[i].comment, time: data.data[i].time});
 						}
+						if (data.data.length === 0) {
+							window.gotAllHistory = true
+						}
 						animateComments();
 					} else if (data.status in window.statusMeta.unexpected) {
 						console.error("[historyFetch] Server Error. Code:", data.status);
@@ -630,6 +634,7 @@
 			})
 				.done(function() {
 					window.finishedFirstAjax = true
+					initializeScrollFire()
 					setTimeout('animateComments();', 2000)
 				})
 			
@@ -665,11 +670,16 @@
 			
 			/* === ScrollFire - Switch Page === */
 			
-			var options = [
-				{ selector: '.new-page-loader', offset: 200, callback: loadNewPage }
-			];
-			
-			Materialize.scrollFire(options);
+			function initializeScrollFire() {
+				if (!window.gotAllHistory) {
+					var options = [
+						{ selector: '.new-page-loader', offset: 0, callback: loadNewPage }
+					];
+					Materialize.scrollFire(options);
+					console.log('ScrollFire has been re-initialized.')
+				}
+				setTimeout('initializeScrollFire()', 3000)
+			}
 			
 			/* === New Page ajax & loader === */
 			
@@ -686,6 +696,9 @@
                                     console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
                                     app.comments.unshift({name: data.data[i].name, message: data.data[i].comment, time: data.data[i].time});
                                 }
+								if (data.data.length === 0) {
+									window.gotAllHistory = true
+								}
 							} else if (data.status in window.statusMeta.unexpected) {
 								console.error("[historyFetch] Server Error. Code:", data.status);
 							} else {
@@ -695,6 +708,9 @@
 							console.error("[historyFetch] No response...");
 						}
 					})
+						.done (function (){
+							console.log('Finished Ajax')
+						})
 				} else {
 					console.log('Not finished first ajax yet. New page ajax aborted.')
 				}
