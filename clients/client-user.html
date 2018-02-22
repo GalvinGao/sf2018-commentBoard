@@ -584,7 +584,7 @@
 			window.settings = {
 				historyPostApi: "/api/history",
 				wsurl: "wss://dev.khs.science",
-				pageLimit: 20
+				pageLimit: 5
 			}
 			
 			window.statusMeta = {
@@ -629,6 +629,7 @@
 			})
 				.done(function() {
 					window.finishedFirstAjax = true
+					$('.single-comment:last-child').addClass('new-page-loader')
 					setTimeout('animateComments();', 2000)
 				})
 			
@@ -674,6 +675,7 @@
 			
 			function loadNewPage() {
 				if (window.finishedFirstAjax) {
+					$('.single-comment:last-child').removeClass('new-page-loader')
 					window.pageNumber += 1
 					var newFetchUrl = window.settings.historyPostApi + '?page=' + window.pageNumber + '&eachpage=' + window.settings.pageLimit
 
@@ -685,6 +687,7 @@
                                     console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
                                     app.comments.unshift({name: data.data[i].name, message: data.data[i].comment, time: data.data[i].time});
                                 }
+								$('.single-comment:last-child').addClass('new-page-loader')
 							} else if (data.status in window.statusMeta.unexpected) {
 								console.error("[historyFetch] Server Error. Code:", data.status);
 							} else {
