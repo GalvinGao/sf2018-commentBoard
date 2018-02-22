@@ -77,7 +77,7 @@ var sslOptions = {
 var sslServer = https.createServer(sslOptions, function (req, res) {
   // res.writeHead(403) // Response https connections
   // res.end('403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.')
-  logHttps.trace({request: req}, 'HTTPS Request received.')
+  logHttps.trace({reqUrl: req.url}, 'HTTPS Request received.')
   var reqPath = url.parse(req.url)['pathname']
   switch (reqPath) {
     case '/':
