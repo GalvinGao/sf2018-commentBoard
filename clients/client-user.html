@@ -583,7 +583,8 @@
 			
 			window.settings = {
 				historyPostApi: "/api/history",
-				wsurl: "wss://dev.khs.science"
+				wsurl: "wss://dev.khs.science",
+				pageLimit: 20
 			}
 			
 			window.statusMeta = {
@@ -592,16 +593,27 @@
 				error: {error: "", fatal: ""}
 			}
 			
+			window.pageNumber = 1
+			window.finishedFirstAjax = false
+			
+			/* === [Main Logic] History Fetch Data Parser & Render {Vue.js} === */
+			
+			var app = new Vue({
+				el: "#app",
+				data: {
+					comments: []
+				}
+			})
+			
 			/* === [Main Logic] History Fetch === */
 			
-			$.get(window.settings.historyPostApi, function(data){
+			var constructFetchUrl = window.settings.historyPostApi + '?page=' + window.pageNumber + '&eachpage=' + window.settings.pageLimit
+			
+			$.get(constructFetchUrl, function(data){
 				if (data) {
 					data = safeJson(data);
 					if (data.status in window.statusMeta.expected) {
-						for (i in data.data) {
-							console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
-							app.comments.unshift({name: data.data[i].name, message: data.data[i].comment, time: data.data[i].time});
-						}
+						app.comments.concat(data.data)
 						animateComments();
 					} else if (data.status in window.statusMeta.unexpected) {
 						console.error("[historyFetch] Server Error. Code:", data.status);
@@ -613,17 +625,9 @@
 				}
 			})
 				.done(function() {
-					setTimeout('animateComments();', 2000);
+					window.finishedFirstAjax = true
+					setTimeout('animateComments();', 2000)
 				})
-			
-			/* === [Main Logic] History Fetch Data Parser & Render {Vue.js} === */
-			
-			var app = new Vue({
-				el: "#app",
-				data: {
-					comments: []
-				}
-			})
 			
 			/* === Code Helpers === */
 			
@@ -654,6 +658,40 @@
 		    $(".sendCommentButton").click(function(){
 		    	submitComment();
 		    });
+			
+			/* === ScrollFire - Switch Page === */
+			
+			var options = [
+				{ selector: '.new-page-loader', offset: 200, callback: loadNewPage }
+			];
+			
+			Materialize.scrollFire(options);
+			
+			/* === New Page ajax & loader === */
+			
+			function loadNewPage() {
+				if (window.finishedFirstAjax) {
+					window.pageNumber += 1
+					var newFetchUrl = window.settings.historyPostApi + '?page=' + window.pageNumber + '&eachpage=' + window.settings.pageLimit
+
+					$.get(newFetchUrl, function(data){
+						if (data) {
+							data = safeJson(data);
+							if (data.status in window.statusMeta.expected) {
+								app.comments.concat(data.data)
+							} else if (data.status in window.statusMeta.unexpected) {
+								console.error("[historyFetch] Server Error. Code:", data.status);
+							} else {
+								console.error("[historyFetch] Server send an un-normal status code:", data.status);
+							}
+						} else {
+							console.error("[historyFetch] No response...");
+						}
+					})
+				} else {
+					console.log('Not finished first ajax yet. New page ajax aborted.')
+				}
+			}
 			
 			/* === [Main Logic] Submit Comment === */
 			    

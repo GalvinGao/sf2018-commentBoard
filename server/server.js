@@ -89,6 +89,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.end()
       break
     case '/api/history':
+      // /api/history?page=2&eachpage=5 [ 10, 5 ]
       res.setHeader('Content-Type', 'application/json')
       res.setHeader('Expires', 'Thu, 01 Jan 1970 00:00:01 GMT')
       res.setHeader('Cache-Control', 'no-cache')
@@ -97,7 +98,15 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.setHeader('Access-Control-Allow-Methods', 'GET')
       res.setHeader('Content-Encoding', 'utf-8')
       // request.get(config.historyMessageApi).pipe(res)
-      connection.query('SELECT name, comment, time FROM comments', function (err, result, fields) {
+      var queries = querystring.parse(url.parse(req.url)['query'])
+      try {
+        var eachpage = queries['eachpage'] || 20
+        var page = queries['page'] * eachpage || 1
+        var sqlParam = [ page, eachpage ]
+      } catch (err) {
+        logHttps.debug('historyFetch Param Parsing error: ', err)
+      }
+      connection.query('SELECT name, comment, time FROM comments ORDER BY id DESC LIMIT ?, ?', sqlParam, function (err, result, fields) {
         if (err) {
           logMysql.error('historyFetch Error: %s', err)
           return
@@ -295,7 +304,7 @@ function adminAuth (uurl) {
       return ''
     }
   }
-  
+
   var getTimestamp = function (uurl) {
     try {
       var tokenParsed = querystring.parse(url.parse(uurl)['query'])['t']
