@@ -1,25 +1,31 @@
 # sf-2018 Comment Board
 
+> An SaaS architecture, event-driven and real-time synchronizing comment board system.
+
 ![David Dependencies Watcher](https://david-dm.org/GalvinGao/sf2018-commentBoard.svg)[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Features
 
-- Uses **NodeJS**, **PHP**, **MySQL** as backend and flavored with **WebSocket**.
-- JSON data transmitting.
-- HTTPS backend and WebSocketSecure (wss://) supported.
-- Message delivery checking.
-- XSS Blocked.
-- Friendly UI.
-- ~ 5,000 Request/s processing speed.
-- Be able to keep ~ 300 Connections per CPU Core.
+- Uses **NodeJS**, **MySQL** as backend and flavored with native **WebSocket**
+- JSON data transmitting
+- HTTPS backend and WebSocketSecure (wss://) supported
+- Message delivery checking
+- XSS Blocked
+- Friendly UI
+- Easily switch to backup backend
+- Completed Logging System
 
 ## Server Configuration
 
-Vultr's **Bare Metal Instance**
-- CPU: E3-1270v6 (8 Cores @ 3.8GHz)
-- Memory: 32768MB
-- Bandwidth: 5000GB
-- SSD Disk: 2x240 Software RAID10
+```javascript
+  if (iCanUseSchoolsServer) {
+    deployAt(SchoolsServer)
+  } else {
+    deployAt(vultr)
+	setUpPrivateNetwork()
+	setUpStatusMonitor({ enable: ['dns', 'adminUI'] })
+  }
+```
 
 ## Artitecture
 
@@ -177,7 +183,7 @@ $ node server.js
 }
 ```
 
-##### `event: received-other-posts`
+##### `event: newmessage`
 ###### ! IMPORTANT: When event is received and check it is valid, then _**broadcast**_ to all other clients. !
 
 ```javascript

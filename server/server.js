@@ -26,7 +26,7 @@ const logWss = bunyan.createLogger({ name: 'WebSocket-Server', src: config.debug
 const logWsscp = bunyan.createLogger({ name: 'WebSocket-ContentParse', src: config.debug, streams: config.logStreams })
 const logHttp = bunyan.createLogger({ name: 'HTTP-Server', src: config.debug, streams: config.logStreams })
 const logHttps = bunyan.createLogger({ name: 'HTTPS-Server', src: config.debug, streams: config.logStreams })
-const logReport = bunyan.createLogger({ name: 'ReportAPI', streams: [ { level: 'info', stream: process.stdout }, { level: 'trace', path: 'log/report.log' } ] })
+const logReport = bunyan.createLogger({ name: 'ReportAPI', streams: [ { level: 'info', stream: process.stdout }, { level: 'debug', path: 'log/report.log' } ] })
 
 logService.info('Service Initialized. Launching server...')
 
