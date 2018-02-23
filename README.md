@@ -2,7 +2,8 @@
 
 > An SaaS architecture, event-driven and real-time synchronizing comment board system.
 
-![David Dependencies Watcher](https://david-dm.org/GalvinGao/sf2018-commentBoard.svg)[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+![David Dependencies Watcher](https://david-dm.org/GalvinGao/sf2018-commentBoard.svg)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Features
 
@@ -18,13 +19,13 @@
 ## Server Configuration
 
 ```javascript
-  if (iCanUseSchoolsServer) {
-    deployAt(SchoolsServer)
-  } else {
-    deployAt(vultr)
-	setUpPrivateNetwork()
-	setUpStatusMonitor({ enable: ['dns', 'adminUI'] })
-  }
+if (iCanUseSchoolsServer) {
+  deployAt(SchoolsServer)
+} else {
+  deployAt(vultr)
+  setUpPrivateNetwork()
+  setUpStatusMonitor({ enable: ['dns', 'adminUI'] })
+}
 ```
 
 ## Artitecture
