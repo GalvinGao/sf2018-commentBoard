@@ -22,11 +22,11 @@
 
 ## TODOS
 
-[ ] Improve `clients/client-user.html`; Major problem is the UI & Animation;
-[ ] Improve `clients/client-bigboard.html`; Major problem is object alignment;
-[ ] Make `clients/admin.html` usable;
-[ ] Complete test script;
-[ ] Make it more school...
+- [ ] Improve `clients/client-user.html`; Major problem is the UI & Animation;
+- [ ] Improve `clients/client-bigboard.html`; Major problem is object alignment;
+- [ ] Make `clients/admin.html` usable;
+- [ ] Complete test script;
+- [ ] Make it more school...
 
 ## Server Configuration
 
