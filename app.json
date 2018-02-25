@@ -1,0 +1,16 @@
+{
+  "name": "sf2018-commentBoard",
+  "scripts": {
+    "postdeploy": "server/deploy.sh"
+  },
+  "env": {
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ]
+}
