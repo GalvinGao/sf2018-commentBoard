@@ -85,7 +85,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.setHeader('Access-Control-Allow-Origin', '*')
       res.setHeader('Access-Control-Allow-Methods', 'GET')
       res.setHeader('Content-Encoding', 'utf-8')
-      res.write(fs.readFileSync('../clients/client-user.html'))
+      res.write(fs.readFileSync('public/client-user.html'))
       res.end()
       break
     case '/api/history':
@@ -141,14 +141,14 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       var queries = querystring.parse(url.parse(req.url)['query'])
       if (queries['passwd'] === config.adminPasswd) {
         // Authed.
-        res.write(fs.readFileSync('../clients/admin.html'))
+        res.write(fs.readFileSync('public/admin.html'))
         res.end()
         logHttps.info('Admin page authed.')
       } else {
         logHttps.debug('Admin page NOT authed: Token Invalid.')
         // Pretend to be Nothing Happened LOLLLLLLL.
         res.writeHead(404)
-        res.write(fs.readFileSync('../clients/404.html'))
+        res.write(fs.readFileSync('public/404.html'))
         res.end()
       }
       break
@@ -179,17 +179,17 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         }
       } else {
         res.writeHead(404)
-        res.write(fs.readFileSync('../clients/404.html'))
+        res.write(fs.readFileSync('public/404.html'))
         res.end()
       }
       break
     case config.bigBoardUrl:
-      res.write(fs.readFileSync('../clients/client-bigboard.html'))
+      res.write(fs.readFileSync('public/client-bigboard.html'))
       res.end()
       break
     default:
       res.writeHead(404)
-      res.write(fs.readFileSync('../clients/404.html'))
+      res.write(fs.readFileSync('public/404.html'))
       res.end()
   }
 }).listen(443)

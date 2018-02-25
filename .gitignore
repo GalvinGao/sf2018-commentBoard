@@ -58,5 +58,5 @@ typings/
 .env
 
 resources/
-server/demos
-server/log
+demos
+log
