@@ -1,4 +1,6 @@
-# sf-2018 Comment Board
+<div align="center">
+  <h1>sf-2018 Comment Board</h1>
+</div>
 
 > An SaaS architecture, event-driven and real-time synchronizing comment board system.
 
