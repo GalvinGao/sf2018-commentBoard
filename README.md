@@ -113,10 +113,9 @@ if (iCanUseSchoolsServer) {
 ### Ready the environment
 
 ```shell
-$ cd server
-$ chmod -R 777 deploy-env.sh
-$ ./deploy-env.sh
-$ mysql -u <username> -p sfcomments < create-tables.sql
+$ chmod -R 777 deploy.sh
+$ ./deploy.sh
+$ mysql -u [your_mysql_username_here] -p sfcomments < create-tables.sql
 ```
 
 ### Go!
