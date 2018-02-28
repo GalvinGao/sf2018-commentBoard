@@ -26,6 +26,7 @@ const logWss = bunyan.createLogger({ name: 'WebSocket-Server', src: config.debug
 const logWsscp = bunyan.createLogger({ name: 'WebSocket-ContentParse', src: config.debug, streams: config.logStreams })
 const logHttp = bunyan.createLogger({ name: 'HTTP-Server', src: config.debug, streams: config.logStreams })
 const logHttps = bunyan.createLogger({ name: 'HTTPS-Server', src: config.debug, streams: config.logStreams })
+const logRequest = bunyan.createLogger({ name: 'WebRequest', streams: [ { level: 'trace', path: 'log/request.log' } ], serializers: config.webServerSerializers })
 const logReport = bunyan.createLogger({ name: 'ReportAPI', streams: [ { level: 'info', stream: process.stdout }, { level: 'trace', path: 'log/report.log' } ] })
 
 logService.info('Service Initialized. Launching server...')
@@ -69,6 +70,14 @@ function handleError (err) {
   }
 }
 
+function requestSerializer(requestObj) {
+    return {
+        method: requestObj.method,
+        url: requestObj.url,
+        headers: requestObj.headers
+    }
+}
+
 var sslOptions = {
   key: fs.readFileSync(config.keypath),
   cert: fs.readFileSync(config.certpath)
@@ -77,7 +86,7 @@ var sslOptions = {
 var sslServer = https.createServer(sslOptions, function (req, res) {
   // res.writeHead(403) // Response https connections
   // res.end('403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.')
-  logHttps.trace({reqUrl: req.url}, 'HTTPS Request received.')
+  logRequest.trace({req: req}, 'HTTPS Request received.')
   var reqPath = url.parse(req.url)['pathname']
   switch (reqPath) {
     case '/':
@@ -197,7 +206,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
 }).listen(443)
 
 http.createServer(function (req, res) {
-  logHttp.trace({request: req}, 'HTTP Request received.')
+  logRequest.trace({req: req}, 'HTTP Request received.')
   res.writeHead(301, { 'Location': 'https://' + config.serverHostname + req.url })
   res.end('Redirecting...')
 }).listen(80)

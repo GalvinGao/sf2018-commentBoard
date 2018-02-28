@@ -16,7 +16,7 @@ const config = {
 	historyMessageApi: "http://localhost:8888/",
 	// WebSocket Ping Interval (miliseconds)
 	pingInterval: 15000,
-	// Debug Switcher
+	// Debug Switcher [ENV-FLAG]
 	// if true then when log (bunyan) it will trace the file
 	debug: true,
 	// Bunyan Log Stream, supports a lot of streams.
@@ -30,7 +30,10 @@ const config = {
 			level: 'trace',
 			path: 'log/main.log'
 		}
-	]
+	],
+    webServerSerializers: {
+        req: requestSerializer
+    }
 }
 
 module.exports = config;
