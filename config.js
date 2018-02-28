@@ -5,7 +5,7 @@ const config = {
 	adminToken: "PFaHq1hCgq4jovF3zEmalezz",
 	adminPasswd: "Galvin-Gao-sf2018-ADMIN",
 	keypath: "/etc/letsencrypt/live/dev.khs.science/privkey.pem", // HTTPS Server Private Key
-	certpath: "/etc/letsencrypt/live/dev.khs.science/fullchain.pem", // HTTPS Server Certificate		
+	certpath: "/etc/letsencrypt/live/dev.khs.science/fullchain.pem", // HTTPS Server Certificate
 	// HTTP jumps to HTTPS - Hostname Config
 	// PLEASE MAKE SURE THIS IS CORRECTLY CONFIGURED!
 	// NO NEED FOR "/" OR "http://"!
@@ -30,10 +30,7 @@ const config = {
 			level: 'trace',
 			path: 'log/main.log'
 		}
-	],
-    webServerSerializers: {
-        req: requestSerializer
-    }
+	]
 }
 
 module.exports = config;
