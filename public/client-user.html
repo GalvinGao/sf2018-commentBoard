@@ -325,7 +325,7 @@
 									{{ comment.name }}
 								</div>
 								<div class="content" v-html="comment.message">
-									
+
 								</div>
 							</div>
 						</div>
@@ -970,13 +970,22 @@
 
 			/* === Time Formatter === */
 
-			function formatTime(UNIX_timestamp){
-			  var a = new Date(UNIX_timestamp * 1000);
-			  var hour = a.getHours();
-			  var min = a.getMinutes();
-			  var sec = a.getSeconds();
-			  var time = hour + ':' + min + ':' + sec ;
-			  return time;
+			function formatTime(timestampInput){
+			  var timestampInput = new Date(timestampInput * 1000);
+			  var hour = pad(timestampInput.getHours(), 2);
+			  var min = pad(timestampInput.getMinutes(), 2);
+			  var sec = pad(timestampInput.getSeconds(), 2);
+			  var outputTime = hour + ':' + min + ':' + sec ;
+			  return outputTime;
+			}
+
+			function pad(num, n) {
+			  var len = num.toString().length;
+			  while(len < n) {
+			    num = "0" + num;
+			    len++;
+			  }
+			  return num;
 			}
 		</script>
 	</body>
