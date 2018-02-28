@@ -6,7 +6,7 @@
 		<style>
         	/* Material Design Spinner */
 			.loader{width:75pt;position:relative}.loader:before{content:'';display:block;padding-top:100%}.loader .circular{position:absolute;top:0;left:0;-webkit-animation:rotate 2s linear infinite;animation:rotate 2s linear infinite}.loader circle{-webkit-animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite;animation:circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite}@-webkit-keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@keyframes circle-dash{0%{stroke-dasharray:1,125;stroke-dashoffset:0}50%{stroke-dashoffset:-25px}50%,to{stroke-dasharray:100,125}to{stroke-dashoffset:-125px}}@-webkit-keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes rotate{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
-		
+
 			.section {
 				color: #fff;
 				border-radius: 0.8em;
@@ -35,7 +35,7 @@
 				text-shadow: 0 0 3px #fff;
 				margin-bottom: 1em;
 			}
-			
+
 			.header .text {
 				padding-bottom: 0.1em;
 			}
@@ -79,7 +79,7 @@
 				margin: 0;
 				transition: all 0.3s ease-out;
 			}
-			
+
 			.sk-folding-cube {
 			  margin: 20px auto;
 			  width: 40px;
@@ -96,7 +96,7 @@
 			  position: relative;
 			  -webkit-transform: scale(1.1);
 				  -ms-transform: scale(1.1);
-					  transform: scale(1.1); 
+					  transform: scale(1.1);
 			}
 			.sk-folding-cube .sk-cube:before {
 			  content: '';
@@ -130,7 +130,7 @@
 			}
 			.sk-folding-cube .sk-cube3:before {
 			  -webkit-animation-delay: 0.6s;
-					  animation-delay: 0.6s; 
+					  animation-delay: 0.6s;
 			}
 			.sk-folding-cube .sk-cube4:before {
 			  -webkit-animation-delay: 0.9s;
@@ -140,50 +140,50 @@
 			  0%, 10% {
 				-webkit-transform: perspective(140px) rotateX(-180deg);
 						transform: perspective(140px) rotateX(-180deg);
-				opacity: 0; 
+				opacity: 0;
 			  } 25%, 75% {
 				-webkit-transform: perspective(140px) rotateX(0deg);
 						transform: perspective(140px) rotateX(0deg);
-				opacity: 1; 
+				opacity: 1;
 			  } 90%, 100% {
 				-webkit-transform: perspective(140px) rotateY(180deg);
 						transform: perspective(140px) rotateY(180deg);
-				opacity: 0; 
-			  } 
+				opacity: 0;
+			  }
 			}
 
 			@keyframes sk-foldCubeAngle {
 			  0%, 10% {
 				-webkit-transform: perspective(140px) rotateX(-180deg);
 						transform: perspective(140px) rotateX(-180deg);
-				opacity: 0; 
+				opacity: 0;
 			  } 25%, 75% {
 				-webkit-transform: perspective(140px) rotateX(0deg);
 						transform: perspective(140px) rotateX(0deg);
-				opacity: 1; 
+				opacity: 1;
 			  } 90%, 100% {
 				-webkit-transform: perspective(140px) rotateY(180deg);
 						transform: perspective(140px) rotateY(180deg);
-				opacity: 0; 
+				opacity: 0;
 			  }
 			}
-			
+
 			.submitForm {
 				padding: 1em;
 			}
-			
+
 			.is-loading, .not-loading {
-				transition: all 0.3s cubic-bezier(0.8, 0.25, 0.25, 0.8); 
+				transition: all 0.3s cubic-bezier(0.8, 0.25, 0.25, 0.8);
 			}
-			
+
 			.is-loading {
 				top: 0;
 			}
-			
+
 			.not-loading {
 				top: -200px;
 			}
-			
+
 			.spin {
 				position: fixed;
 				background: rgba(0, 0, 0, 0.5);
@@ -192,15 +192,15 @@
 				left: 0;
 				height: 100%;
 				width: 100%;
-				
+
 			}
-			
+
 			.spinContainer {
 				background: #fff;
 				z-index: 15;
 				padding: 2em;
 			}
-			
+
 			.title {
 			  font-weight: 200;
 			  font-size: 1em;
@@ -229,7 +229,7 @@
 			  display: inline-block;
 			  line-height: 1em;
 			}
-			
+
 			.heading {
 			  font-weight: 200;
 			}
@@ -252,8 +252,8 @@
 			  transform-origin: 0 50%;
 			}
 
-			.heading .line1 { 
-			  top: 0; 
+			.heading .line1 {
+			  top: 0;
 			  left: 0;
 			}
 
@@ -261,14 +261,14 @@
 			  display: inline-block;
 			  line-height: 1em;
 			}
-			
+
 			.sendCommentButton {
 				color: #fff !important;
 				border: 1px solid grey !important;
 				height: 4em !important;
 				width: 11em !important;
 			}
-			
+
 			.progress-indeterminate {
 				position: fixed;
 				top: 100;
@@ -360,7 +360,7 @@
 								{{ comment.name }}
 							</div>
 							<div class="content">
-								{{ comment.message }}
+								{{{ comment.message }}}
 							</div>
 						</div>
 					</div>
@@ -577,40 +577,40 @@
 		<!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
 		<script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js" integrity="sha384-RydurAhVLkWOTB6JAAzjuVHy6VsmznzaDLHvqffwz9DPG0PgMpVlVSu3faIetRFa" crossorigin="anonymous"></script>
 		<script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
-		
+
 		<script id="main-script">
-			
+
 			/* === Config === */
-			
+
 			window.settings = {
 				historyPostApi: "/api/history",
 				wsurl: "wss://dev.khs.science",
 				pageLimit: 5
 			}
-			
+
 			window.statusMeta = {
 				expected: {ok: ""},
 				unexpected: {warn: "", error: "", fatal: ""},
 				error: {error: "", fatal: ""}
 			}
-			
+
 			window.pageNumber = 1
 			window.finishedFirstAjax = false
 			window.gotAllHistory = false
-			
+
 			/* === [Main Logic] History Fetch Data Parser & Render {Vue.js} === */
-			
+
 			var app = new Vue({
 				el: "#app",
 				data: {
 					comments: []
 				}
 			})
-			
+
 			/* === [Main Logic] History Fetch === */
-			
+
 			var constructFetchUrl = window.settings.historyPostApi + '?page=' + window.pageNumber + '&eachpage=' + window.settings.pageLimit
-			
+
 			$.get(constructFetchUrl, function(data){
 				if (data) {
 					data = safeJson(data);
@@ -637,9 +637,9 @@
 					initializeScrollFire()
 					setTimeout('animateComments();', 2000)
 				})
-			
+
 			/* === Code Helpers === */
-			
+
 			function safeJson(jsonString) {
 				try {
 					var parsedJSON = JSON.parse(jsonString);
@@ -648,28 +648,28 @@
 				}
 				return parsedJSON;
 			}
-			
+
 			/* === WebSocket Connection & Basic Initiation === */
-		
+
 			var socket;
 		    try {
 				window.socket = new ReconnectingWebSocket(window.settings.wsurl);
             	window.socket.timeoutInterval = 10000;
 				window.socket.reconnectDecay = 1.15;
-		    } catch ( e ) {  
+		    } catch ( e ) {
 				alert('WebSocket 连接错误，请尝试刷新页面。详细信息：' + e);
 		    }
-		    window.socket.onopen = sOpen;  
+		    window.socket.onopen = sOpen;
 		    window.socket.onerror = sError;
 		    window.socket.onmessage = sMessage;
 		    window.socket.onclose = sClose;
-		    
+
 		    $(".sendCommentButton").click(function(){
 		    	submitComment();
 		    });
-			
+
 			/* === ScrollFire - Switch Page === */
-			
+
 			function initializeScrollFire() {
 				if (!window.gotAllHistory) {
 					var options = [
@@ -680,9 +680,9 @@
 				}
 				setTimeout('initializeScrollFire()', 3000)
 			}
-			
+
 			/* === New Page ajax & loader === */
-			
+
 			function loadNewPage() {
 				if (window.finishedFirstAjax) {
 					window.pageNumber += 1
@@ -715,9 +715,9 @@
 					console.log('Not finished first ajax yet. New page ajax aborted.')
 				}
 			}
-			
+
 			/* === [Main Logic] Submit Comment === */
-			    
+
 			function submitComment() {
 				/* Feature Logic
 				 *
@@ -728,18 +728,18 @@
 				 * ;if received; [UE] STOP ANIMATION, POP MODAL WITH COMPLETED MESSAGE
 				 * Operation Completed
 				 */
-				 
+
 				 loadingBox();
-				 
+
 				 var name = $(".submit #name").val() || friendlyError("请输入'家长名称'。 / Please complete 'name' field.", "#name");
 				 var message = $(".submit #comment").val() || friendlyError("请输入留言。 / Please complete 'comments' field.", "#comment");
 				 var time = new Date().getTime() || 0;
-				 
+
 				 if (!name || !message) {
 					console.error("Input undefined.");
 				 	return false;
 				 }
-				
+
 				 try {
 					 name = name.replace(new RegExp("\n", "gm"), "<br>");
 					 message = message.replace(new RegExp("\n", "gm"), "<br>");
@@ -748,7 +748,7 @@
 					 report("error", "submitComment", "Name / Message return replace failed: " + e);
 					 return false;
 				 }
-				 
+
 				 var data = {
 					action: "post",
 					time: time,
@@ -758,13 +758,13 @@
 					 	time: time
 					}
 				 }
-				 
+
 				 sendSocket(JSON.stringify(data));
-				 
+
 				 window.prevName = filterXSS(name);
 				 window.prevMessage = filterXSS(message);
 				 window.prevTime = time;
-				 
+
 				 /*
 				 window.prevHash = md5({
 					data: {
@@ -775,20 +775,20 @@
 				 });
 				 */
 			}
-			
+
 			/* === WebSocket Event Handlers === */
-			
+
 			// Connection Established.
 			function sOpen(){
 			    console.info('Connection has been Established.');
 			}
-			
+
 			// Connection Error.
 			function sError(e){
 			    console.info("Connection Error. ", e);
 				report("error", "ws-connection", "WebSocket Connection Error: " + e);
 			}
-			
+
 			// RECEIVED from SERVER
 			function sMessage(msg){
             	var msg = JSON.parse(msg.data);
@@ -835,32 +835,32 @@
 					report("error", "ws-messageParser", "Server reported an unexpected status code.");
 				}
 			}
-			
+
 			// Connection has been Closed.
 			function sClose(e){
 			    console.info("Connection has been Closed.", e.code);
 			}
-			
+
 			// SEND to SERVER
 			function sendSocket(msg){
 				console.info("Sending: ", msg);
 			    window.socket.send(msg);
 				var parsed = JSON.parse(msg); //DEVMARK
 				Materialize.toast("Sending Message: " + parsed.data.name + " says " + parsed.data.message, 3000); //DEVMARK
-			} 
-			
+			}
+
 			// Close the Socket
 			function closeSocket(){
 			    console.info("Closing Connection.");
 			    window.socket.close();
-			}  
-			
+			}
+
 			function loadingBox() {
 				// Shows the Loading Animation
 				$(".loading").removeClass("not-loading");
 				$(".loading").addClass("is-loading");
 			}
-			
+
 			function hideLoadingBox() {
 				// Hides the Loading Animation
 				$(".loading").removeClass("is-loading");
@@ -868,9 +868,9 @@
 				// Clears the input
 				$("#comment").val("");
 			}
-			
+
 			/* === User Experience === */
-			
+
 			function friendlyError(errorMsg, noticeSelector) {
 				console.info("Friendly Error Message [%s], will Notice Element [%s]", errorMsg, noticeSelector);
 				hideLoadingBox();
@@ -878,32 +878,32 @@
 				$(noticeSelector).addClass("animated shake");
 				setTimeout('$("' + noticeSelector + '").removeClass("animated"); $("' + noticeSelector + '").removeClass("shake");', 1500);
 			}
-			
+
 			/* === Debug Helpers === */
-			
+
 			function odb(object) {
 				console.info(JSON.stringify(object, null, 4));
 			}
-			
+
 			function ob(object) {
 				return JSON.stringify(object, null, 4);
 			}
-			
+
 			function replaceReturn(str) {
 				return str.replace(new RegExp("\n", "gm"), "<br>");
 			}
-			
+
 			/* === Client Status Report === */
-			
+
 			function report(level, module, data) {
 				$.get("/api/report", {level: level, module: module, data: data})
 					.done(function(data){
 						console.log("Server received report. Server response:", data);
 					})
 			}
-			
+
 			/* === Animation === */
-			
+
 			// Wrap every letter in a span
 			$('.title .letters').each(function(){
 			  $(this).html($(this).text().replace(/([^\x00-\x80]|\w)/g, "<span class='letter'>$&</span>"));
@@ -943,7 +943,7 @@
 				easing: "easeOutExpo",
 				delay: 1000
 			  });*/
-			
+
 			// Wrap every letter in a span
 			$('.heading .letters').each(function(){
 			  $(this).html($(this).text().replace(/([^\x00-\x80]|\w)/g, "<span class='letter'>$&</span>"));
@@ -973,7 +973,7 @@
 				  return 34 * (i+1)
 				}
 			  });
-			
+
 			  anime({
 					targets: ".section-box .input-field, .section-box .single-comment",
 					translateY: [-150, 0],
@@ -986,7 +986,7 @@
 					  return 175 * i
 					}
 				})
-			
+
 			function animateComments() {
 				$("#app").css("opacity", 1);
 				anime({
@@ -1002,9 +1002,9 @@
 					}
 				})
 			}
-			
+
 			/* === Time Formatter === */
-			
+
 			function formatTime(UNIX_timestamp){
 			  var a = new Date(UNIX_timestamp * 1000);
 			  var hour = a.getHours();
