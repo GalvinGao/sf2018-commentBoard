@@ -26,7 +26,7 @@ const logWss = bunyan.createLogger({ name: 'WebSocket-Server', src: config.debug
 const logWsscp = bunyan.createLogger({ name: 'WebSocket-ContentParse', src: config.debug, streams: config.logStreams })
 const logHttp = bunyan.createLogger({ name: 'HTTP-Server', src: config.debug, streams: config.logStreams })
 const logHttps = bunyan.createLogger({ name: 'HTTPS-Server', src: config.debug, streams: config.logStreams })
-const logReport = bunyan.createLogger({ name: 'ReportAPI', streams: [ { level: 'info', stream: process.stdout }, { level: 'debug', path: 'log/report.log' } ] })
+const logReport = bunyan.createLogger({ name: 'ReportAPI', streams: [ { level: 'info', stream: process.stdout }, { level: 'trace', path: 'log/report.log' } ] })
 
 logService.info('Service Initialized. Launching server...')
 
@@ -129,7 +129,9 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
         logHttps.warn({clientQueries: queries, parseErrorMsg: e}, 'Client send an invalid report request, parse error.')
       }
 
-      logReport.info({level: ulevel, module: umodule, data: udata}, 'Client Report.')
+      var reportData = {level: ulevel, module: umodule, data: udata}
+
+      logReport.info({data: reportData}, 'Client report.')
 
       if (success) {
         res.end(genStatus(true))
@@ -351,5 +353,5 @@ function genStatus (success) {
     var status = 'error'
   }
 
-  return '{ status: ' + status + ' }'
+  return '{ status: "' + status + '" }'
 }
