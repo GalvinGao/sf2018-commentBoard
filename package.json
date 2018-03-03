@@ -13,29 +13,14 @@
   "repository": "https://github.com/GalvinGao/sf2018-commentBoard.git",
   "author": "GalvinGao <2403901511@qq.com> (https://github.com/GalvinGao)",
   "bugs": {
-    "url": "https://github.com/GalvinGao/sf2018-commentBoard.git/issues"
+    "url": "https://github.com/GalvinGao/sf2018-commentBoard/issues"
   },
   "homepage": "https://github.com/GalvinGao/sf2018-commentBoard#readme",
   "requires": true,
   "dependencies": {
-    "async-limiter": "^1.0.0",
-    "bignumber.js": "^4.0.4",
     "bunyan": "^1.8.12",
-    "core-util-is": "^1.0.2",
     "crypto": "^1.0.1",
-    "http-proxy": "^1.16.2",
-    "inherits": "^2.0.3",
-    "isarray": "^1.0.0",
     "mysql": "^2.15.0",
-    "node-gyp": "^3.6.2",
-    "process-nextick-args": "^1.0.7",
-    "readable-stream": "^2.3.3",
-    "request": "^2.83.0",
-    "safe-buffer": "^5.1.1",
-    "sqlstring": "^2.3.0",
-    "string_decoder": "^1.0.3",
-    "ultron": "^1.1.1",
-    "util-deprecate": "^1.0.2",
     "ws": "^4.0.0",
     "xss": "^0.3.7"
   },
