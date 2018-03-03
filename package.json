@@ -8,8 +8,16 @@
     "bunyan": "./node_modules/.bin/bunyan -o short -l info",
     "start": "./deploy.sh"
   },
-  "keywords": ["websockets", "mysql", "event-driven", "saas"],
-  "contributors": ["GalvinGao", "BYTEGOING"],
+  "keywords": [
+    "websockets",
+    "mysql",
+    "event-driven",
+    "saas"
+  ],
+  "contributors": [
+    "GalvinGao",
+    "BYTEGOING"
+  ],
   "repository": "https://github.com/GalvinGao/sf2018-commentBoard.git",
   "author": "GalvinGao <2403901511@qq.com> (https://github.com/GalvinGao)",
   "bugs": {
