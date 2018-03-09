@@ -218,6 +218,9 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
           })
             .addListener('end', function () {
               var postdata = decodeURIComponent(querystring.parse(dataSegment)['json'])
+              logHttps.debug('dataSegment: %s', dataSegment)
+              logHttps.debug('dataSegmentQuery: %s', querystring.parse(dataSegment))
+              logHttps.debug('querystring.parse(dataSegment)["JSON"]: %s', querystring.parse(dataSegment)['json'])
               res.end(`Received data [${postdata}]`)
               try {
                 var _name = JSON.parse(postdata)[1][0]
