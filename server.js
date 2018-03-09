@@ -11,6 +11,7 @@ const url = require('url')
 const querystring = require('querystring')
 const config = require('./config') // Personal Configuration File
 
+
 // Initialize Starts Here //
 
 // Seriously without config file I will be out of my mind lol...
@@ -71,11 +72,11 @@ function handleError (err) {
 }
 
 function requestSerializer(requestObj) {
-    return {
-        method: requestObj.method,
-        url: requestObj.url,
-        headers: requestObj.headers
-    }
+  return {
+    method: requestObj.method,
+    url: requestObj.url,
+    headers: requestObj.headers
+  }
 }
 
 var sslOptions = {
@@ -88,6 +89,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
   // res.end('403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.')
   logRequest.trace({req: req}, 'HTTPS Request received.')
   var reqPath = url.parse(req.url)['pathname']
+  var queries = querystring.parse(url.parse(req.url)['query'])
   switch (reqPath) {
     case '/':
       res.setHeader('Content-Type', 'text/html')
@@ -107,10 +109,9 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       res.setHeader('Access-Control-Allow-Methods', 'GET')
       res.setHeader('Content-Encoding', 'utf-8')
       // request.get(config.historyMessageApi).pipe(res)
-      var queries = querystring.parse(url.parse(req.url)['query'])
       try {
         var eachpage = parseInt(queries['eachpage']) || 20
-        var page = ( parseInt(queries['page']) - 1 ) * eachpage || 1
+        var page = (parseInt(queries['page']) - 1) * eachpage || 1
         var sqlParam = [ page, eachpage ]
       } catch (err) {
         logHttps.debug('historyFetch Param Parsing error: ', err)
@@ -126,7 +127,6 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       })
       break
     case '/api/report':
-      var queries = querystring.parse(url.parse(req.url)['query'])
       var success = true
       try {
         var ulevel = queries['level']
@@ -149,7 +149,6 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       }
       break
     case config.adminUrl:
-      var queries = querystring.parse(url.parse(req.url)['query'])
       if (queries['passwd'] === config.adminPasswd) {
         // Authed.
         res.write(fs.readFileSync('public/admin.html'))
@@ -165,7 +164,6 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
       break
     case config.evalUrl:
       if (adminAuth(req.url)) {
-        var queries = querystring.parse(url.parse(req.url)['query'])
         var code = queries['code']
         switch (queries['action']) {
           case 'node':
@@ -197,6 +195,50 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
     case config.bigBoardUrl:
       res.write(fs.readFileSync('public/client-bigboard.html'))
       res.end()
+      break
+    case config.talkAdminAdd:
+      switch (req.method) {
+        /*case 'GET':
+          switch (queries['action']) {
+            case 'nothing':
+              // Code: GET /api/{talkAdminApi}?action=nothing
+              break
+            default:
+              res.writeHead(404)
+              res.write(fs.readFileSync('public/404.html'))
+              res.end()
+          }
+          break*/
+        case 'POST':
+          // Code: POST /api/{talkAdminApi}
+          var dataSegment = ''
+          req.addListener('data', function (chunk) {
+            dataSegment += chunk
+            if (dataSegment.length > 1e5) return request.connection.destory()
+          })
+            .addListener('end', function () {
+              var postdata = decodeURIComponent(querystring.parse(dataSegment)['json'])
+              res.end(`Received data [${postdata}]`)
+              try {
+                var _name = JSON.parse(postdata)[1][0]
+                var _comment = JSON.parse(postdata)[2][0]
+              } catch (e) {
+                return
+              }
+              var _time = new Date().getTime()
+              insertSql(_name, _comment, _time)
+              boardcast({
+                name: _name,
+                message: _message,
+                time: _time
+              }, 'newmessage')
+            })
+          break
+        default:
+          res.writeHead(405)
+          res.end(`Method ${req.method} is currently not supported yet`)
+          break
+      }
       break
     default:
       res.writeHead(404)
@@ -237,7 +279,7 @@ wss.on('connection', function connection (ws) {
   })
 })
 
-const interval = setInterval(function ping () {
+setInterval(function ping () {
   wss.clients.forEach(function each (ws) {
     if (ws.isAlive === false) return ws.terminate()
     ws.isAlive = false

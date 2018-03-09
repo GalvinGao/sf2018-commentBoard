@@ -4,8 +4,8 @@ const config = {
 	bigBoardUrl: "/view/board",
 	adminToken: "PFaHq1hCgq4jovF3zEmalezz",
 	adminPasswd: "Galvin-Gao-sf2018-ADMIN",
-	keypath: "/etc/letsencrypt/live/dev.khs.science/privkey.pem", // HTTPS Server Private Key
-	certpath: "/etc/letsencrypt/live/dev.khs.science/fullchain.pem", // HTTPS Server Certificate
+	keypath: "/etc/letsencrypt/live/dev.khs.science/privkey.pem", // HTTPS Server Private Key [ENV-FLAG]
+	certpath: "/etc/letsencrypt/live/dev.khs.science/fullchain.pem", // HTTPS Server Certificate [ENV-FLAG]
 	// HTTP jumps to HTTPS - Hostname Config
 	// PLEASE MAKE SURE THIS IS CORRECTLY CONFIGURED!
 	// NO NEED FOR "/" OR "http://"!
@@ -13,6 +13,7 @@ const config = {
 	// Use request to get the api and then echo it.
 	// MAKE SURE this is CORRECTLY CONFIGURED
 	// Otherwise History Message WILL NOT WORK
+    // [18.3.9]: Deprecated.
 	historyMessageApi: "http://localhost:8888/",
 	// WebSocket Ping Interval (miliseconds)
 	pingInterval: 15000,
@@ -30,7 +31,12 @@ const config = {
 			level: 'trace',
 			path: 'log/main.log'
 		}
-	]
+	],
+    // Talk Admin Post API [Add]; Token already included in URI
+    talkAdminAdd: "/api/ta/EV4kdK3LuuDyLVNjK5BlBlOa2U0zH8r1/add",
+    talkAdminDelete: "/api/ta/EV4kdK3LuuDyLVNjK5BlBlOa2U0zH8r1/delete",
+    // 'Downward Link' Token; Use this to control whether the choice from admin was authed
+    talkAdminToken: "hQ1ZcX0SVOIv322CfdlwzY3nDIxieUd2"
 }
 
 module.exports = config;
