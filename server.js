@@ -217,9 +217,9 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
             if (dataSegment.length > 1e5) return request.connection.destory()
           })
             .addListener('end', function () {
-              logHttps.debug('dataSegment: %s', dataSegment)
-              logHttps.debug('dataSegment.toString(): %s', dataSegment.toString())
-              logHttps.debug('dataSegment.toString.splitFirstTime: %s', dataSegment.toString().split('name="json"\n\n')[1])
+              console.log('dataSegment: %s', dataSegment)
+              console.log('dataSegment.toString(): %s', dataSegment.toString())
+              console.log('dataSegment.toString.splitFirstTime: %s', dataSegment.toString().split('name="json"\n\n')[1])
               var postdata = dataSegment.toString().split('name="json"\n\n')[1].split('\n--------')[0]
               res.end(`Received data [${postdata}]`)
               try {
