@@ -11,6 +11,9 @@ const url = require('url')
 const querystring = require('querystring')
 const config = require('./config') // Personal Configuration File
 
+// const socket = require('socket.io')
+const express = require('express')
+const app = express()
 
 // Initialize Starts Here //
 
@@ -79,183 +82,193 @@ function requestSerializer(requestObj) {
   }
 }
 
-var sslOptions = {
-  key: fs.readFileSync(config.keypath),
-  cert: fs.readFileSync(config.certpath)
+try {
+  var sslOptions = {
+    key: fs.readFileSync(config.keypath),
+    cert: fs.readFileSync(config.certpath)
+  }
+  global.currentServer = https.createServer(sslOptions, app).listen(443)
+  global.httpServer = http.createServer(httpServerHandler).listen(80)
+} catch (e) {
+  logService.info('Certificate read error. Launching HTTP server instead of HTTPS.')
+  global.currentServer = http.createServer(app).listen(80)
 }
 
-var sslServer = https.createServer(sslOptions, httpsHandler).listen(443)
+// Log all requests
+app.all('*', (req, res) => {logRequest.trace({req: req}, 'HTTPS Request received.')})
 
-function httpsHandler (req, res) {
-  // res.writeHead(403) // Response https connections
-  // res.end('403 Forbidden\nPowered by NodeJS\nCopyright by Galvin.G 2017-2018. All rights reserved.')
-  logRequest.trace({req: req}, 'HTTPS Request received.')
-  var reqPath = url.parse(req.url)['pathname']
+app.get('/', (req, res) => {
+  res.setHeader('Content-Type', 'text/html')
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET')
+  res.setHeader('Content-Encoding', 'utf-8')
+  res.sendFile('public/client-user.html')
+})
+
+app.use(function (req, res, next) {
+  res.writeHead(404)
+  res.status(404).send(fs.readFileSync('public/404.html'));
+});
+
+app.get('/api/history', (req, res) => {
   var queries = querystring.parse(url.parse(req.url)['query'])
-  switch (reqPath) {
-    case '/':
-      res.setHeader('Content-Type', 'text/html')
-      res.setHeader('Access-Control-Allow-Origin', '*')
-      res.setHeader('Access-Control-Allow-Methods', 'GET')
-      res.setHeader('Content-Encoding', 'utf-8')
-      res.write(fs.readFileSync('public/client-user.html'))
-      res.end()
-      break
-    case '/api/history':
-      // /api/history?page=2&eachpage=5 [ 10, 5 ]
-      res.setHeader('Content-Type', 'application/json')
-      res.setHeader('Expires', 'Thu, 01 Jan 1970 00:00:01 GMT')
-      res.setHeader('Cache-Control', 'no-cache')
-      res.setHeader('Cache-Control', 'must-revalidate')
-      res.setHeader('Access-Control-Allow-Origin', '*')
-      res.setHeader('Access-Control-Allow-Methods', 'GET')
-      res.setHeader('Content-Encoding', 'utf-8')
-      // request.get(config.historyMessageApi).pipe(res)
-      try {
-        var eachpage = parseInt(queries['eachpage']) || 20
-        var page = (parseInt(queries['page']) - 1) * eachpage || 1
-        var sqlParam = [ page, eachpage ]
-      } catch (err) {
-        logHttps.debug('historyFetch Param Parsing error: ', err)
-      }
-      connection.query('SELECT name, comment, time FROM `comments` ORDER BY `comments`.`id` DESC LIMIT ?, ?', sqlParam, function (err, result, fields) {
-        if (err) {
-          logMysql.error('historyFetch Error: %s', err)
-          res.end(genStatus(false))
-          return
+  // /api/history?page=2&eachpage=5 [ 10, 5 ]
+  res.setHeader('Content-Type', 'application/json')
+  res.setHeader('Expires', 'Thu, 01 Jan 1970 00:00:01 GMT')
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Cache-Control', 'must-revalidate')
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET')
+  res.setHeader('Content-Encoding', 'utf-8')
+  // request.get(config.historyMessageApi).pipe(res)
+  try {
+    var eachpage = parseInt(queries['eachpage']) || 20
+    var page = (parseInt(queries['page']) - 1) * eachpage || 1
+    var sqlParam = [ page, eachpage ]
+  } catch (err) {
+    logHttps.debug('historyFetch Param Parsing error: ', err)
+  }
+  connection.query('SELECT name, comment, time FROM `comments` ORDER BY `comments`.`id` DESC LIMIT ?, ?', sqlParam, function (err, result, fields) {
+    if (err) {
+      logMysql.error('historyFetch Error: %s', err)
+      res.end(genStatus(false))
+      return
+    }
+    logMysql.trace(result)
+    res.end(respParse(result, 'history'))
+  })
+})
+
+app.get('/api/report', (req, res) => {
+  var queries = querystring.parse(url.parse(req.url)['query'])
+  var success = true
+  try {
+    var ulevel = queries['level']
+    var udata = queries['data']
+    var umodule = queries['module']
+    var success = true
+  } catch (e) {
+    var success = false
+    logHttps.warn({clientQueries: queries, parseErrorMsg: e}, 'Client send an invalid report request, parse error.')
+  }
+
+  var reportData = {level: ulevel, module: umodule, data: udata}
+
+  logReport.info({data: reportData}, 'Client report.')
+
+  if (success) {
+    res.end(genStatus(true))
+  } else {
+    res.end(genStatus(false))
+  }
+})
+
+app.get(config.adminUrl, (req, res) => {
+  var queries = querystring.parse(url.parse(req.url)['query'])
+  if (queries['passwd'] === config.adminPasswd) {
+    // Authed.
+    res.sendFile('public/admin.html')
+    logHttps.info('Admin page authed.')
+  } else {
+    logHttps.debug('Admin page NOT authed: Token Invalid.')
+    // Pretend to be Nothing Happened LOLLLLLLL.
+    res.writeHead(404)
+    res.sendFile('public/404.html')
+  }
+})
+
+app.get(config.evalUrl, (req, res) => {
+  var queries = querystring.parse(url.parse(req.url)['query'])
+  if (adminAuth(req.url)) {
+    var code = queries['code']
+    switch (queries['action']) {
+      case 'node':
+        logService.info('RCE Event: Eval Node Code: %s', code)
+        try {
+          var result = eval(code)
+        } catch (e) {
+          logService.warn('RCE Event: Evaluate Node code error: %s', e)
         }
-        logMysql.trace(result)
-        res.end(respParse(result, 'history'))
-      })
-      break
-    case '/api/report':
-      var success = true
-      try {
-        var ulevel = queries['level']
-        var udata = queries['data']
-        var umodule = queries['module']
-        var success = true
-      } catch (e) {
-        var success = false
-        logHttps.warn({clientQueries: queries, parseErrorMsg: e}, 'Client send an invalid report request, parse error.')
-      }
+        // var result = eval(code)
+        logService.info('RCE Event: Eval Result: %s', result)
+        res.end('RCE: Evaluated node code. Result: %s', result)
+        break
+      case 'client':
+        logService.info('RCE Event: Eval Client Code: %s', code)
+        boardcast(code, 'rce')
+        res.end('RCE: Boardcasted client code.')
+        break
+      default:
+        res.end('Unknown action type %s.', queries['action'])
+        break
+    }
+  } else {
+    res.writeHead(404)
+    res.sendFile('public/404.html')
+  }
+})
 
-      var reportData = {level: ulevel, module: umodule, data: udata}
+app.get(config.bigBoardUrl, (req, res) => {
+  res.sendFile('public/client-bigboard.html')
+})
 
-      logReport.info({data: reportData}, 'Client report.')
-
-      if (success) {
-        res.end(genStatus(true))
-      } else {
-        res.end(genStatus(false))
-      }
-      break
-    case config.adminUrl:
-      if (queries['passwd'] === config.adminPasswd) {
-        // Authed.
-        res.write(fs.readFileSync('public/admin.html'))
-        res.end()
-        logHttps.info('Admin page authed.')
-      } else {
-        logHttps.debug('Admin page NOT authed: Token Invalid.')
-        // Pretend to be Nothing Happened LOLLLLLLL.
-        res.writeHead(404)
-        res.write(fs.readFileSync('public/404.html'))
-        res.end()
-      }
-      break
-    case config.evalUrl:
-      if (adminAuth(req.url)) {
-        var code = queries['code']
-        switch (queries['action']) {
-          case 'node':
-            logService.info('RCE Event: Eval Node Code: %s', code)
-            try {
-              var result = eval(code)
-            } catch (e) {
-              logService.warn('RCE Event: Evaluate Node code error: %s', e)
-            }
-            // var result = eval(code)
-            logService.info('RCE Event: Eval Result: %s', result)
-            res.end('RCE: Evaluated node code. Result: %s', result)
-            break
-          case 'client':
-            logService.info('RCE Event: Eval Client Code: %s', code)
-            boardcast(code, 'rce')
-            res.end('RCE: Boardcasted client code.')
-            break
-          default:
-            res.end('Unknown action type %s.', queries['action'])
-            break
-        }
-      } else {
-        res.writeHead(404)
-        res.write(fs.readFileSync('public/404.html'))
-        res.end()
-      }
-      break
-    case config.bigBoardUrl:
-      res.write(fs.readFileSync('public/client-bigboard.html'))
-      res.end()
-      break
-    case config.talkAdminAdd:
-      switch (req.method) {
-        /*case 'GET':
-          switch (queries['action']) {
-            case 'nothing':
-              // Code: GET /api/{talkAdminApi}?action=nothing
-              break
-            default:
-              res.writeHead(404)
-              res.write(fs.readFileSync('public/404.html'))
-              res.end()
-          }
-          break*/
-        case 'POST':
-          // Code: POST /api/{talkAdminApi}
-          var dataSegment = ''
-          req.addListener('data', function (chunk) {
-            dataSegment += chunk
-            if (dataSegment.length > 1e5) return request.connection.destory()
-          })
-            .addListener('end', function () {
-              var postdata = dataSegment.split('name="json"')[1].split('--------')[0]
-              res.end(`Received data [${postdata}]`)
-              try {
-                var _name = JSON.parse(postdata)[1][0]
-                var _comment = JSON.parse(postdata)[2][0]
-              } catch (e) {
-                return
-              }
-              var _time = new Date().getTime()
-              insertSql(_name, _comment, _time)
-              boardcast({
-                name: _name,
-                message: _comment,
-                time: _time
-              }, 'newmessage')
-            })
+app.get(config.talkAdminAdd, (req, res) => {
+  var queries = querystring.parse(url.parse(req.url)['query'])
+  switch (req.method) {
+    /*case 'GET':
+      switch (queries['action']) {
+        case 'nothing':
+          // Code: GET /api/{talkAdminApi}?action=nothing
           break
         default:
-          res.writeHead(405)
-          res.end(`Method ${req.method} is currently not supported yet`)
-          break
+          res.writeHead(404)
+          res.write(fs.readFileSync('public/404.html'))
+          res.end()
       }
+      break*/
+    case 'POST':
+      // Code: POST /api/{talkAdminApi}
+      var dataSegment = ''
+      req.addListener('data', function (chunk) {
+        dataSegment += chunk
+        if (dataSegment.length > 1e5) return request.connection.destory()
+      })
+        .addListener('end', function () {
+          var postdata = dataSegment.split('name="json"')[1].split('--------')[0]
+          res.end(`Received data [${postdata}]`)
+          try {
+            var _name = JSON.parse(postdata)[1][0]
+            var _comment = JSON.parse(postdata)[2][0]
+          } catch (e) {
+            return
+          }
+          var _time = new Date().getTime()
+          insertSql(_name, _comment, _time)
+          boardcast({
+            name: _name,
+            message: _comment,
+            time: _time
+          }, 'newmessage')
+        })
       break
     default:
-      res.writeHead(404)
-      res.write(fs.readFileSync('public/404.html'))
-      res.end()
+      res.writeHead(405)
+      res.end(`Method ${req.method} is currently not supported yet`)
+      break
   }
-}
+})
 
-http.createServer(function (req, res) {
+function httpServerHandler (req, res) {
   logRequest.trace({req: req}, 'HTTP Request received.')
   res.writeHead(301, { 'Location': 'https://' + config.serverHostname + req.url })
   res.end('Redirecting...')
-}).listen(80)
+}
 
-const wss = new WebSocket.Server({ server: sslServer, clientTracking: true })
+
+// ===== [ABOVE] HTTP & HTTPS Server  |  [BELOW] WebSocket Server ===== //
+
+
+const wss = new WebSocket.Server({ server: currentServer, clientTracking: true })
 
 function noop () {}
 
