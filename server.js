@@ -229,7 +229,7 @@ var sslServer = https.createServer(sslOptions, function (req, res) {
               insertSql(_name, _comment, _time)
               boardcast({
                 name: _name,
-                message: _message,
+                message: _comment,
                 time: _time
               }, 'newmessage')
             })
