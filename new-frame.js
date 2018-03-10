@@ -96,9 +96,11 @@ try {
 
 // Request Logger
 var myLogger = function (req, res, next) {
+  logRequest.trace({req: req}, 'HTTPS Request received.')
   res.setHeader('Access-Control-Allow-Origin', 'dev.khs.science, khs.science')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
   res.setHeader('Content-Encoding', 'utf-8')
+  next()
 }
 
 app.use(myLogger)
