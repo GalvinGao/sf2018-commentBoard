@@ -7,7 +7,7 @@
   "scripts": {
     "bunyan": "./node_modules/.bin/bunyan -o short -l info",
     "start": "chmod -R 777 deploy.sh && ./deploy.sh",
-    "new": "node new-frame.js | ./node_modules/.bin/bunyan -o short -l info",
+    "new": "git pull && npm i && node new-frame.js | ./node_modules/.bin/bunyan -o short -l info",
     "logger": "./node_modules/.bin/bunyan"
   },
   "keywords": [
