@@ -84,7 +84,7 @@ try {
   var certKey = fs.readFileSync(config.keypath)
   var certFile = fs.readFileSync(config.certpath)
   var sslOptions = {
-    key: certKey
+    key: certKey,
     cert: certFile
   }
   global.currentServer = https.createServer(sslOptions, app).listen(443)
