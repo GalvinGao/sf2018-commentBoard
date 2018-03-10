@@ -32,11 +32,20 @@ const config = {
 			path: 'log/main.log'
 		}
 	],
-    // Talk Admin Post API [Add]; Token already included in URI
-    talkAdminAdd: "/api/ta/EV4kdK3LuuDyLVNjK5BlBlOa2U0zH8r1/add",
-    talkAdminDelete: "/api/ta/EV4kdK3LuuDyLVNjK5BlBlOa2U0zH8r1/delete",
+  // Talk Admin Post API [Add]; Token already included in URI
+  talkAdmin: {
+    entry: "/admin/api/talkadmin/EV4kdK3LuuDyLVNjK5BlBlOa2U0zH8r1/talkadmin",
     // 'Downward Link' Token; Use this to control whether the choice from admin was authed
-    talkAdminToken: "hQ1ZcX0SVOIv322CfdlwzY3nDIxieUd2"
+    downwardToken: "hQ1ZcX0SVOIv322CfdlwzY3nDIxieUd2"
+  },
+  // MySQL Credentials
+  mysqlCredentials: {
+    host: 'localhost',
+    port: '3306',
+    user: 'sf2018',
+    password: 'sf2018',
+    database: 'sfcomments'
+  }
 }
 
 module.exports = config;

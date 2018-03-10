@@ -11,7 +11,7 @@ const url = require('url')
 const querystring = require('querystring')
 const config = require('./config') // Personal Configuration File
 
-// const socket = require('socket.io')
+const socket = require('socket.io')
 const express = require('express')
 const app = express()
 
@@ -48,14 +48,7 @@ function insertSql (name, comment, time) {
 }
 
 function connectMysql () {
-  global.connection = mysqlConn.createConnection({
-    host: 'localhost',
-    port: '3306',
-    user: 'sf2018',
-    password: 'sf2018',
-    database: 'sfcomments'
-  })
-
+  global.connection = mysqlConn.createConnection(config.mysqlCredentials)
   connection.connect(handleError)
   connection.on('error', handleError)
 }
@@ -82,10 +75,17 @@ function requestSerializer(requestObj) {
   }
 }
 
+// Create Server. If certificate is usable, then use HTTPS as
+// the current server; HTTP requests will automatically being redirected to HTTPS request.
+// Otherwise if certificate is unusable, then use HTTP as the current server.
+// New created servers will be automatically attached to express and ready to be use.
+
 try {
+  var certKey = fs.readFileSync(config.keypath)
+  var certFile = fs.readFileSync(config.certpath)
   var sslOptions = {
-    key: fs.readFileSync(config.keypath),
-    cert: fs.readFileSync(config.certpath)
+    key: certKey
+    cert: certFile
   }
   global.currentServer = https.createServer(sslOptions, app).listen(443)
   global.httpServer = http.createServer(httpServerHandler).listen(80)
@@ -94,20 +94,23 @@ try {
   global.currentServer = http.createServer(app).listen(80)
 }
 
-// Log all requests
-app.all('*', (req, res) => {logRequest.trace({req: req}, 'HTTPS Request received.')})
+// Parse ALL requests
+app.all('*', (req, res) => {
+  logRequest.trace({req: req}, 'HTTPS Request received.')
+  res.setHeader('Access-Control-Allow-Origin', 'dev.khs.science, khs.science')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
+  res.setHeader('Content-Encoding', 'utf-8')
+  next()
+})
 
 app.get('/', (req, res) => {
   res.setHeader('Content-Type', 'text/html')
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET')
-  res.setHeader('Content-Encoding', 'utf-8')
-  res.sendFile('public/client-user.html')
+  res.end(fs.readFileSync('public/client-user.html'))
 })
 
 app.use(function (req, res, next) {
   res.writeHead(404)
-  res.status(404).send(fs.readFileSync('public/404.html'));
+  res.status(404).end(fs.readFileSync('public/404.html'))
 });
 
 app.get('/api/history', (req, res) => {
@@ -117,13 +120,10 @@ app.get('/api/history', (req, res) => {
   res.setHeader('Expires', 'Thu, 01 Jan 1970 00:00:01 GMT')
   res.setHeader('Cache-Control', 'no-cache')
   res.setHeader('Cache-Control', 'must-revalidate')
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET')
-  res.setHeader('Content-Encoding', 'utf-8')
   // request.get(config.historyMessageApi).pipe(res)
   try {
-    var eachpage = parseInt(queries['eachpage']) || 20
-    var page = (parseInt(queries['page']) - 1) * eachpage || 1
+    var eachpage = parseInt(req.query.eachpage) || 20
+    var page = (parseInt(req.query.page) - 1) * eachpage || 1
     var sqlParam = [ page, eachpage ]
   } catch (err) {
     logHttps.debug('historyFetch Param Parsing error: ', err)
@@ -143,9 +143,9 @@ app.get('/api/report', (req, res) => {
   var queries = querystring.parse(url.parse(req.url)['query'])
   var success = true
   try {
-    var ulevel = queries['level']
-    var udata = queries['data']
-    var umodule = queries['module']
+    var ulevel = req.query.level
+    var udata = req.query.data
+    var umodule = req.query.module
     var success = true
   } catch (e) {
     var success = false
@@ -164,24 +164,21 @@ app.get('/api/report', (req, res) => {
 })
 
 app.get(config.adminUrl, (req, res) => {
-  var queries = querystring.parse(url.parse(req.url)['query'])
-  if (queries['passwd'] === config.adminPasswd) {
+  if (req.query.passwd === config.adminPasswd) {
     // Authed.
-    res.sendFile('public/admin.html')
+    res.end(fs.readFileSync('public/admin.html'))
     logHttps.info('Admin page authed.')
   } else {
     logHttps.debug('Admin page NOT authed: Token Invalid.')
     // Pretend to be Nothing Happened LOLLLLLLL.
-    res.writeHead(404)
-    res.sendFile('public/404.html')
+    res.status(404).end(fs.readFileSync('public/404.html'))
   }
 })
 
 app.get(config.evalUrl, (req, res) => {
-  var queries = querystring.parse(url.parse(req.url)['query'])
   if (adminAuth(req.url)) {
-    var code = queries['code']
-    switch (queries['action']) {
+    var code = req.query.code
+    switch (req.query.action) {
       case 'node':
         logService.info('RCE Event: Eval Node Code: %s', code)
         try {
@@ -199,63 +196,38 @@ app.get(config.evalUrl, (req, res) => {
         res.end('RCE: Boardcasted client code.')
         break
       default:
-        res.end('Unknown action type %s.', queries['action'])
+        res.end('Unknown action type %s.', req.query.action)
         break
     }
   } else {
-    res.writeHead(404)
-    res.sendFile('public/404.html')
+    res.status(404).end(fs.readFileSync('public/404.html'))
   }
 })
 
 app.get(config.bigBoardUrl, (req, res) => {
-  res.sendFile('public/client-bigboard.html')
+  res.end(fs.readFileSync('public/client-bigboard.html'))
 })
 
-app.get(config.talkAdminAdd, (req, res) => {
-  var queries = querystring.parse(url.parse(req.url)['query'])
-  switch (req.method) {
-    /*case 'GET':
-      switch (queries['action']) {
-        case 'nothing':
-          // Code: GET /api/{talkAdminApi}?action=nothing
-          break
-        default:
-          res.writeHead(404)
-          res.write(fs.readFileSync('public/404.html'))
-          res.end()
-      }
-      break*/
-    case 'POST':
-      // Code: POST /api/{talkAdminApi}
-      var dataSegment = ''
-      req.addListener('data', function (chunk) {
-        dataSegment += chunk
-        if (dataSegment.length > 1e5) return request.connection.destory()
-      })
-        .addListener('end', function () {
-          var postdata = dataSegment.split('name="json"')[1].split('--------')[0]
-          res.end(`Received data [${postdata}]`)
-          try {
-            var _name = JSON.parse(postdata)[1][0]
-            var _comment = JSON.parse(postdata)[2][0]
-          } catch (e) {
-            return
-          }
-          var _time = new Date().getTime()
-          insertSql(_name, _comment, _time)
-          boardcast({
-            name: _name,
-            message: _comment,
-            time: _time
-          }, 'newmessage')
-        })
-      break
-    default:
-      res.writeHead(405)
-      res.end(`Method ${req.method} is currently not supported yet`)
-      break
+app.post(config.talkAdmin.entry, (req, res) => {
+  var postdata = req.body.split('name="json"')[1].split('--------')[0]
+  res.end(`Received data [${postdata}]`)
+  try {
+    var _name = JSON.parse(postdata)[1][0]
+    var _comment = JSON.parse(postdata)[2][0]
+  } catch (e) {
+    return
   }
+  var _time = new Date().getTime()
+  insertSql(_name, _comment, _time)
+  boardcast({
+    name: _name,
+    message: _comment,
+    time: _time
+  }, 'newmessage')
+})
+
+app.all('*', (req, res) => {
+  res.status(404).end(fs.readFileSync('public/404.html'))
 })
 
 function httpServerHandler (req, res) {
