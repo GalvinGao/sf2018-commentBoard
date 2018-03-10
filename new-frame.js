@@ -94,14 +94,14 @@ try {
   global.currentServer = http.createServer(app).listen(80)
 }
 
-// Parse ALL requests
-app.all('*', (req, res) => {
-  logRequest.trace({req: req}, 'HTTPS Request received.')
+// Request Logger
+var myLogger = function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'dev.khs.science, khs.science')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
   res.setHeader('Content-Encoding', 'utf-8')
-  next()
-})
+}
+
+app.use(myLogger)
 
 app.get('/', (req, res) => {
   res.setHeader('Content-Type', 'text/html')
