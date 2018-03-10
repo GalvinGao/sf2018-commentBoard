@@ -114,7 +114,6 @@ app.use(function (req, res, next) {
 });
 
 app.get('/api/history', (req, res) => {
-  var queries = querystring.parse(url.parse(req.url)['query'])
   // /api/history?page=2&eachpage=5 [ 10, 5 ]
   res.setHeader('Content-Type', 'application/json')
   res.setHeader('Expires', 'Thu, 01 Jan 1970 00:00:01 GMT')

@@ -6,7 +6,9 @@
   "main": "server.js",
   "scripts": {
     "bunyan": "./node_modules/.bin/bunyan -o short -l info",
-    "start": "./deploy.sh"
+    "start": "chmod -R 777 deploy.sh && ./deploy.sh",
+    "new": "node new-frame.js | ./node_modules/.bin/bunyan -o short -l info",
+    "logger": "./node_modules/.bin/bunyan"
   },
   "keywords": [
     "websockets",
