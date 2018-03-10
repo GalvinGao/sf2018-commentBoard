@@ -72,6 +72,7 @@ function requestSerializer(requestObj) {
   return {
     method: requestObj.method,
     url: requestObj.url,
+    query: requestObj.query,
     headers: requestObj.headers
   }
 }
@@ -111,11 +112,6 @@ app.get('/', (req, res) => {
   res.end(fs.readFileSync('public/client-user.html'))
 })
 
-app.use(function (req, res, next) {
-  res.writeHead(404)
-  res.status(404).end(fs.readFileSync('public/404.html'))
-});
-
 app.get('/api/history', (req, res) => {
   // /api/history?page=2&eachpage=5 [ 10, 5 ]
   res.setHeader('Content-Type', 'application/json')
@@ -142,7 +138,6 @@ app.get('/api/history', (req, res) => {
 })
 
 app.get('/api/report', (req, res) => {
-  var queries = querystring.parse(url.parse(req.url)['query'])
   var success = true
   try {
     var ulevel = req.query.level
@@ -151,7 +146,7 @@ app.get('/api/report', (req, res) => {
     var success = true
   } catch (e) {
     var success = false
-    logHttps.warn({clientQueries: queries, parseErrorMsg: e}, 'Client send an invalid report request, parse error.')
+    logHttps.warn({data: {clientQueries: req.query, parseErrorMsg: e}}, 'Client send an invalid report request, parse error.')
   }
 
   var reportData = {level: ulevel, module: umodule, data: udata}
