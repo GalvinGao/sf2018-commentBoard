@@ -12,7 +12,6 @@ const querystring = require('querystring')
 const config = require('./config') // Personal Configuration File
 
 // New Frames
-// const socket = require('socket.io')
 const express = require('express')
 const app = express()
 
@@ -99,7 +98,7 @@ try {
 // Request Logger
 var myLogger = function (req, res, next) {
   logRequest.trace({req: req}, 'HTTPS Request received.')
-  res.setHeader('Access-Control-Allow-Origin', 'dev.khs.science, khs.science')
+  res.setHeader('Access-Control-Allow-Origin', 'dev.khs.science')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
   res.setHeader('Content-Encoding', 'utf-8')
   next()
@@ -110,6 +109,11 @@ app.use(myLogger)
 app.get('/', (req, res) => {
   res.setHeader('Content-Type', 'text/html')
   res.end(fs.readFileSync('public/client-user.html'))
+})
+
+app.get('/new', (req, res) => {
+  res.setHeader('Content-Type', 'text/html')
+  res.end(fs.readFileSync('public/client-user-new-frame.html'))
 })
 
 app.get('/api/history', (req, res) => {
@@ -223,6 +227,11 @@ app.post(config.talkAdmin.entry, (req, res) => {
   }, 'newmessage')
 })
 
+app.get('/admin/api/user', (req, res) => {
+  res.write(userCount.toString())
+  res.end()
+})
+
 app.all('*', (req, res) => {
   res.status(404).end(fs.readFileSync('public/404.html'))
 })
@@ -237,99 +246,64 @@ function httpServerHandler (req, res) {
 // ===== [ABOVE] HTTP & HTTPS Server  |  [BELOW] WebSocket Server ===== //
 
 
-const wss = new WebSocket.Server({ server: currentServer, clientTracking: true })
+global.userCount = 0
+global.clients = []
 
-function noop () {}
+const io = require('socket.io')(currentServer)
 
-function heartbeat () {
-  this.isAlive = true
-  // logWss.trace('WebSocket Heartbeat package received.')
-}
+logWss.info('Listening for incoming WebSockets...')
 
-wss.on('listening', function () {
-  logWss.info('Listening for incoming WebSockets...')
-})
+io.on('connection', (socket) => {
+  ++userCount
+  clients.push(socket.id)
+  logWss.debug('New WebSocket Connection Established. Current users [%i]', userCount)
+  
+  socket.on('hey heres a new message', function (data) {
+    console.info('Got message [%s] [%j]', data, data)
+    logWsscp.info('Got a new message: %s, %s, %s', data.name, data.message, data.time)
 
-wss.on('connection', function connection (ws) {
-  logWss.debug('New WebSocket Connection Established.')
-  ws.isAlive = true
-  ws.on('pong', heartbeat)
-  ws.on('message', function incoming (message, req) {
-    procReq(message, ws)
-  })
-  ws.on('error', (e) => logWss.warn('Client connection error: [ code:', e.code, ', errno:', e.errno, ' ]. More details:', e))
-  ws.on('close', function close () {
-    logWss.debug('Connection Disconnected.')
-  })
-})
-
-setInterval(function ping () {
-  wss.clients.forEach(function each (ws) {
-    if (ws.isAlive === false) return ws.terminate()
-    ws.isAlive = false
-    ws.ping(noop)
-  })
-}, config.pingInterval)
-
-// procReq = processRequest
-
-function procReq (msg, wsObject) {
-  logWsscp.debug('Received WebSocket Data (formatted JSON): %j', msg)
-  // console.log('Received (String): %s', msg)
-  try {
-    var message = JSON.parse(msg)
-  } catch (e) {
-    logWsscp.debug('Request invalid, parse error. Not a valid client request (JSON). Parsing Error [%s], message content [%s].', e, msg)
-    wsObject.send('{ status: \'error\', message: \'Invalid JSON\' }')
-    return
-  }
-
-  var action = message.action
-
-  switch (action) {
-    case 'post':
-      logWsscp.info('Got a new message: %s, %s, %s', message.data.name, message.data.message, message.data.time)
-      // console.log('message.name: %s', message.data.name)
-      // console.log('message.message: %s', message.data.message)
-      // console.log('message.time: %s', message.data.time)
-      var names = xss(message.data.name)
-      var messages = xss(message.data.message)
-      var times = xss(message.data.time)
-      logWsscp.debug('New Message dexss: %s, %s, %s', names, messages, times)
-      insertSql(names, messages, times)
-      var dexss = {
-        name: names,
-        message: messages,
-        time: times
-      }
-      wsObject.send(respParse(dexss, 'received'))
-      boardcast(dexss, 'newmessage')
-      break
-    default:
-      logWsscp.debug('Invalid client action type: %s', action)
-  }
-}
-
-function boardcast (message, type) {
-  logWss.info('Broadcasting message: %s', respParse(message, type))
-  wss.clients.forEach(function each (client) {
-    if (client !== wss && client.readyState === WebSocket.OPEN) {
-      client.send(respParse(message, type))
+    var names = xss(data.name)
+    var messages = xss(data.message)
+    var times = xss(data.time)
+    logWsscp.debug('New Message dexss: %s, %s, %s', names, messages, times)
+    //insertSql(names, messages, times)
+    var dexss = {
+      name: names,
+      message: messages,
+      time: times
     }
+    socket.broadcast.emit('new message guys', dexss)
+    socket.emit('k got it but u have to verify it', dexss)
   })
-}
+  
+  socket.on('disconnect', () => {
+    --userCount
+    clients.pop()
+  })
 
-function respParse (dataObject, type) {
-  // 构造响应内容
-  var time = new Date().getTime()
-  var object = {
-    'status': 'ok',
-    'time': time,
-    'type': type,
-    'data': dataObject
-  }
-  return JSON.stringify(object)
-}
+  socket.on('error', (error) => {
+    logWss.debug('Client connection error %s', error)
+    --userCount
+    clients.pop()
+  })
+  
+  socket.on('i want to know everything', (data) => {
+    var backdata = {
+      id: socket.id,
+      users: userCount,
+      connections: clients
+    }
+    socket.emit('heres everything bro', backdata)
+  })
+})
+
+// socket.emit('news', { hello: 'world' })
+
+
+// ==== [BELOW] Deprecated WebSocket Service ==== //
+
+
+// const wss = new WebSocket.Server({ server: currentServer, clientTracking: true })
 
 function adminAuth (uurl) {
   var getToken = function (uurl) {

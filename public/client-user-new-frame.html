@@ -1,0 +1,1125 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <title>Kinglee Science Fair 2018</title>
+  <style>
+    /* Material Design Spinner */
+
+    .loader {
+      width: 75pt;
+      position: relative
+    }
+
+    .loader:before {
+      content: '';
+      display: block;
+      padding-top: 100%
+    }
+
+    .loader .circular {
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-animation: rotate 2s linear infinite;
+      animation: rotate 2s linear infinite
+    }
+
+    .loader circle {
+      -webkit-animation: circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite;
+      animation: circle-dash 1.5s cubic-bezier(.80, 0, .55, 1) infinite
+    }
+
+    @-webkit-keyframes circle-dash {
+      0% {
+        stroke-dasharray: 1, 125;
+        stroke-dashoffset: 0
+      }
+      50% {
+        stroke-dashoffset: -25px
+      }
+      50%,
+      to {
+        stroke-dasharray: 100, 125
+      }
+      to {
+        stroke-dashoffset: -125px
+      }
+    }
+
+    @keyframes circle-dash {
+      0% {
+        stroke-dasharray: 1, 125;
+        stroke-dashoffset: 0
+      }
+      50% {
+        stroke-dashoffset: -25px
+      }
+      50%,
+      to {
+        stroke-dasharray: 100, 125
+      }
+      to {
+        stroke-dashoffset: -125px
+      }
+    }
+
+    @-webkit-keyframes rotate {
+      0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0)
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg)
+      }
+    }
+
+    @keyframes rotate {
+      0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0)
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg)
+      }
+    }
+
+    .section {
+      color: #fff;
+      border-radius: 0.8em;
+      padding: 1.5em;
+      /* background: rgba(255, 255, 255, 0.7); */
+      /*
+				-webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.14), 0 0 14px 2px rgba(0, 0, 0, 0.12), 0 0 5px -3px rgba(0, 0, 0, 0.3);
+				box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.14), 0 0 14px 2px rgba(0, 0, 0, 0.12), 0 0 5px -3px rgba(0, 0, 0, 0.3);
+				*/
+      margin: 2em 0;
+      font-size: 1em;
+    }
+
+    body {
+      padding: 0.3em;
+      text-align: left;
+      font-display: swap;
+      font-family: 'chinese-font', 'Product Sans', 'Open Sans', serif;
+      background: #000000;
+    }
+
+    .header {
+      text-align: center;
+      font-size: 2em;
+      padding: 0.75em;
+      text-shadow: 0 0 3px #fff;
+      margin-bottom: 1em;
+    }
+
+    .header .text {
+      padding-bottom: 0.1em;
+    }
+
+    .single-comment .name {
+      font-size: 1.5em;
+      margin-bottom: 0.3em;
+    }
+
+    .single-comment .content {
+      margin-left: 0.5em;
+    }
+
+    .single-comment {
+      padding: 1em;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .single-comment:last-child {
+      padding: none;
+      border-bottom: none;
+    }
+
+    .heading {
+      font-size: 2em;
+      padding: 0.25em;
+    }
+
+    .loading {
+      position: fixed;
+      top: -140px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-weight: 400;
+      font-family: 'Kefa';
+      background: rgba(0, 0, 0, 0.75);
+      font-size: 1em;
+      color: #fff;
+      padding: 1em 0.5em;
+      margin: 0;
+      transition: all 0.3s ease-out;
+    }
+
+    .sk-folding-cube {
+      margin: 20px auto;
+      width: 40px;
+      height: 40px;
+      position: relative;
+      -webkit-transform: rotateZ(45deg);
+      transform: rotateZ(45deg);
+    }
+
+    .sk-folding-cube .sk-cube {
+      float: left;
+      width: 50%;
+      height: 50%;
+      position: relative;
+      -webkit-transform: scale(1.1);
+      -ms-transform: scale(1.1);
+      transform: scale(1.1);
+    }
+
+    .sk-folding-cube .sk-cube:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
+      animation: sk-foldCubeAngle 2.4s infinite linear both;
+      -webkit-transform-origin: 100% 100%;
+      -ms-transform-origin: 100% 100%;
+      transform-origin: 100% 100%;
+    }
+
+    .sk-folding-cube .sk-cube2 {
+      -webkit-transform: scale(1.1) rotateZ(90deg);
+      transform: scale(1.1) rotateZ(90deg);
+    }
+
+    .sk-folding-cube .sk-cube3 {
+      -webkit-transform: scale(1.1) rotateZ(180deg);
+      transform: scale(1.1) rotateZ(180deg);
+    }
+
+    .sk-folding-cube .sk-cube4 {
+      -webkit-transform: scale(1.1) rotateZ(270deg);
+      transform: scale(1.1) rotateZ(270deg);
+    }
+
+    .sk-folding-cube .sk-cube2:before {
+      -webkit-animation-delay: 0.3s;
+      animation-delay: 0.3s;
+    }
+
+    .sk-folding-cube .sk-cube3:before {
+      -webkit-animation-delay: 0.6s;
+      animation-delay: 0.6s;
+    }
+
+    .sk-folding-cube .sk-cube4:before {
+      -webkit-animation-delay: 0.9s;
+      animation-delay: 0.9s;
+    }
+
+    @-webkit-keyframes sk-foldCubeAngle {
+      0%,
+      10% {
+        -webkit-transform: perspective(140px) rotateX(-180deg);
+        transform: perspective(140px) rotateX(-180deg);
+        opacity: 0;
+      }
+      25%,
+      75% {
+        -webkit-transform: perspective(140px) rotateX(0deg);
+        transform: perspective(140px) rotateX(0deg);
+        opacity: 1;
+      }
+      90%,
+      100% {
+        -webkit-transform: perspective(140px) rotateY(180deg);
+        transform: perspective(140px) rotateY(180deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes sk-foldCubeAngle {
+      0%,
+      10% {
+        -webkit-transform: perspective(140px) rotateX(-180deg);
+        transform: perspective(140px) rotateX(-180deg);
+        opacity: 0;
+      }
+      25%,
+      75% {
+        -webkit-transform: perspective(140px) rotateX(0deg);
+        transform: perspective(140px) rotateX(0deg);
+        opacity: 1;
+      }
+      90%,
+      100% {
+        -webkit-transform: perspective(140px) rotateY(180deg);
+        transform: perspective(140px) rotateY(180deg);
+        opacity: 0;
+      }
+    }
+
+    .submitForm {
+      padding: 1em;
+    }
+
+    .is-loading,
+    .not-loading {
+      transition: all 0.3s cubic-bezier(0.8, 0.25, 0.25, 0.8);
+    }
+
+    .is-loading {
+      top: 0;
+    }
+
+    .not-loading {
+      top: -200px;
+    }
+
+    .spin {
+      position: fixed;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    .spinContainer {
+      background: #fff;
+      z-index: 15;
+      padding: 2em;
+    }
+
+    .title {
+      font-weight: 200;
+      font-size: 1em;
+    }
+
+    .title .text-wrapper {
+      position: relative;
+      display: inline-block;
+      padding-top: 0.1em;
+      padding-right: 0.05em;
+      padding-bottom: 0.15em;
+    }
+
+    .title .line {
+      opacity: 0;
+      position: absolute;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      background-color: #fff;
+      transform-origin: 100% 100%;
+      bottom: 0;
+    }
+
+    .title .letter {
+      display: inline-block;
+      line-height: 1em;
+    }
+
+    .heading {
+      font-weight: 200;
+    }
+
+    .heading .text-wrapper {
+      position: relative;
+      display: inline-block;
+      padding-top: 0.1em;
+      padding-right: 0.05em;
+      padding-bottom: 0.15em;
+    }
+
+    .heading .line {
+      opacity: 0;
+      position: absolute;
+      left: 0;
+      height: 100%;
+      width: 3px;
+      background-color: #fff;
+      transform-origin: 0 50%;
+    }
+
+    .heading .line1 {
+      top: 0;
+      left: 0;
+    }
+
+    .heading .letter {
+      display: inline-block;
+      line-height: 1em;
+    }
+
+    .sendCommentButton {
+      color: #fff !important;
+      border: 1px solid grey !important;
+      height: 4em !important;
+      width: 11em !important;
+    }
+
+    .progress-indeterminate {
+      position: fixed;
+      top: 100;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" integrity="sha384-gGIdbE3rejhnmhbMZyasqhmdgF/Wza7NbuLq2eAVP92BbPF/ziwfO1LtP7E/ai36" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container flow-text">
+    <div class="section header">
+      <div class="title">
+        <div class="text-wrapper">
+          <div class="letters">Science Fair 2018</div>
+          <div class="line"></div>
+        </div>
+      </div>
+    </div>
+    <div class="section submit">
+      <h1 class="heading">
+        <span class="text-wrapper">
+        <span class="line line1"></span>
+        <span class="letters">Submit</span>
+        </span>
+      </h1>
+      <div class="submitForm row section-box">
+        <div class="input-field col s12">
+          <input placeholder="John Appleseed" id="name" type="text"></input>
+          <label for="name">姓名 / Name</label>
+        </div>
+        <div class="input-field col s12">
+          <textarea id="comment" class="materialize-textarea" placeholder="请在此输入留言 / Please input comments at here"></textarea>
+          <label for="comment">留言 / Comments</label>
+        </div>
+        <div class="col s12">
+          <button class="waves-effect waves-light btn-flat sendCommentButton">
+            提交 / Send
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="section comment section-box">
+      <h1 class="heading">
+        <span class="text-wrapper">
+        <span class="line line1"></span>
+        <span class="letters">Comments</span>
+        </span>
+      </h1>
+      <div class="section-box">
+        <div id="app" _desc="Vue.js App Framework" style="opacity: 0;">
+          <div v-for="comment in comments">
+            <div class="single-comment">
+              <div class="name">
+                {{ comment.name }}
+              </div>
+              <div class="content" v-html="comment.message">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="new-page-loader"></div>
+      </div>
+      <div class="ue loading not-loading">
+        <div class="sk-folding-cube">
+          <div class="sk-cube1 sk-cube"></div>
+          <div class="sk-cube2 sk-cube"></div>
+          <div class="sk-cube4 sk-cube"></div>
+          <div class="sk-cube3 sk-cube"></div>
+        </div>
+        正在提交... / Submitting...
+      </div>
+      <div class="ue spin valign-wrapper hide">
+        <div class="spinContainer z-index-5">
+          <div class="loader" align="center">
+            <svg class="circular" viewBox="0 0 50 50">
+              <circle cx="25" cy="25" r="20" fill="none" stroke="#106CFA" stroke-width="5%" stroke-linecap="round"/>
+            </svg><br> Loading...
+          </div>
+        </div>
+      </div>
+      <div class="ue progress-indeterminate hide">
+        <div class="progress">
+          <div class="indeterminate"></div>
+        </div>
+      </div>
+    </div>
+    <canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -2; opacity: 1; filter: blur(4px);" id="canvas"></canvas>
+    <script>
+      var canvas,
+        ctx,
+        width,
+        height,
+        size,
+        lines,
+        tick;
+
+      function line() {
+        this.path = [];
+        this.speed = rand(5, 15);
+        this.count = randInt(5, 40);
+        this.x = width / 2, +1;
+        this.y = height / 2 + 1;
+        this.target = {
+          x: width / 2,
+          y: height / 2
+        };
+        this.dist = 0;
+        this.angle = 0;
+        this.hue = tick / 5;
+        this.life = 1;
+        this.updateAngle();
+        this.updateDist();
+      }
+
+      line.prototype.step = function(i) {
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+
+        this.updateDist();
+
+        if (this.dist < this.speed) {
+          this.x = this.target.x;
+          this.y = this.target.y;
+          this.changeTarget();
+        }
+
+        this.path.push({
+          x: this.x,
+          y: this.y
+        });
+        if (this.path.length > this.count) {
+          this.path.shift();
+        }
+
+        this.life -= 0.002;
+
+        if (this.life <= 0) {
+          this.path = null;
+          lines.splice(i, 1);
+        }
+      };
+
+      line.prototype.updateDist = function() {
+        var dx = this.target.x - this.x,
+          dy = this.target.y - this.y;
+        this.dist = Math.sqrt(dx * dx + dy * dy);
+      }
+
+      line.prototype.updateAngle = function() {
+        var dx = this.target.x - this.x,
+          dy = this.target.y - this.y;
+        this.angle = Math.atan2(dy, dx);
+      }
+
+      line.prototype.changeTarget = function() {
+        var randStart = randInt(0, 3);
+        switch (randStart) {
+          case 0: // up
+            this.target.y = this.y - size;
+            break;
+          case 1: // right
+            this.target.x = this.x + size;
+            break;
+          case 2: // down
+            this.target.y = this.y + size;
+            break;
+          case 3: // left
+            this.target.x = this.x - size;
+        }
+        this.updateAngle();
+      };
+
+      line.prototype.draw = function(i) {
+        ctx.beginPath();
+        var rando = rand(0, 10);
+        for (var j = 0, length = this.path.length; j < length; j++) {
+          ctx[(j === 0) ? 'moveTo' : 'lineTo'](this.path[j].x + rand(-rando, rando), this.path[j].y + rand(-rando, rando));
+        }
+        ctx.strokeStyle = 'hsla(' + rand(this.hue, this.hue + 30) + ', 80%, 55%, ' + (this.life / 3) + ')';
+        ctx.lineWidth = rand(0.2, 2.5);
+        ctx.stroke();
+      };
+
+      function rand(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      function randInt(min, max) {
+        return Math.floor(min + Math.random() * (max - min + 1));
+      };
+
+      function init() {
+        canvas = document.getElementById('canvas');
+        ctx = canvas.getContext('2d');
+        size = 25;
+        lines = [];
+        reset();
+        loop();
+      }
+
+      function reset() {
+        width = Math.ceil(window.innerWidth / 2) * 2;
+        height = Math.ceil(window.innerHeight / 2) * 2;
+        tick = 0;
+
+        lines.length = 0;
+        canvas.width = width;
+        canvas.height = height;
+      }
+
+      function create() {
+        if (tick % 10 === 0) {
+          lines.push(new line());
+        }
+      }
+
+      function step() {
+        var i = lines.length;
+        while (i--) {
+          lines[i].step(i);
+        }
+      }
+
+      function clear() {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'hsla(0, 0%, 0%, 0.1';
+        ctx.fillRect(0, 0, width, height);
+        ctx.globalCompositeOperation = 'lighter';
+      }
+
+      function draw() {
+        ctx.save();
+        ctx.translate(width / 2, height / 2);
+        ctx.rotate(tick * 0.002);
+        var scale = 1.4 + Math.cos(tick * 0.02) * 0.2;
+        ctx.scale(scale, scale);
+        ctx.translate(-width / 2, -height / 2);
+        var i = lines.length;
+        while (i--) {
+          lines[i].draw(i);
+        }
+        ctx.restore();
+      }
+
+      function loop() {
+        requestAnimationFrame(loop);
+        create();
+        step();
+        clear();
+        draw();
+        tick++;
+      }
+
+      function onresize() {
+        reset();
+      }
+
+      window.addEventListener('resize', onresize);
+
+      init();
+    </script>
+
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/animejs/2.2.0/anime.min.js" integrity="sha384-BnFYVbw3PHhz5qWXTCSL12MjPc3KxjdKPx7R4R5JjIzxFmYX267NDyJ9B/nZANdg" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/modernizr/2.8.3/modernizr.min.js" integrity="sha384-bPV3mA2eo3edoq56VzcPBmG1N1QVUfjYMxVIJPPzyFJyFZ8GFfN7Npt06Zr23qts" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha384-FtJyC+/3fgtPbqlacLHdGwBrmPjKoYBsiqNF5/BEprsnIXB4xtXLCJRx7Xx+TWKP" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/socket.io/2.0.4/socket.io.js"></script>
+    <!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
+    <script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js" integrity="sha384-RydurAhVLkWOTB6JAAzjuVHy6VsmznzaDLHvqffwz9DPG0PgMpVlVSu3faIetRFa" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+
+    <script id="main-script">
+      /* === Config === */
+
+      window.settings = {
+        historyPostApi: "/api/history",
+        wsurl: "wss://dev.khs.science",
+        pageLimit: 5
+      }
+
+      window.statusMeta = {"expected":{"ok":""},"unexpected":{"warn":"","error":"","fatal":""},"error":{"error":"","fatal":""}}
+
+      window.pageNumber = 1
+      window.finishedFirstAjax = false
+      window.gotAllHistory = false
+
+      /* === [Main Logic] History Fetch Data Parser & Render {Vue.js} === */
+
+      var app = new Vue({
+        el: '#app',
+        data: {
+          comments: []
+        }
+      })
+
+      /* === [Main Logic] History Fetch === */
+
+      var constructFetchUrl = window.settings.historyPostApi + '?page=' + window.pageNumber + '&eachpage=' + window.settings.pageLimit
+
+      $.get(constructFetchUrl, function(data) {
+          if (data) {
+            data = safeJson(data);
+            if (data.status in window.statusMeta.expected) {
+              for (i in data.data) {
+                console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
+                app.comments.push({
+                  name: data.data[i].name,
+                  message: data.data[i].comment,
+                  time: data.data[i].time
+                });
+              }
+              if (data.data.length === 0) {
+                window.gotAllHistory = true
+              }
+              animateComments();
+            } else if (data.status in window.statusMeta.unexpected) {
+              console.error("[historyFetch] Server Error. Code:", data.status);
+            } else {
+              console.error("[historyFetch] Server send an un-normal status code:", data.status);
+            }
+          } else {
+            console.error("[historyFetch] No response...");
+          }
+        })
+        .done(function() {
+          window.finishedFirstAjax = true
+          initializeScrollFire()
+          setTimeout('animateComments();', 2000)
+        })
+
+      /* === Code Helpers === */
+
+      function safeJson(jsonString) {
+        try {
+          var parsedJSON = JSON.parse(jsonString);
+        } catch (e) {
+          return jsonString;
+        }
+        return parsedJSON;
+      }
+
+      /* === WebSocket Connection & Basic Initiation === */
+
+      const socket = io()
+      
+      socket.on('connect', () => {
+        console.log('socket.io Service Connected, uid %s.', socket.id)
+      })
+      
+      socket.on('k got it but u have to verify it', (msg) => {
+        console.info("Message has been received by server.")
+        console.info("Checking message...")
+        window.msg = msg
+        if (window.prevName === msg.name && window.prevMessage === msg.message && window.prevTime == msg.time) {
+          console.info("Message is Valid: Message is correctly sended to the server.")
+          hideLoadingBox()
+        } else {
+          console.warn("Message validation failed. [%s,%s,%s,%s,%s,%s] [%s,%s,%s,%s,%s,%s]", window.prevName, msg.name, window.prevMessage, msg.message, window.prevTime, msg.time, typeof window.prevName, typeof msg.name, typeof window.prevMessage, typeof msg.message, typeof window.prevTime, typeof msg.time)
+        }
+      })
+      
+      socket.on('new message guys', (msg) => {
+        console.info("New Message received:", msg);
+        Materialize.toast("New Message: " + msg.name + " says " + msg.message, 3000); //DEVMARK
+        app.comments.unshift({
+          name: msg.name,
+          message: msg.message,
+          time: msg.time
+        });
+      })
+      
+      socket.on('rce', (msg) => {
+        console.info("RCE Event: Code received. Evaluating.");
+        try {
+          var evalResult = eval(msg);
+        } catch (e) {
+          console.error("RCE Event: Code error.", e);
+          report("error", "rce", "Code Evaluate Error: " + e);
+          return false;
+        }
+        console.info("Eval code successful, returned ", evalResult);
+        report("info", "rce", "Code Evaluate Successfully. Client Result: " + evalResult);
+      })
+
+
+      $(".sendCommentButton").click(function() {
+        submitComment();
+      });
+
+      /* === ScrollFire - Switch Page === */
+
+      function initializeScrollFire() {
+        if (!window.gotAllHistory) {
+          var options = [{
+            selector: '.new-page-loader',
+            offset: 0,
+            callback: loadNewPage
+          }];
+          Materialize.scrollFire(options);
+          console.log('ScrollFire has been re-initialized.')
+        }
+        setTimeout('initializeScrollFire()', 3000)
+      }
+
+      /* === New Page ajax & loader === */
+
+      function loadNewPage() {
+        if (window.finishedFirstAjax) {
+          window.pageNumber += 1
+          var newFetchUrl = window.settings.historyPostApi + '?page=' + window.pageNumber + '&eachpage=' + window.settings.pageLimit
+
+          $.get(newFetchUrl, function(data) {
+              if (data) {
+                data = safeJson(data);
+                if (data.status in window.statusMeta.expected) {
+                  for (i in data.data) {
+                    console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
+                    app.comments.push({
+                      name: data.data[i].name,
+                      message: data.data[i].comment,
+                      time: data.data[i].time
+                    });
+                  }
+                  if (data.data.length === 0) {
+                    window.gotAllHistory = true
+                  }
+                } else if (data.status in window.statusMeta.unexpected) {
+                  console.error("[historyFetch] Server Error. Code:", data.status);
+                } else {
+                  console.error("[historyFetch] Server send an un-normal status code:", data.status);
+                }
+              } else {
+                console.error("[historyFetch] No response...");
+              }
+            })
+            .done(function() {
+              console.log('Finished Ajax')
+            })
+        } else {
+          console.log('Not finished first ajax yet. New page ajax aborted.')
+        }
+      }
+
+      /* === [Main Logic] Submit Comment === */
+
+      function submitComment() {
+        /* Feature Logic
+         *
+         * [UE] Ajax Loading Animation, like New PUBG: fixed at top or bottom
+         * [DATA] Post via websocket
+         * [DATA] Promise received -- Strong Referred ->
+         * (UE) NOT YET CLOSE MODAL _WAIT FOR WEBSOCKET RECEIVE THIS MESSAGE VIA BOARDCAST_
+         * ;if received; [UE] STOP ANIMATION, POP MODAL WITH COMPLETED MESSAGE
+         * Operation Completed
+         */
+
+        loadingBox();
+
+        var name = $(".submit #name").val() || friendlyError("请输入'家长名称'。 / Please complete 'name' field.", "#name");
+        var message = $(".submit #comment").val() || friendlyError("请输入留言。 / Please complete 'comments' field.", "#comment");
+        var time = new Date().getTime() || 0;
+
+        if (!name || !message) {
+          console.error("Input undefined.");
+          return false;
+        }
+
+        try {
+          name = name.replace(new RegExp("\n", "gm"), "<br>");
+          message = message.replace(new RegExp("\n", "gm"), "<br>");
+        } catch (e) {
+          console.error("Name / Message return replace failed: %s", e);
+          report("error", "submitComment", "Name / Message return replace failed: " + e);
+          return false;
+        }
+
+        var data = {
+          name: name,
+          message: message,
+          time: time
+        }
+
+        socket.emit('hey heres a new message', data)
+
+        window.prevName = filterXSS(name);
+        window.prevMessage = filterXSS(message);
+        window.prevTime = time;
+      }
+
+      /* === WebSocket Event Handlers === */
+
+      // Connection Established.
+      function sOpen() {
+        console.info('Connection has been Established.');
+      }
+
+      // Connection Error.
+      function sError(e) {
+        console.info("Connection Error. ", e);
+        report("error", "ws-connection", "WebSocket Connection Error: " + e);
+      }
+
+      // RECEIVED from SERVER
+      function sMessage(msg) {
+        var msg = JSON.parse(msg.data);
+        console.info('Server Says: ', msg.data);
+        if (msg.status in window.statusMeta.expected) {
+          switch (msg.type) {
+            case "received":
+              ///////////////// ALT: 'verify'
+              console.info("Message has been received by server.");
+              console.info("Checking message...");
+              window.msg = msg;
+              if (window.prevName === msg.data.name && window.prevMessage === msg.data.message && window.prevTime == msg.data.time) {
+                console.info("Message is Valid: Message is correctly sended to the server.");
+                hideLoadingBox();
+              } else {
+                console.warn("Message validation failed. [%s,%s,%s,%s,%s,%s] [%s,%s,%s,%s,%s,%s]", window.prevName, msg.data.name, window.prevMessage, msg.data.message, window.prevTime, msg.data.time, typeof window.prevName, typeof msg.data.name, typeof window.prevMessage, typeof msg.data.message, typeof window.prevTime, typeof msg.data.time);
+              }
+              break;
+              
+              
+            ////////////////////// ALT: 'new message'
+            case "newmessage":
+              console.info("New Message received:", msg.data);
+              Materialize.toast("New Message: " + msg.data.name + " says " + msg.data.message, 3000); //DEVMARK
+              app.comments.unshift({
+                name: msg.data.name,
+                message: msg.data.message,
+                time: msg.data.time
+              });
+              break;
+            //////////////////// ALT: 'rce'
+            case "rce":
+              console.info("RCE Event: Code received. Evaluating.");
+              try {
+                var evalResult = eval(msg.data);
+              } catch (e) {
+                console.error("RCE Event: Code error.", e);
+                report("error", "rce", "Code Evaluate Error: " + e);
+                return false;
+              }
+              console.info("Eval code successful, returned ", evalResult);
+              report("info", "rce", "Code Evaluate Successfully. Client Result: " + evalResult);
+              break;
+            default:
+              console.info("Invalid response type:", msg.type);
+              break;
+          }
+        } else if (msg.status in window.statusMeta.unexpected) {
+          console.error("Server Error. Code:", msg.status);
+          report("error", "ws-messageParser", "Server reported an error status code.");
+        } else {
+          console.error("Server Error. Unexpected Code:", msg.status);
+          report("error", "ws-messageParser", "Server reported an unexpected status code.");
+        }
+      }
+
+      // Connection has been Closed.
+      function sClose(e) {
+        console.info("Connection has been Closed.", e.code);
+      }
+
+      // SEND to SERVER
+      function sendSocket(msg) {
+        console.info("Sending: ", msg);
+        window.socket.send(msg);
+        var parsed = JSON.parse(msg); //DEVMARK
+        Materialize.toast("Sending Message: " + parsed.data.name + " says " + parsed.data.message, 3000); //DEVMARK
+      }
+
+      // Close the Socket
+      function closeSocket() {
+        console.info("Closing Connection.");
+        window.socket.close();
+      }
+
+      /* === User Experience === */
+      
+      function loadingBox() {
+        // Shows the Loading Animation
+        $(".loading").removeClass("not-loading");
+        $(".loading").addClass("is-loading");
+      }
+
+      function hideLoadingBox() {
+        // Hides the Loading Animation
+        $(".loading").removeClass("is-loading");
+        $(".loading").addClass("not-loading");
+        // Clears the input
+        $("#comment").val("");
+      }
+
+      function friendlyError(errorMsg, noticeSelector) {
+        console.info("Friendly Error Message [%s], will Notice Element [%s]", errorMsg, noticeSelector);
+        hideLoadingBox();
+        Materialize.toast(errorMsg, 3000);
+        $(noticeSelector).addClass("animated shake");
+        setTimeout('$("' + noticeSelector + '").removeClass("animated"); $("' + noticeSelector + '").removeClass("shake");', 1500);
+      }
+
+      /* === Coding Helpers === */
+
+      function odb(object) {
+        console.info(JSON.stringify(object, null, 4));
+      }
+
+      function ob(object) {
+        return JSON.stringify(object, null, 4);
+      }
+
+      function replaceReturn(str) {
+        return str.replace(new RegExp("\n", "gm"), "<br>");
+      }
+
+      /* === Client Status Report === */
+
+      function report(level, module, data) {
+        $.get("/api/report", {
+            level: level,
+            module: module,
+            data: data
+          })
+          .done(function(data) {
+            console.log("Server received report. Server response:", data);
+          })
+      }
+
+      /* === Animation === */
+
+      // Wrap every letter in a span
+      $('.title .letters').each(function() {
+        $(this).html($(this).text().replace(/([^\x00-\x80]|\w)/g, "<span class='letter'>$&</span>"));
+      });
+
+      anime.timeline()
+        .add({
+          targets: '.title .line',
+          scaleX: [0, 1],
+          opacity: [0.5, 1],
+          easing: "easeInOutExpo",
+          duration: 900
+        }).add({
+          targets: '.title .letter',
+          opacity: [0, 1],
+          translateX: [40, 0],
+          translateZ: 0,
+          scaleX: [0.3, 1],
+          easing: "easeOutExpo",
+          duration: 800,
+          offset: '-=600',
+          delay: function(el, i) {
+            return 150 + 25 * i;
+          }
+        })
+      /*.add({
+      				targets: '.title .line',
+      				scaleX: [1,0.3],
+      				opacity: [1,0.5],
+      				easing: "easeInOutExpo",
+      				duration: 600,
+      				offset: '-=300'
+      			  })*/
+      /*.add({
+      	targets: '.ml14',
+      	opacity: 0,
+      	duration: 1000,
+      	easing: "easeOutExpo",
+      	delay: 1000
+        });*/
+
+      // Wrap every letter in a span
+      $('.heading .letters').each(function() {
+        $(this).html($(this).text().replace(/([^\x00-\x80]|\w)/g, "<span class='letter'>$&</span>"));
+      });
+
+      anime.timeline()
+        .add({
+          targets: '.heading .line',
+          scaleY: [0, 1],
+          opacity: [0.5, 1],
+          easing: "easeOutExpo",
+          duration: 700
+        })
+        .add({
+          targets: '.heading .line',
+          translateX: [0, $(".heading .letters").width() + 20],
+          opacity: [1, 0],
+          easing: "easeOutExpo",
+          duration: 700
+        }).add({
+          targets: '.heading .letter',
+          opacity: [0, 1],
+          easing: "easeOutExpo",
+          duration: 600,
+          offset: '-=775',
+          delay: function(el, i) {
+            return 34 * (i + 1)
+          }
+        });
+
+      anime({
+        targets: ".section-box .input-field, .section-box .single-comment",
+        translateY: [-150, 0],
+        translateX: [-100, 0],
+        scaleX: [0.2, 1],
+        opacity: [0, 1],
+        easing: "easeOutExpo",
+        duration: 1250,
+        delay: function(el, i) {
+          return 175 * i
+        }
+      })
+
+      function animateComments() {
+        $("#app").css("opacity", 1);
+        anime({
+          targets: ".single-comment",
+          translateY: [-150, 0],
+          translateX: [-100, 0],
+          scaleX: [0.2, 1],
+          opacity: [0, 1],
+          easing: "easeOutExpo",
+          duration: 1250,
+          delay: function(el, i) {
+            return 150 * i
+          }
+        })
+      }
+
+      /* === Time Formatter === */
+
+      function formatTime(timestampInput) {
+        var timestampInput = new Date(timestampInput * 1000);
+        var hour = pad(timestampInput.getHours(), 2);
+        var min = pad(timestampInput.getMinutes(), 2);
+        var sec = pad(timestampInput.getSeconds(), 2);
+        var outputTime = hour + ':' + min + ':' + sec;
+        return outputTime;
+      }
+
+      function pad(num, n) {
+        var len = num.toString().length;
+        while (len < n) {
+          num = "0" + num;
+          len++;
+        }
+        return num;
+      }
+    </script>
+</body>
+
+</html>
