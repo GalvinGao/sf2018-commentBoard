@@ -299,6 +299,18 @@ io.on('connection', (socket) => {
 
 // socket.emit('news', { hello: 'world' })
 
+function respParse (dataObject, type) {
+  // 构造响应内容
+  var time = new Date().getTime()
+  var object = {
+    'status': 'ok',
+    'time': time,
+    'type': type,
+    'data': dataObject
+  }
+  return JSON.stringify(object)
+}
+
 
 // ==== [BELOW] Deprecated WebSocket Service ==== //
 
