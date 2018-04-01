@@ -3,12 +3,14 @@
   <blockquote>A SaaS architecture, state-less, event-driven and real-time synchronizing comment board system using latest web technologies of NodeJS (Express and socket.io).</blockquote>
 </div>
 
-[![David - Dependencies Watch](https://david-dm.org/GalvinGao/sf2018-commentBoard.svg)](https://david-dm.org/GalvinGao/sf2018-commentBoard)
-[![Gemnasium - Dependencies Watch](https://beta.gemnasium.com/badges/github.com/GalvinGao/sf2018-commentBoard.svg)](https://beta.gemnasium.com/projects/github.com/GalvinGao/sf2018-commentBoard)
-[![Snyk - Dependencies Vulnerabilities Scan](https://snyk.io/test/github/galvingao/sf2018-commentboard/badge.svg?targetFile=package.json)](https://snyk.io/test/github/galvingao/sf2018-commentboard?targetFile=package.json)
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-[![FOSSA - License Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FGalvinGao%2Fsf2018-commentBoard.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FGalvinGao%2Fsf2018-commentBoard?ref=badge_shield)
-[![FOSSA - License Scan Report](https://img.shields.io/badge/license%20scan-report-blue.svg)](https://app.fossa.io/reports/68a548b4-d2e6-422c-bc6a-2830b1bb0296)
+<div align="center">
+  <a href='https://david-dm.org/GalvinGao/sf2018-commentBoard'><img src='https://david-dm.org/GalvinGao/sf2018-commentBoard.svg' alt='David - Dependencies Watch' /></a>
+  <a href='https://beta.gemnasium.com/projects/github.com/GalvinGao/sf2018-commentBoard'><img src='https://beta.gemnasium.com/badges/github.com/GalvinGao/sf2018-commentBoard.svg' alt='Gemnasium - Dependencies Watch' /></a>
+  <a href='https://snyk.io/test/github/galvingao/sf2018-commentboard?targetFile=package.json'><img src='https://snyk.io/test/github/galvingao/sf2018-commentboard/badge.svg?targetFile=package.json' alt='Snyk - Dependencies Vulnerabilities Scan' /></a>
+  <a href='https://standardjs.com'><img src='https://img.shields.io/badge/code_style-standard-brightgreen.svg' alt='JavaScript Style Guide' /></a>
+  <a href='https://app.fossa.io/projects/git%252Bgithub.com%252FGalvinGao%252Fsf2018-commentBoard?ref=badge_shield'><img src='https://app.fossa.io/api/projects/git%252Bgithub.com%252FGalvinGao%252Fsf2018-commentBoard.svg?type=shield' alt='FOSSA - License Status' /></a>
+  <a href='https://app.fossa.io/reports/68a548b4-d2e6-422c-bc6a-2830b1bb0296'><img src='https://img.shields.io/badge/license%20scan-report-blue.svg' alt='FOSSA - License Scan Report' /></a>
+  </div>
 
 ## Features
 

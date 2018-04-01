@@ -266,7 +266,7 @@ io.on('connection', (socket) => {
     var messages = xss(data.message)
     var times = xss(data.time)
     logWsscp.debug('New Message dexss: %s, %s, %s', names, messages, times)
-    //insertSql(names, messages, times)
+    insertSql(names, messages, times)
     var dexss = {
       name: names,
       message: messages,
