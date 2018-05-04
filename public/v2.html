@@ -390,21 +390,21 @@
       <h1 class="heading">
         <span class="text-wrapper">
         <span class="line line1"></span>
-        <span class="letters">Submit</span>
+        <span class="letters">新留言 / Submit</span>
         </span>
       </h1>
       <div class="submitForm row section-box">
         <div class="input-field col s12">
           <input placeholder="John Appleseed" id="name" type="text"></input>
-          <label for="name">姓名 / Name</label>
+          <label for="name">您的姓名 / Your Name</label>
         </div>
         <div class="input-field col s12">
           <textarea id="comment" class="materialize-textarea" placeholder="请在此输入留言 / Please input comments at here"></textarea>
-          <label for="comment">留言 / Comments</label>
+          <label for="comment">您的留言 / Your Comments</label>
         </div>
         <div class="col s12">
           <button class="waves-effect waves-light btn-flat sendCommentButton">
-            提交 / Send
+            发送 / Send
           </button>
         </div>
       </div>
@@ -413,7 +413,7 @@
       <h1 class="heading">
         <span class="text-wrapper">
         <span class="line line1"></span>
-        <span class="letters">Comments</span>
+        <span class="letters">留言列表 / Comments</span>
         </span>
       </h1>
       <div class="section-box">
@@ -664,10 +664,8 @@
       })
 
       /* === [Main Logic] History Fetch === */
-
-      var constructFetchUrl = window.settings.historyPostApi + '?page=' + window.pageNumber + '&eachpage=' + window.settings.pageLimit
-
-      $.get(constructFetchUrl, function(data) {
+ 
+      $.get(window.settings.historyPostApi, {page: window.pageNumber, eachpage: window.settings.pageLimit}, function(data) {
           if (data) {
             data = safeJson(data);
             if (data.status in window.statusMeta.expected) {
