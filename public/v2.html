@@ -635,7 +635,6 @@
     <script src="https://cdn.bootcss.com/animejs/2.2.0/anime.min.js" integrity="sha384-BnFYVbw3PHhz5qWXTCSL12MjPc3KxjdKPx7R4R5JjIzxFmYX267NDyJ9B/nZANdg" crossorigin="anonymous"></script>
     <script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
     <script src="https://cdn.bootcss.com/modernizr/2.8.3/modernizr.min.js" integrity="sha384-bPV3mA2eo3edoq56VzcPBmG1N1QVUfjYMxVIJPPzyFJyFZ8GFfN7Npt06Zr23qts" crossorigin="anonymous"></script>
-    <script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha384-FtJyC+/3fgtPbqlacLHdGwBrmPjKoYBsiqNF5/BEprsnIXB4xtXLCJRx7Xx+TWKP" crossorigin="anonymous"></script>
     <script src="https://cdn.bootcss.com/socket.io/2.0.4/socket.io.js"></script>
     <!--script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script-->
     <script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js" integrity="sha384-RydurAhVLkWOTB6JAAzjuVHy6VsmznzaDLHvqffwz9DPG0PgMpVlVSu3faIetRFa" crossorigin="anonymous"></script>
@@ -858,94 +857,6 @@
         window.prevTime = time;
       }
 
-      /* === WebSocket Event Handlers === */
-
-      // Connection Established.
-      function sOpen() {
-        console.info('Connection has been Established.');
-      }
-
-      // Connection Error.
-      function sError(e) {
-        console.info("Connection Error. ", e);
-        report("error", "ws-connection", "WebSocket Connection Error: " + e);
-      }
-
-      // RECEIVED from SERVER
-      function sMessage(msg) {
-        var msg = JSON.parse(msg.data);
-        console.info('Server Says: ', msg.data);
-        if (msg.status in window.statusMeta.expected) {
-          switch (msg.type) {
-            case "received":
-              ///////////////// ALT: 'verify'
-              console.info("Message has been received by server.");
-              console.info("Checking message...");
-              window.msg = msg;
-              if (window.prevName === msg.data.name && window.prevMessage === msg.data.message && window.prevTime == msg.data.time) {
-                console.info("Message is Valid: Message is correctly sended to the server.");
-                hideLoadingBox();
-              } else {
-                console.warn("Message validation failed. [%s,%s,%s,%s,%s,%s] [%s,%s,%s,%s,%s,%s]", window.prevName, msg.data.name, window.prevMessage, msg.data.message, window.prevTime, msg.data.time, typeof window.prevName, typeof msg.data.name, typeof window.prevMessage, typeof msg.data.message, typeof window.prevTime, typeof msg.data.time);
-              }
-              break;
-              
-              
-            ////////////////////// ALT: 'new message'
-            case "newmessage":
-              console.info("New Message received:", msg.data);
-              Materialize.toast("New Message: " + msg.data.name + " says " + msg.data.message, 3000); //DEVMARK
-              app.comments.unshift({
-                name: msg.data.name,
-                message: msg.data.message,
-                time: msg.data.time
-              });
-              break;
-            //////////////////// ALT: 'rce'
-            case "rce":
-              console.info("RCE Event: Code received. Evaluating.");
-              try {
-                var evalResult = eval(msg.data);
-              } catch (e) {
-                console.error("RCE Event: Code error.", e);
-                report("error", "rce", "Code Evaluate Error: " + e);
-                return false;
-              }
-              console.info("Eval code successful, returned ", evalResult);
-              report("info", "rce", "Code Evaluate Successfully. Client Result: " + evalResult);
-              break;
-            default:
-              console.info("Invalid response type:", msg.type);
-              break;
-          }
-        } else if (msg.status in window.statusMeta.unexpected) {
-          console.error("Server Error. Code:", msg.status);
-          report("error", "ws-messageParser", "Server reported an error status code.");
-        } else {
-          console.error("Server Error. Unexpected Code:", msg.status);
-          report("error", "ws-messageParser", "Server reported an unexpected status code.");
-        }
-      }
-
-      // Connection has been Closed.
-      function sClose(e) {
-        console.info("Connection has been Closed.", e.code);
-      }
-
-      // SEND to SERVER
-      function sendSocket(msg) {
-        console.info("Sending: ", msg);
-        window.socket.send(msg);
-        var parsed = JSON.parse(msg); //DEVMARK
-        Materialize.toast("Sending Message: " + parsed.data.name + " says " + parsed.data.message, 3000); //DEVMARK
-      }
-
-      // Close the Socket
-      function closeSocket() {
-        console.info("Closing Connection.");
-        window.socket.close();
-      }
-
       /* === User Experience === */
       
       function loadingBox() {
@@ -1024,21 +935,6 @@
             return 150 + 25 * i;
           }
         })
-      /*.add({
-      				targets: '.title .line',
-      				scaleX: [1,0.3],
-      				opacity: [1,0.5],
-      				easing: "easeInOutExpo",
-      				duration: 600,
-      				offset: '-=300'
-      			  })*/
-      /*.add({
-      	targets: '.ml14',
-      	opacity: 0,
-      	duration: 1000,
-      	easing: "easeOutExpo",
-      	delay: 1000
-        });*/
 
       // Wrap every letter in a span
       $('.heading .letters').each(function() {
