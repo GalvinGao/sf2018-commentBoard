@@ -4,12 +4,12 @@ const config = {
 	bigBoardUrl: "/view/board",
 	adminToken: "PFaHq1hCgq4jovF3zEmalezz",
 	adminPasswd: "Galvin-Gao-sf2018-ADMIN",
-	keypath: "/etc/letsencrypt/live/dev.khs.science/privkey.pem", // HTTPS Server Private Key [ENV-FLAG]
-	certpath: "/etc/letsencrypt/live/dev.khs.science/fullchain.pem", // HTTPS Server Certificate [ENV-FLAG]
+	keypath: "/etc/letsencrypt/live/khs.science/privkey.pem", // HTTPS Server Private Key [ENV-FLAG]
+	certpath: "/etc/letsencrypt/live/khs.science/fullchain.pem", // HTTPS Server Certificate [ENV-FLAG]
 	// HTTP jumps to HTTPS - Hostname Config
 	// PLEASE MAKE SURE THIS IS CORRECTLY CONFIGURED!
 	// NO NEED FOR "/" OR "http://"!
-	serverHostname: "dev.khs.science",
+	serverHostname: "khs.science",
 	// Use request to get the api and then echo it.
 	// MAKE SURE this is CORRECTLY CONFIGURED
 	// Otherwise History Message WILL NOT WORK

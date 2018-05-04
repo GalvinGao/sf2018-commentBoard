@@ -98,7 +98,7 @@ try {
 // Request Logger
 var myLogger = function (req, res, next) {
   logRequest.trace({req: req}, 'HTTPS Request received.')
-  res.setHeader('Access-Control-Allow-Origin', 'dev.khs.science')
+  res.setHeader('Access-Control-Allow-Origin', 'khs.science')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
   res.setHeader('Content-Encoding', 'utf-8')
   next()
@@ -108,13 +108,17 @@ app.use(myLogger)
 
 app.get('/', (req, res) => {
   res.setHeader('Content-Type', 'text/html')
-  res.end(fs.readFileSync('public/client-user.html'))
+  res.end(fs.readFileSync('public/v2.html'))
 })
+
+/*
 
 app.get('/new', (req, res) => {
   res.setHeader('Content-Type', 'text/html')
-  res.end(fs.readFileSync('public/client-user-new-frame.html'))
+  res.end(fs.readFileSync('public/v2.html'))
 })
+
+*/
 
 app.get('/api/history', (req, res) => {
   // /api/history?page=2&eachpage=5 [ 10, 5 ]
