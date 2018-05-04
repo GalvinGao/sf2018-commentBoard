@@ -335,7 +335,7 @@ function adminAuth (uurl) {
 
   var currentTime = new Date().getTime()
 
-  if Math.abs(currentTime - timestamp) > 30 * 1000 {
+  if (Math.abs(currentTime - timestamp) > 30 * 1000) {
     // If time offset is greater than 30sec, then assume it is a invalid token.
     return false
   }
