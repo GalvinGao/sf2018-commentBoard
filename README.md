@@ -1,4 +1,4 @@
-<div align="center">
+ <div align="center">
   <h1>Kinglee sf-2018: Comment Board System</h1>
   <blockquote>A SaaS architecture, state-less, event-driven and real-time synchronizing comment board system using latest web technologies of NodeJS (Express and socket.io).</blockquote>
 </div>
@@ -10,7 +10,7 @@
   <a href='https://standardjs.com'><img src='https://img.shields.io/badge/code_style-standard-brightgreen.svg' alt='JavaScript Style Guide' /></a>
   <a href='https://app.fossa.io/projects/git%252Bgithub.com%252FGalvinGao%252Fsf2018-commentBoard?ref=badge_shield'><img src='https://app.fossa.io/api/projects/git%252Bgithub.com%252FGalvinGao%252Fsf2018-commentBoard.svg?type=shield' alt='FOSSA - License Status' /></a>
   <a href='https://app.fossa.io/reports/68a548b4-d2e6-422c-bc6a-2830b1bb0296'><img src='https://img.shields.io/badge/license%20scan-report-blue.svg' alt='FOSSA - License Scan Report' /></a>
-  </div>
+</div>
 
 ## Features
 

@@ -2,534 +2,71 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-		<title>Science Fair 2018</title>
+		<title>Layout Test</title>
 		<style>
-			.section {
-				border-radius: 0;
-				padding: 1em;
-				background: rgba(255, 255, 255, 0.7);
-				-webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.14), 0 0 14px 2px rgba(0, 0, 0, 0.12), 0 0 5px -3px rgba(0, 0, 0, 0.3);
-				box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.14), 0 0 14px 2px rgba(0, 0, 0, 0.12), 0 0 5px -3px rgba(0, 0, 0, 0.3);
-				margin: 2em 0;
-				font-size: 1em;
-			}
+		body {
+		    font-family: Verdana, Arial, Helvetica, sans-serif;
+		    font-size: 13px;
+		    color:#333
+		}
 
-			body {
-				text-align: left;
-				font-family: 'Product Sans', 'Open Sans', serif;
-				background: #000 no-repeat top center;
-				font-family: Merriweather, Product Sans, Apple Sothic SD Neo, Segoe UI, Helvetica, sans-serif;
-			}
+		p {
+		    padding: 10px;
+		}
 
-			.header {
-				text-align: left;
-				font-size: 2em;
-				padding: 0.75em;
-				text-shadow: 0 0 3px #fff;
-				color: #fff;
-				display: flex;  
-				flex-flow: row;
-				flex: 1 100%;
-				justify-content: flex-start;
-			}
-			
-			.title {
-				flex: 3;
-			}
-			
-			.subtitle {
-				flex: 8;
-			}
-			
-			.comment {
-				padding: 1em 2em;
-			}
-			
-			.commentBlock {
-				border-bottom: 0.4em solid tomato;
-				padding: 1em 2em;
-				margin-bottom: 2em;
-			}
-			
-			.comment .large {
-				font-size: 5em;
-			}
-			
-			.comment .large .time {
-				margin-top: 1em;
-				font-size: 0.3em;
-			}
-			
-			.comment .message {
-				font-size: 2.5em;
-				text-indent: 1em;
-			}
-			
-			/* Salvattore Plugin */
-			
-			@media screen and (max-width: 480px) {
-				#grid[data-columns]::before {
-					content: '1 .column.size-1of1';
-				}
-			}
-			
-			@media screen and (min-width: 481px) and (max-width: 768px) {
-				#grid[data-columns]::before {
-					content: '2 .column.size-1of2';
-				}
-			}
-			
-			@media screen and (min-width: 769px) {
-				#grid[data-columns]::before {
-					content: '3 .column.size-1of3';
-				}
-			}
-			
-			.column { float: left; }
-			.size-1of1 { width: 100%; }
-			.size-1of2 { width: 50%; }
-			.size-1of3 { width: 33.333%; }
+		#wrapper {
+		    width: 100%;
+		    min-width: 1000px;
+		    max-width: 2000px;
+		    margin: 0 auto;
+		}
+
+		#header {
+		    float: left;
+		    height: 75px;
+		    width: 100%;
+		    background: ;
+		}
+
+		#contentliquid {
+		    float: left;
+		    width: 100%;
+		}
+
+		#content {
+		    background: ;
+		    margin-left: 150px;
+		}
+
+		#leftcolumn {
+		    float: left;
+		    background: ;
+		    width: 150px;
+		    margin-left: -100%;
+		}
+
+		#footer {
+		    height: 40px;
+		    width: 100%;
+		    background: #000;
+		    clear: both;
+		}
 		</style>
-		<link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
-		<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
 	</head>
 	<body>
-		<div class="header">
-			<div class="title">
-				Science Fair 2018
-			</div>
-			<div class="subtitle">
-				Lorem Ipsum Dolor Lorem Ipsum Dolor Lorem Ipsum Dolor 
-			</div>
-		</div>
-		<div class="comment grid" data-columns>
-			<article class="commentBlock">
-				<div class="large blue-text">
-					我是哈哈
-					<div class="time right blue-text text-accent-3">
-						2018.1.29 10:00
-					</div>
-				</div>
-				<div class="message">
-					经过了一番实践和一些基本的兼容处理，至少在移动端flexbox还是有可为的（安卓4.0+，2.3+没测试，ios都还行）。但是坑也确实还有很多。1，flexbox有多个
-				</div>
-			</article>
-			<article class="commentBlock">
-				Lorem Ipsum Dolor
-			</article>
-			<article class="commentBlock">
-				Lorem Ipsum Dolor
-			</article>
-			<article class="commentBlock">
-				Lorem Ipsum Dolor
-			</article>
-			<article class="commentBlock">
-				Lorem Ipsum Dolor
-			</article>
-		</div>
-		<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
-		<script>
-		var canvas,
-			ctx,
-			width,
-			height,
-			size,
-			lines,
-			tick;
-
-		function line() {
-			this.path = [];
-			this.speed = rand(10, 20);
-			this.count = randInt(10, 30);
-			this.x = width / 2, +1;
-			this.y = height / 2 + 1;
-			this.target = {
-				x: width / 2,
-				y: height / 2
-			};
-			this.dist = 0;
-			this.angle = 0;
-			this.hue = tick / 5;
-			this.life = 1;
-			this.updateAngle();
-			this.updateDist();
-		}
-
-		line.prototype.step = function(i) {
-			this.x += Math.cos(this.angle) * this.speed;
-			this.y += Math.sin(this.angle) * this.speed;
-
-			this.updateDist();
-
-			if (this.dist < this.speed) {
-				this.x = this.target.x;
-				this.y = this.target.y;
-				this.changeTarget();
-			}
-
-			this.path.push({
-				x: this.x,
-				y: this.y
-			});
-			if (this.path.length > this.count) {
-				this.path.shift();
-			}
-
-			this.life -= 0.001;
-
-			if (this.life <= 0) {
-				this.path = null;
-				lines.splice(i, 1);
-			}
-		};
-
-		line.prototype.updateDist = function() {
-			var dx = this.target.x - this.x,
-				dy = this.target.y - this.y;
-			this.dist = Math.sqrt(dx * dx + dy * dy);
-		}
-
-		line.prototype.updateAngle = function() {
-			var dx = this.target.x - this.x,
-				dy = this.target.y - this.y;
-			this.angle = Math.atan2(dy, dx);
-		}
-
-		line.prototype.changeTarget = function() {
-			var randStart = randInt(0, 3);
-			switch (randStart) {
-				case 0: // up
-					this.target.y = this.y - size;
-					break;
-				case 1: // right
-					this.target.x = this.x + size;
-					break;
-				case 2: // down
-					this.target.y = this.y + size;
-					break;
-				case 3: // left
-					this.target.x = this.x - size;
-			}
-			this.updateAngle();
-		};
-
-		line.prototype.draw = function(i) {
-			ctx.beginPath();
-			var rando = rand(0, 10);
-			for (var j = 0, length = this.path.length; j < length; j++) {
-				ctx[(j === 0) ? 'moveTo' : 'lineTo'](this.path[j].x + rand(-rando, rando), this.path[j].y + rand(-rando, rando));
-			}
-			ctx.strokeStyle = 'hsla(' + rand(this.hue, this.hue + 30) + ', 80%, 55%, ' + (this.life / 3) + ')';
-			ctx.lineWidth = rand(0.1, 2);
-			ctx.stroke();
-		};
-
-		function rand(min, max) {
-			return Math.random() * (max - min) + min;
-		}
-
-		function randInt(min, max) {
-			return Math.floor(min + Math.random() * (max - min + 1));
-		};
-
-		function init() {
-			canvas = document.getElementById('canvas');
-			ctx = canvas.getContext('2d');
-			size = 30;
-			lines = [];
-			reset();
-			loop();
-		}
-
-		function reset() {
-			width = Math.ceil(window.innerWidth / 2) * 2;
-			height = Math.ceil(window.innerHeight / 2) * 2;
-			tick = 0;
-
-			lines.length = 0;
-			canvas.width = width;
-			canvas.height = height;
-		}
-
-		function create() {
-			if (tick % 10 === 0) {
-				lines.push(new line());
-			}
-		}
-
-		function step() {
-			var i = lines.length;
-			while (i--) {
-				lines[i].step(i);
-			}
-		}
-
-		function clear() {
-			ctx.globalCompositeOperation = 'destination-out';
-			ctx.fillStyle = 'hsla(0, 0%, 0%, 0.1';
-			ctx.fillRect(0, 0, width, height);
-			ctx.globalCompositeOperation = 'lighter';
-		}
-
-		function draw() {
-			ctx.save();
-			ctx.translate(width / 2, height / 2);
-			ctx.rotate(tick * 0.001);
-			var scale = 0.8 + Math.cos(tick * 0.02) * 0.2;
-			ctx.scale(scale, scale);
-			ctx.translate(-width / 2, -height / 2);
-			var i = lines.length;
-			while (i--) {
-				lines[i].draw(i);
-			}
-			ctx.restore();
-		}
-
-		function loop() {
-			requestAnimationFrame(loop);
-			create();
-			step();
-			clear();
-			draw();
-			tick++;
-		}
-
-		function onresize() {
-			reset();
-		}
-
-		window.addEventListener('resize', onresize);
-
-		init();
-
-		</script>
-
-		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
-		<script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
-  		<script src="https://cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
-		<script id="main-script">
-			window.settings = {
-				historyPostApi: "/api/history",
-				wsurl: "wss://sf2018.dev.iblueg.cn"
-			}
-			
-			window.statusMeta = {
-				expected: {ok: ""},
-				unexpected: {warn: "", error: "", fatal: ""},
-				error: {error: "", fatal: ""}
-			}
-			
-			window.commentTemplate = "<article class=\"commentBlock\"><div class=\"large blue-text\">{{name}}<div class=\"time right blue-text text-accent-3\">{{time}}</div></div><div class=\"message\">{{message}}</div></article>";
-		
-			throttle = function(func, wait, options) {
-				var context, args, result;
-				var timeout = null;
-				var previous = 0;
-				if (!options) options = {};
-				var later = function() {
-						previous = options.leading === false ? 0 : _.now();
-						timeout = null;
-						result = func.apply(context, args);
-						if (!timeout) context = args = null
-				};
-				return function() {
-					var now = new Date().getTime();
-					if (!previous && options.leading === false) previous = now;
-					var remaining = wait - (now - previous);
-					context = this;
-					args = arguments;
-					if (remaining <= 0 || remaining > wait) {
-						if (timeout) {
-							clearTimeout(timeout);
-							timeout = null
-						}
-						previous = now;
-						result = func.apply(context, args);
-						if (!timeout) context = args = null
-					} else if (!timeout && options.trailing !== false) {
-						timeout = setTimeout(later, remaining)
-					}
-					return result
-				}
-			};
-			
-			$.get(window.settings.historyPostApi, function(data){
-				if (data) {
-					data = JSON.parse(data);
-					if (data.status in window.statusMeta.expected) {
-						for (i in data.data) {
-							console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].message, data.data[i].time);
-							var grid = document.querySelector('.grid');
-							var item = document.createElement('article');
-							salvattore.appendElements(grid, [item]);
-						}
-					} else if (data.status in window.statusMeta.unexpected) {
-						console.error("[historyFetch] Server Error. Code:", data.status)
-					} else {
-						console.warn("[historyFetch] Server send an un-normal status code:", data.status)
-					}
-				} else {
-					console.log("[historyFetch] No response...")
-				}
-			})
-		
-			var socket;
-		    try {
-				window.socket = new ReconnectingWebSocket(window.settings.wsurl);
-            	socket.timeoutInterval = 3000;
-				socket.reconnectDecay = 1.2;
-				socket.timeoutInterval = 5000;
-		    } catch ( e ) {  
-				alert('WebSocket 连接错误，请尝试刷新页面。详细信息：', e);
-		    }
-		    window.socket.onopen = sOpen;  
-		    window.socket.onerror = sError;
-		    window.socket.onmessage = sMessage;
-		    window.socket.onclose = sClose;
-		    
-		    $(".sendCommentButton").click(function(){
-		    	submitComment();
-		    });
-			    
-			function submitComment() {
-				/* Feature Logic
-				 *
-				 * [UE] Ajax Loading Animation, like New PUBG: fixed at top or bottom
-				 * [DATA] Post via websocket
-				 * [DATA] Promise received -- Strong Referred ->
-				 * (UE) NOT YET CLOSE MODAL _WAIT FOR WEBSOCKET RECEIVE THIS MESSAGE VIA BOARDCAST_
-				 * ;if received; [UE] STOP ANIMATION, POP MODAL WITH COMPLETED MESSAGE
-				 * Operation Completed
-				 */
-				 
-				 loadingBox();
-				 
-				 var name = $(".submit #name").val() || friendlyError("请输入'家长名称'。 / Please complete 'name' field.", "#name");
-				 var message = $(".submit #comment").val() || friendlyError("请输入留言。 / Please complete 'comments' field.", "#comment");
-				 var time = new Date().getTime() || 1;
-				 
-				 if (!name || !message) {
-				 	return false;
-				 }
-				 
-				 var data = {
-					action: "post",
-					time: time,
-					data: {
-						name: name,
-					 	message: message,
-					 	time: time
-					}
-				 }
-				 
-				 sendSocket(JSON.stringify(data));
-				 
-				 window.prevName = filterXSS(name);
-				 window.prevMessage = filterXSS(message);
-				 window.prevTime = time;
-				 
-				 /*
-				 window.prevHash = md5({
-					data: {
-						name: filterXSS(name),
-					 	message: filterXSS(message),
-					 	time: time
-					}
-				 });
-				 */
-			}
-			
-			// Connection Established.
-			function sOpen(){
-			    console.info('Connection has been Established.');
-			}
-			
-			// Connection Error.
-			function sError(e){
-			    console.info("Connection Error. ", e);
-			}
-			
-			// RECEIVED from SERVER
-			function sMessage(msg){
-            	var msg = JSON.parse(msg.data);
-			    console.info('Server Says: ', msg.data);
-			    if (msg.status in window.statusMeta.expected) {
-					switch (msg.type){
-						case "received":
-							console.info("Message has been received by server.");
-							console.info("Checking message...");
-							window.msg = msg;
-							if (window.prevName === msg.data.name && window.prevMessage === msg.data.message && window.prevTime === msg.data.time) {
-								console.info("Message is Valid: Message is correctly sended to the server.");
-								hideLoadingBox();
-							} else {
-								console.warn("Message validation failed.");
-							}
-							break;
-						case "newmessage":
-							console.info("New Message received:", msg.data);
-							Materialize.toast("New Message: " + msg.data.name + " says " + msg.data.message, 3000); //DEVMARK
-							break;
-						default:
-							console.info("Invalid response type:", msg.type);
-							break;
-					}
-				} else if (msg.status in window.statusMeta.unexpected) {
-					console.error("Server Error. Code:", msg.status);
-				} else {
-					console.error("Server Error. Unexpected Code:", msg.status);
-				}
-			}
-			
-			// Connection has been Closed.
-			function sClose(e){
-			    console.info("Connection has been Closed.", e.code);
-			}
-			
-			// SEND to SERVER
-			function sendSocket(msg){
-				console.info("Sending: ", msg);
-			    window.socket.send(msg);
-				var parsed = JSON.parse(msg); //DEVMARK
-				Materialize.toast("Sending Message: " + parsed.data.name + " says " + parsed.data.message, 3000); //DEVMARK
-			} 
-			
-			// Close the Socket
-			function closeSocket(){
-			    console.info("Closing Connection.");
-			    window.socket.close();
-			}  
-			
-			function loadingBox() {
-				// Shows the Loading Animation
-				$(".loading").removeClass("not-loading");
-				$(".loading").addClass("is-loading");
-			}
-			
-			function hideLoadingBox() {
-				// Hides the Loading Animation
-				$(".loading").removeClass("is-loading");
-				$(".loading").addClass("not-loading");
-			}
-			
-			function friendlyError(errorMsg, noticeSelector) {
-				hideLoadingBox();
-				Materialize.toast(errorMsg, 3000);
-				$(noticeSelector).addClass("animated shake");
-			}
-			
-			function odb(object) {
-				console.info(JSON.stringify(object, null, 4));
-			}
-			
-			function ob(object) {
-				return JSON.stringify(object, null, 4);
-			}
-			
-			/* Alias Explained:
-			 * UE: User Experience
-			 */
-		</script>
+		 <div id="wrapper">
+        <div id="header">
+            <p>This is the Header</p>
+        </div>
+        <div id="contentliquid"><div id="content">
+           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. </p><p>Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. </p><p>Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. </p>
+       </div></div>
+        <div id="leftcolumn">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.</p>
+        </div>
+        <div id="footer">
+            <p>This is the Footer</p>
+        </div>
+    </div>
 	</body>
 </html>

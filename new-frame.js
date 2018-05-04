@@ -11,7 +11,7 @@ const url = require('url')
 const querystring = require('querystring')
 const config = require('./config') // Personal Configuration File
 
-// New Frames
+// New Frameworks
 const express = require('express')
 const app = express()
 
@@ -137,7 +137,8 @@ app.get('/api/history', (req, res) => {
       return
     }
     logMysql.trace(result)
-    res.end(respParse(result, 'history'))
+    res.json(respParse(result, 'history'))
+    res.end()
   })
 })
 
@@ -157,11 +158,7 @@ app.get('/api/report', (req, res) => {
 
   logReport.info({data: reportData}, 'Client report.')
 
-  if (success) {
-    res.end(genStatus(true))
-  } else {
-    res.end(genStatus(false))
-  }
+  res.end(genStatus(success))
 })
 
 app.get(config.adminUrl, (req, res) => {
@@ -228,7 +225,7 @@ app.post(config.talkAdmin.entry, (req, res) => {
 })
 
 app.get('/admin/api/user', (req, res) => {
-  res.write(userCount.toString())
+  res.json(respParse(userCount.toString(), 'userCount'))
   res.end()
 })
 
@@ -247,7 +244,6 @@ function httpServerHandler (req, res) {
 
 
 global.userCount = 0
-global.clients = []
 
 const io = require('socket.io')(currentServer)
 
@@ -255,11 +251,10 @@ logWss.info('Listening for incoming WebSockets...')
 
 io.on('connection', (socket) => {
   ++userCount
-  clients.push(socket.id)
   logWss.debug('New WebSocket Connection Established. Current users [%i]', userCount)
-  
+
   socket.on('hey heres a new message', function (data) {
-    console.info('Got message [%s] [%j]', data, data)
+    // console.info('Got message [%s] [%j]', data, data)
     logWsscp.info('Got a new message: %s, %s, %s', data.name, data.message, data.time)
 
     var names = xss(data.name)
@@ -275,25 +270,22 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('new message guys', dexss)
     socket.emit('k got it but u have to verify it', dexss)
   })
-  
-  socket.on('disconnect', () => {
-    --userCount
-    clients.pop()
+
+  socket.on('i want to know everything', (data) => {
+    var backdata = {
+      id: socket.id,
+      users: userCount
+    }
+    socket.emit('heres everything bro', backdata)
   })
 
   socket.on('error', (error) => {
     logWss.debug('Client connection error %s', error)
     --userCount
-    clients.pop()
   })
-  
-  socket.on('i want to know everything', (data) => {
-    var backdata = {
-      id: socket.id,
-      users: userCount,
-      connections: clients
-    }
-    socket.emit('heres everything bro', backdata)
+
+  socket.on('disconnect', () => {
+    --userCount
   })
 })
 
@@ -308,14 +300,8 @@ function respParse (dataObject, type) {
     'type': type,
     'data': dataObject
   }
-  return JSON.stringify(object)
+  return object
 }
-
-
-// ==== [BELOW] Deprecated WebSocket Service ==== //
-
-
-// const wss = new WebSocket.Server({ server: currentServer, clientTracking: true })
 
 function adminAuth (uurl) {
   var getToken = function (uurl) {
@@ -325,7 +311,7 @@ function adminAuth (uurl) {
       return tokenParsed
     } catch (e) {
       logHttps.debug('Query string parse error: %s.', e)
-      return ''
+      return false
     }
   }
 
@@ -336,19 +322,25 @@ function adminAuth (uurl) {
       return tokenParsed
     } catch (e) {
       logHttps.debug('Query string parse error: %s.', e)
-      return ''
+      return false
     }
   }
 
   var token = getToken(uurl)
   var timestamp = getTimestamp(uurl)
 
+  var currentTime = new Date().getTime()
+
+  if Math.abs(currentTime - timestamp) > 30 * 1000 {
+    // If time offset is greater than 30sec, then assume it is a invalid token.
+    return false
+  }
+
   var expected = md5(config.adminToken + timestamp)
   logService.debug('Expected MD5: %s. Dataset: [%s, %s]', expected, config.adminToken, timestamp)
-  var userinput = token
-  logService.debug('User Input MD5: %s', userinput)
+  logService.debug('User Input MD5: %s', token)
 
-  if (expected === userinput) {
+  if (expected === token) {
     return true
   } else {
     return false
@@ -368,11 +360,6 @@ function md5 (text) {
 }
 
 function genStatus (success) {
-  if (success) {
-    var status = 'ok'
-  } else {
-    var status = 'error'
-  }
-
+  var status = success ? 'ok' : 'error'
   return '{ status: "' + status + '" }'
 }
