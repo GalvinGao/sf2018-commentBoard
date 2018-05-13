@@ -6,6 +6,7 @@
       <link href="https://fonts.googleapis.com/css?family=Oswald:400,700" rel="stylesheet">
       <link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
       <link rel="stylesheet" href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" integrity="sha384-gGIdbE3rejhnmhbMZyasqhmdgF/Wza7NbuLq2eAVP92BbPF/ziwfO1LtP7E/ai36" crossorigin="anonymous">
+      <link href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">
       
 		<style>
 		  body {
@@ -42,7 +43,7 @@
           }
           
           .comment {
-            margin-top: 2em;
+            margin-top: 2.5em;
             display: block;
             text-align: center;
           }
@@ -61,7 +62,7 @@
           
           .comment
           .metadata {
-            padding-top: .2em;
+            padding-top: .5em;
             font-size: 1.5em;
             text-align: right;
             margin-right: 12.5%;
@@ -72,8 +73,17 @@
               margin: 0;
               min-height: 100%;
               background-color: #50afe4;
-              background-image: linear-gradient(to bottom,#57B7E0,#3C799D);
               background-attachment: fixed;
+          }
+          
+          .bkgd-wrapper {
+              height: 100%;
+              width: 100%;
+              position: fixed;
+              top: 0;
+              left: 0;
+              z-index: -32769;
+              background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.35));
           }
           
           body { z-index: 1; position: relative; }
@@ -91,17 +101,36 @@
               z-index: -32768;
               border-radius: 1000px;
           }
+          
+          .group-number {
+            font-weight: 700;
+            font-size: 110%;
+            color: #500
+          }
+          
+          .header {
+            text-align: left;
+            font-size: 2.5em;
+            position: relative;
+            top: 2em;
+            left: 3em;
+            width: 20em;
+          }
 
 		</style>
       </head>
 	<body>
+      <div class="header">
+        Kinglee Science Fair 2018
+      </div>
+      <div class="bkgd-wrapper"></div>
       <div class="comment-list">
         <div class="comment preload">
           <div class="content">
             Connecting...
           </div>
           <div class="metadata">
-            env:production | git:0c76f10
+            <span style='font-family: Source Code Pro, Ubuntu Mono, Courier New, Courier, monospace; font-size: 80%;'>env:production | git:0c76f10</span>
           </div>
         </div>
       </div>
@@ -197,7 +226,7 @@
             level: level,
             module: module,
             data: data
-          })
+        })
           .done(function(data) {
             console.log("Server received report. Server response:", data);
           })
@@ -205,33 +234,76 @@
       
       function addNewComment(name, comment, time) {
         $list = $('.comment-list')
-        
+        comment = specializeMsg(comment.toString())
         time = formatTime(time)
         
-        template = `        <div class="comment">
+        template = `        <div class="comment new-comment">
           <div class="content">
             ${comment}
           </div>
           <div class="metadata">
-            ${name} | ${time}
+            <i class="material-icons">account_circle</i> ${name} &nbsp <i class="material-icons">access_time</i> ${time}
           </div>
         </div>`
         
         $list.prepend(template)
+        
+        $leaving = $('.comment-list').children()[1]
+        
+        anime({
+          targets: '.comment:eq(1)',
+          easing: 'easeInOutQuad',
+          filter: ['blur(0px)', 'blur(5px)'],
+          opacity: [1, 0],
+          duration: 300
+        })
+        
+        generalComments = $('.comment-list').children().toArray().slice(2).slice(0, 10)
+        
+        anime.timeline()
+        .add({
+          targets: '.new-comment',
+          easing: 'easeInOutQuad',
+          scaleX: [0.8, 1],
+          translateY: [-40, 0],
+          opacity: [0, 1],
+          duration: 700,
+          complete: function(anim) {
+            $('.new-comment').removeClass('new-comment')
+          },
+          offset: 0
+        })
+        .add({
+          targets: $leaving,
+          easing: 'easeInOutQuad',
+          filter: ['blur(5px)', 'blur(0px)'],
+          scaleY: [1.2, 1],
+          translateY: [-160, 0],
+          opacity: [0, 1, 1, 1, 1],
+          duration: 600,
+          offset: 0
+        })
+        .add({
+          targets: generalComments,
+          easing: 'easeInOutQuad',
+          translateY: [-145, 0],
+          duration: 600,
+          offset: 0
+        })
+      }
+      
+      function specializeMsg(message) {
+        return message.replace(/((\d){1,3}(号)|(第)(\d){1,3}|(\d){1,3}(，|\,|\.)|(\d){1,3})/g, "<span class='group-number'>$1</span>")
       }
       
       function a() {
-        d=[{"name":"曲俊锋","comment":"68非常美！55很好玩！66号用心！64号有趣！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"党元英","comment":"6号作品非常有创意讲述清晰，2号作品也讲述的非常认真","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"卢俊丽","comment":"14 8 71都做的很用心 很棒 很努力 继续加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高珊","comment":"10.7.9.60号很棒，孩子们很用心，讲解的趣味性也很强，继续加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"卢俊丽","comment":"14. 8 15 71号三个小伙伴做的很棒很用心 非常认真 继续加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"于涛","comment":"21号，以事实调查，研究了食物的颜色对人食欲的影响。加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"林成松","comment":"64号71号69号75号74号很用心！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘敏","comment":"97号作品，小伙子们讲解精彩、侃侃而谈、自然大方！很棒！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"阮峻","comment":"108号、106号实验做得非常棒 ","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"郑吉泳","comment":"20号，19号，76号科学板报很有趣！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘潇雅","comment":"5号作品很用心，很有科学精神！我喜欢！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"石笑东","comment":"认真的了解了9号的黄油制作，8号的冰块融化，6号的巧克力颜色，5号的飞机滑行，4号的糖的融化，2号的棉花糖的高度变化。大家很用心，实验很精彩，讲解的也很认真和详细。很棒！同学们辛苦了！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高震宇","comment":"17号作品内容非常有深度。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"胡俊伟","comment":"92的设计很棒 .91实验效果很强大 ","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"石笑东","comment":"请大家关注5号作品！很用心，很严谨的实验，然后用缜密的语言加以表达，用活泼的版面进行了展示！好棒！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"T.James","comment":"Thank you for all of your comments!","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王","comment":"76号大餐不错，色香味俱全","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"周黎军","comment":"5号简洁大方内容完整6号版面设计新颖独特别致，内容丰富，很棒！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"陈才源","comment":"34号，Myron &amp; Jefferron用实证方式测试不同碳酸饮料的含糖量，good！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘敏","comment":"12号作品做了一个固体—液体—固体的循环试验，得出了温度对物态的重要性结论。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"李宝军","comment":"2号，3号作品也不错，讲解的清楚，图片丰富。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"李宝军","comment":"2号，3号作品也不错，讲解的清楚，图片丰富。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"胡俊伟","comment":"93版面有创意，实验实用性强 ","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"李宝军","comment":"1号作品，孩子们认真准备，在最简单的现象中，发现了有趣的音律规律，很不错哟。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"Simon","comment":"1#water music 🎶👍\n46#Great experiment for how to save water with green 🌳 \n100# Useful test for people daily milk 🍼 \n97# How to get full use of V C? 💪","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"胡俊伟","comment":"108.105实用性很强 ","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"Helen","comment":"93,87,96,97,100立意明确 实验步骤清晰 结果可见👍👍👍","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"苏伟丽","comment":"1号、2号、5号、6号、15号，设计有心，讲解有趣，加油﻿(●—●)(*˘︶˘*).｡.:*♡","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"胡俊伟","comment":"97号的实验说明食物中维生素是有保质期的 赞","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"黄静容","comment":"3号追求结果及解决问题的求知慾望，非常好！\n103号很生活化的科学实驗，对学生在学习上非常有幫助！\n98号用飲科与粉的反应相当有创意！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"黄静容","comment":"3号追求结果及解决问题的求知慾望，非常好！\n103号很生活化的科学实驗，对学生在学习上非常有幫助！\n98号用飲科与粉的反应相当有创意！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘素娟","comment":"9号、13号、3号、6号、2号的作品都很不错，孩子们继续努力加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"苏展","comment":"10号作品，降落伞实验数据充分，用事实说话，论证有力。赞一个。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"胡俊伟","comment":"88菠菜光合作用实验很棒","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"李涛","comment":"58号作品不错","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"苏展","comment":"9号自制黄油，实验成功，赞一个。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"丘华芮","comment":"8号作品非常棒，让我们生活常识变得很有意义","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"于东","comment":"21号作品很用心！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"申香玉","comment":"16号很有创意，87号的很 不错哦，继续加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"魏海玲","comment":"83号实验很棒，能测出水果维C含量，为你加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"原航","comment":"19号的作品风格简洁，但内容很棒！加油，\n继续在科技创新中发挥设计讲解能力！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘敏","comment":"1号作品展板内容丰富，图片详实、文字介绍全面、试验结果以表格表示，一目了然、画面活泼，充分显示了三位同学对待科学的认真态度。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"魏海玲","comment":"83号试验很棒，可以测出水果维C含量，为你加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘伟","comment":"6号，7号，3O号，40号表现都很好，加油!","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"魏海玲","comment":"83号试验很棒，可以测出水果维C含量，为你加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"崔文强","comment":"实验做工明确 很好\n","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"魏海玲","comment":"83号试验很棒，可以测出水果维C含量，为你加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"穆建霞","comment":"35，36，66都非常好，很有创意！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"宋国军","comment":"12号三个小伙挺认真。挺好的。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘万春","comment":"1号作品设计新颖，视频很精彩，讲解思路清晰，三人通力合作很棒，加油！！！\n","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘伟","comment":"7号的作品很棒，赞一个","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"余中丽","comment":"49号科学观察很细致呦！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"田文娟","comment":"31号，38号作品很用心，继续加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘松鹤","comment":"31，38作品棒棒的，加油!!","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"孙海燕","comment":"90号作品特别棒赞一个👌","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"申香玉","comment":"7号作品很棒，很用心，孩子加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"陈军丽","comment":"29号正在试验中 来👀啦","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王霞","comment":"21，20的作品很棒，加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"卢兵","comment":"84号，科学展板简单又深奥。有创意真棒，加油!","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"苏展","comment":"21号作品，立意简明，论证科学，讲解清晰，令人信服。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"岳俊芳","comment":"15号～9号都很棒噢！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"阮峻","comment":"10号降落伞试验做的很好👍","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"赵国庆","comment":"作品质量不论，只要是用心去做、自己动手，就要点赞。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"岳俊芳","comment":"太棒了，加油加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王霞","comment":"31.15号的作品很棒，很用心，做得很好👍","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"杨红","comment":"66号马健棠酵母菌与音乐的律动很有意思的实验，加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"毛宝铭","comment":"作品97、56号设计细致，讲解也棒棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"钱晓霞","comment":"74有关酵母 与生活实际关联 排版很有创意","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"周黎军","comment":"15号的作品很用心，做得很好👍","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"GAO YONG","comment":"来56号台，测试下你随机确定的密码，真的是“”秘密“”吗？\n\n\n\n56号，来！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"陈华为","comment":"29号、创意新颖，试验复杂，科学含量高！63号Frida自己亲手种植植物研究杀虫剂对人体的危害。对食品安全很关注！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"陈华为","comment":"29号、创意新颖，试验复杂，科学含量高！63号Frida自己亲手种植植物研究杀虫剂对人体的危害。对食品安全很关注！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"李巍","comment":"20号，25号，87号有特色！孩子们真棒！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"杜梅娥","comment":"34号四种不同口味的饮料，测出它们的含糖量，实验过程超棒","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"于涛","comment":"26号的孩子们，解释了不同纤维密度的纸张和吸水性的关系。加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘萍","comment":"13号立意不错，与视频实验结合，讲解清楚","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"孙胜爱","comment":"81、80、71、74孩子们制作的作品有想象力、不错、加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"程晓琳","comment":"    为所有孩子们的努力点赞！\n    非常 喜欢97、87、88号作品\n","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"肖华","comment":"73号作品加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"张峰","comment":"23号作品棒棒哒","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"崔玉萍","comment":"13号很有特点","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘素娟","comment":"孩子们都很棒，加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"温娜","comment":"77号Lance，作品很好，讲解很好","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"肖华","comment":"李雨恒加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"孩子，只要参与就是你最大的收获，互学是你前进的动力，相信自己，","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"文蕾","comment":"25号作品活泼生动。用三角形的稳定性见证了普通纸张的神奇。👍","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"邱华芮","comment":"16号作品以土和水为题材，实验了温度的上升速度，非常棒","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"郑艳","comment":"今年孩子比较有经验，希望越来越好！加油↖(^ω^)↗","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"苏展","comment":"6号作品色彩丰富，图片精美。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"秦晓艳","comment":"6号的作品是以彩虹为背景非常美","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"秦晓艳","comment":"6号的作品是以彩虹为背景非常美","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"秦晓艳","comment":"6号的作品是以彩虹为背景非常美","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"秦晓艳","comment":"6号的作品是以彩虹为背景非常美","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"秦晓艳","comment":"6号的作品是以彩虹为背景非常美","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"秦晓艳","comment":"6号的作品是以彩虹为背景非常美","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"曲俊锋","comment":"林含笑曹思涵加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"赵国庆","comment":"作品的质量不论，只要是亲自动手、用心去做，就要点赞！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"付小飞","comment":"孩子们都很棒，加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"黄静容","comment":"25、36、20、27、42、26号都非常好！有创意！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"Benjamin","comment":"Welcome to the 2017 Kinglee Science Fair!","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"}]
+        d=[{"name":"曲俊锋","comment":"68非常美！55很好玩！66号用心！64号有趣！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"党元英","comment":"6号作品非常有创意讲述清晰，2号作品也讲述的非常认真","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"卢俊丽","comment":"14 8 71都做的很用心 很棒 很努力 继续加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高珊","comment":"10.7.9.60号很棒，孩子们很用心，讲解的趣味性也很强，继续加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"卢俊丽","comment":"14. 8 15 71号三个小伙伴做的很棒很用心 非常认真 继续加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"于涛","comment":"21号，以事实调查，研究了食物的颜色对人食欲的影响。加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"林成松","comment":"64号71号69号75号74号很用心！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘敏","comment":"97号作品，小伙子们讲解精彩、侃侃而谈、自然大方！很棒！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"阮峻","comment":"108号、106号实验做得非常棒 ","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"郑吉泳","comment":"20号，19号，76号科学板报很有趣！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘潇雅","comment":"5号作品很用心，很有科学精神！我喜欢！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"}]
         for (i in d) {
           addNewComment(d[i].name, d[i].comment, Math.floor(Math.random() * 50000))
         }
       }
       
       //a()
-      
-      anime({
-        
-      })
       
       /* === Time Formatter === */
 

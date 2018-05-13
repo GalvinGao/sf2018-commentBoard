@@ -294,9 +294,12 @@
     }
 
     .spinContainer {
-      background: #fff;
+      text-align: center;
+      box-shadow: 0px 0px 25px cyan;
+      border-radius: 1em;
       z-index: 15;
       padding: 2em;
+      width: 150pt;
     }
 
     .title {
@@ -429,7 +432,13 @@
             </div>
           </div>
         </div>
-        <div class="new-page-loader"></div>
+        <div class="new-page-loader"><div class="spinContainer z-index-5">
+          <div class="loader" align="center">
+            <svg class="circular" viewBox="0 0 50 50">
+              <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" stroke-width="5%" stroke-linecap="round"/>
+            </svg> 
+          </div><br> Loading...
+        </div></div>
       </div>
       <div class="ue loading not-loading">
         <div class="sk-folding-cube">
@@ -644,7 +653,7 @@
 
       window.settings = {
         historyPostApi: "/api/history",
-        pageLimit: 5
+        pageLimit: 20
       }
 
       window.statusMeta = {"expected":{"ok":""},"unexpected":{"warn":"","error":"","fatal":""},"error":{"error":"","fatal":""}}
@@ -764,9 +773,9 @@
             callback: loadNewPage
           }];
           Materialize.scrollFire(options);
-          console.log('ScrollFire has been re-initialized.')
+          //console.log('ScrollFire has been re-initialized.')
         }
-        setTimeout('initializeScrollFire()', 3000)
+        setTimeout('initializeScrollFire()', 2000)
       }
 
       /* === New Page ajax & loader === */
