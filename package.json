@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Science Fair 2018 - Public Comment Board Interactive Program",
   "license": "GPL-3.0",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "bunyan": "./node_modules/.bin/bunyan -o short -l info",
     "start": "chmod -R 777 deploy.sh && ./deploy.sh",
@@ -17,8 +17,7 @@
     "saas"
   ],
   "contributors": [
-    "GalvinGao",
-    "BYTEGOING"
+    "GalvinGao"
   ],
   "repository": "https://github.com/GalvinGao/sf2018-commentBoard.git",
   "author": "GalvinGao <2403901511@qq.com> (https://github.com/GalvinGao)",
