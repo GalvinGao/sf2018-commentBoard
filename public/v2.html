@@ -678,7 +678,7 @@
             data = safeJson(data);
             if (data.status in window.statusMeta.expected) {
               for (i in data.data) {
-                console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
+                //console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
                 app.comments.push({
                   name: data.data[i].name,
                   message: data.data[i].comment,
