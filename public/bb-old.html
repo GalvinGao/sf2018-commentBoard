@@ -1,0 +1,329 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<!--meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" /-->
+      <title>Layout Test</title>
+      <link href="https://fonts.googleapis.com/css?family=Oswald:400,700" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" integrity="sha384-gGIdbE3rejhnmhbMZyasqhmdgF/Wza7NbuLq2eAVP92BbPF/ziwfO1LtP7E/ai36" crossorigin="anonymous">
+      
+		<style>
+		body {
+		    font-family: Source Sans Pro,  思源黑体, Merriweather, Source Sans Pro, Verdana, Arial, Helvetica, sans-serif;
+          font-weight: 500;
+		    font-size: 1em;
+		    color: #333;
+		}
+
+		p {
+		    /* padding: 10px; */
+		}
+
+		#wrapper {
+		    width: 100%;
+		    /* min-width: 1000px; */
+		    /*max-width: 2000px;*/
+		    margin: 0;
+		}
+
+		#header {
+		    float: left;
+		    height: 1em;
+		    width: auto;
+		    padding: 2em 2em 0 2em;
+		}
+
+		#contentliquid {
+		    float: left;
+		    width: 100%;
+		}
+
+		#content {
+		    margin-left: 13em;
+		    padding: 2em 0 2em 2em;
+		}
+
+		#leftcolumn {
+		    float: left;
+		    width: 11em;
+		    margin-left: -100%;
+		    padding: 2em;
+		}
+          .comment-section {
+            display: inline-block;
+            width: 46%;
+            padding: 2%;
+          }
+          
+          .first-place .comment-section {
+            display: inline-block;
+            width: 100%;
+          }
+          
+          .first-place {
+            font-size: 2em;
+          }
+          
+          .comment-subtitle {
+            padding: 0.5em;
+            text-align: right;
+            font-size: 1em;
+            word-break: break-all;
+          }
+          
+          .comment-content {
+            text-indent: 1em;
+            width: 100%;
+            word-break: break-all;
+            padding: .3em 0 .3em 0;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.5)
+          }
+		</style>
+      </head>
+	<body>
+      <div id="wrapper">
+        <div id="header">
+            Kinglee - Science Fair 2018
+        </div>
+        <div id="contentliquid">
+          <div id="content">
+         </div>
+       </div>
+        <div id="leftcolumn">
+          <div class="first-place"></div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/animejs/2.2.0/anime.min.js" integrity="sha384-BnFYVbw3PHhz5qWXTCSL12MjPc3KxjdKPx7R4R5JjIzxFmYX267NDyJ9B/nZANdg" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js" integrity="sha384-C5yXM3HiWa6a8kI2Jd4LuuwmOGAVgJw0YSmuRXN+PLT5Jln26ddUnPQxkInM/w2x" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/socket.io/2.0.4/socket.io.js"></script>
+    <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+    <script src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js" integrity="sha384-RydurAhVLkWOTB6JAAzjuVHy6VsmznzaDLHvqffwz9DPG0PgMpVlVSu3faIetRFa" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+      
+    <script id="main-script">
+      
+      
+      /* === Config === */
+
+      window.settings = {
+        historyPostApi: "/api/history",
+        pageLimit: 500
+      }
+
+      window.statusMeta = {"expected":{"ok":""},"unexpected":{"warn":"","error":"","fatal":""},"error":{"error":"","fatal":""}}
+
+      window.pageNumber = 1
+      window.finishedFirstAjax = false
+      window.gotAllHistory = false
+      window.perpage = 6 // History amount (right column)
+
+      /* === [Main Logic] History Fetch === */
+ 
+      $.get(window.settings.historyPostApi, {page: window.pageNumber, eachpage: window.settings.pageLimit}, function(data) {
+          if (data) {
+            data = safeJson(data);
+            if (data.status in window.statusMeta.expected) {
+              for (i in data.data) {
+                console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
+                app.comments.push({
+                  name: data.data[i].name,
+                  message: data.data[i].comment,
+                  time: data.data[i].time
+                });
+              }
+              if (data.data.length === 0) {
+                window.gotAllHistory = true
+              }
+              animateComments();
+            } else if (data.status in window.statusMeta.unexpected) {
+              console.error("[historyFetch] Server Error. Code:", data.status);
+            } else {
+              console.error("[historyFetch] Server send an un-normal status code:", data.status);
+            }
+          } else {
+            console.error("[historyFetch] No response...");
+          }
+        })
+      
+      /* === Code Helpers === */
+
+      function safeJson(jsonString) {
+        try {
+          var parsedJSON = JSON.parse(jsonString);
+        } catch (e) {
+          return jsonString;
+        }
+        return parsedJSON;
+      }
+
+      /* === WebSocket Connection & Basic Initiation === */
+
+      const socket = io()
+      
+      socket.on('connect', () => {
+        console.log('socket.io Service Connected, uid %s.', socket.id)
+      })
+      
+      socket.on('new message guys', (msg) => {
+        console.info("New Message received:", msg);
+        Materialize.toast("New Message: " + msg.name + " says " + msg.message, 3000); //DEVMARK
+        app.comments.unshift({
+          name: msg.name,
+          message: msg.message,
+          time: msg.time
+        });
+      })
+
+      /* === [Main Logic] Submit Comment === */
+
+      function submitComment() {
+        /* Feature Logic
+         *
+         * [UE] Ajax Loading Animation, like New PUBG: fixed at top or bottom
+         * [DATA] Post via websocket
+         * [DATA] Promise received -- Strong Referred ->
+         * (UE) NOT YET CLOSE MODAL _WAIT FOR WEBSOCKET RECEIVE THIS MESSAGE VIA BOARDCAST_
+         * ;if received; [UE] STOP ANIMATION, POP MODAL WITH COMPLETED MESSAGE
+         * Operation Completed
+         */
+
+        loadingBox();
+
+        var name = $(".submit #name").val() || friendlyError("请输入'家长名称'。 / Please complete 'name' field.", "#name");
+        var message = $(".submit #comment").val() || friendlyError("请输入留言。 / Please complete 'comments' field.", "#comment");
+        var time = new Date().getTime() || 0;
+
+        if (!name || !message) {
+          console.error("Input undefined.");
+          return false;
+        }
+
+        try {
+          name = name.replace(new RegExp("\n", "gm"), "<br>");
+          message = message.replace(new RegExp("\n", "gm"), "<br>");
+        } catch (e) {
+          console.error("Name / Message return replace failed: %s", e);
+          report("error", "submitComment", "Name / Message return replace failed: " + e);
+          return false;
+        }
+
+        var data = {
+          name: name,
+          message: message,
+          time: time
+        }
+
+        socket.emit('hey heres a new message', data)
+
+        window.prevName = filterXSS(name);
+        window.prevMessage = filterXSS(message);
+        window.prevTime = time;
+      }
+
+      /* === User Experience === */
+      
+      function loadingBox() {
+        // Shows the Loading Animation
+        $(".loading").removeClass("not-loading");
+        $(".loading").addClass("is-loading");
+      }
+
+      function hideLoadingBox() {
+        // Hides the Loading Animation
+        $(".loading").removeClass("is-loading");
+        $(".loading").addClass("not-loading");
+        // Clears the input
+        $("#comment").val("");
+      }
+
+      function friendlyError(errorMsg, noticeSelector) {
+        console.info("Friendly Error Message [%s], will Notice Element [%s]", errorMsg, noticeSelector);
+        hideLoadingBox();
+        Materialize.toast(errorMsg, 3000);
+        $(noticeSelector).addClass("animated shake");
+        setTimeout('$("' + noticeSelector + '").removeClass("animated"); $("' + noticeSelector + '").removeClass("shake");', 1500);
+      }
+
+      /* === Coding Helpers === */
+
+      function odb(object) {
+        console.info(JSON.stringify(object, null, 4));
+      }
+
+      function ob(object) {
+        return JSON.stringify(object, null, 4);
+      }
+
+      function replaceReturn(str) {
+        return str.replace(new RegExp("\n", "gm"), "<br>");
+      }
+
+      /* === Client Status Report === */
+
+      function report(level, module, data) {
+        $.get("/api/report", {
+            level: level,
+            module: module,
+            data: data
+          })
+          .done(function(data) {
+            console.log("Server received report. Server response:", data);
+          })
+      }
+      
+      function addNewComment(name, comment, time) {
+        $first = $('.first-place')
+        $list = $('#content')
+        $comments = $('.comment-section')
+        
+        time = formatTime(time)
+        
+        template = `<div class="comment-section flow-text">
+             <div class="comment-content">
+             	  ${comment}
+             </div>
+             <div class="comment-subtitle">
+             	 ${name} <br> ${time}
+             </div>
+           </div>`
+        
+        if ($first.html().length < 1) {
+          $first.html(template)
+        } else {
+          $list.prepend($first.html().replace('<br>', '|'))
+          $first.html(template)
+        }
+      }
+      
+      function a() {
+        d=[{"name":"曲俊锋","comment":"68非常美！55很好玩！66号用心！64号有趣！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"党元英","comment":"6号作品非常有创意讲述清晰，2号作品也讲述的非常认真","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"卢俊丽","comment":"14 8 71都做的很用心 很棒 很努力 继续加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高珊","comment":"10.7.9.60号很棒，孩子们很用心，讲解的趣味性也很强，继续加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"}]
+        for (i in d) {
+          addNewComment(d[i].name, d[i].comment, Math.floor(Math.random() * 50000))
+        }
+      }
+      
+      a()
+      
+      /* === Time Formatter === */
+
+      function formatTime(timestampInput) {
+        var timestampInput = new Date(timestampInput * 1000);
+        var hour = pad(timestampInput.getHours(), 2);
+        var min = pad(timestampInput.getMinutes(), 2);
+        var sec = pad(timestampInput.getSeconds(), 2);
+        var outputTime = hour + ':' + min + ':' + sec;
+        return outputTime;
+      }
+
+      function pad(num, n) {
+        var len = num.toString().length;
+        while (len < n) {
+          num = "0" + num;
+          len++;
+        }
+        return num;
+      }
+    </script>
+	</body>
+</html>
