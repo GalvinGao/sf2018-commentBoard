@@ -152,8 +152,8 @@
       right: 0;
       text-align: center;
       font-weight: 400;
-      font-family: 'Kefa';
-      background: rgba(0, 0, 0, 0.75);
+      font-family: 'Courier New', 'Courier', 'PingFang SC', 'Product Sans', 'Lantinghei SC', 'Microsoft Yahei', 'Hiragino Sans GB', 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', 'Open Sans', serif;
+      background: rgba(0, 0, 0, 0.9);
       font-size: 1em;
       color: #fff;
       padding: 1em 0.5em;
@@ -477,15 +477,15 @@
           <div class="indeterminate"></div>
         </div>
       </div>
-    </div>
+    </div> 
   
     <div class="fixed-action-btn horizontal click-to-toggle side-buttons">
-      <a class="btn-floating btn-large deep-purple accent-3" href='/about'>
+      <a class="btn-floating btn-large deep-purple accent-3 waves-effect waves-light" href='/about'>
         <i class="large material-icons">account_circle</i>
       </a><br><div class='center'><span class='white-text' style='font-size: 16px;'>关于我</span></div>
     </div>
     <div class="fixed-action-btn horizontal click-to-toggle side-buttons" style='margin-right: 65px;'>
-      <a class="btn-floating btn-large pink accent-3" href='/feedback'>
+      <a class="btn-floating btn-large pink accent-3 waves-effect waves-light" href='/feedback'>
         <i class="large material-icons">comment</i>
       </a><br><div class='center'><span class='white-text' style='font-size: 16px;'>反馈</span></div>
     </div>
@@ -693,6 +693,8 @@
       window.pageNumber = 1
       window.finishedFirstAjax = false
       window.gotAllHistory = false
+      
+      $('#success-dialog').modal()
 
       /* === [Main Logic] History Fetch Data Parser & Render {Vue.js} === */
 
@@ -760,7 +762,13 @@
         window.msg = msg
         if (window.prevName === msg.name && window.prevMessage === msg.message && window.prevTime == msg.time) {
           console.info("Message is Valid: Message is correctly sended to the server.")
+          app.comments.unshift({
+            name: msg.name,
+            message: msg.message,
+            time: msg.time
+          });
           hideLoadingBox()
+          showSuccess()
         } else {
           console.warn("Message validation failed. [%s,%s,%s,%s,%s,%s] [%s,%s,%s,%s,%s,%s]", window.prevName, msg.name, window.prevMessage, msg.message, window.prevTime, msg.time, typeof window.prevName, typeof msg.name, typeof window.prevMessage, typeof msg.message, typeof window.prevTime, typeof msg.time)
         }
@@ -793,6 +801,10 @@
       $(".sendCommentButton").click(function() {
         submitComment();
       });
+      
+      function showSuccess() {
+        Materialize.toast('留言提交成功！ / Your comment has been submitted!', 5000)
+      }
 
       /* === ScrollFire - Switch Page === */
       
