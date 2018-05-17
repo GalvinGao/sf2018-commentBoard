@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Admin Control Panel</title>
+  <link href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/materialize/1.0.0-alpha.3/css/materialize.min.css" rel="stylesheet">
+  <style>
+  body {
+    font-family: 'PingFang SC', 'Product Sans', 'Lantinghei SC', 'Microsoft Yahei', 'Hiragino Sans GB', 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', 'Open Sans', serif;
+  }
+  
+  @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+  @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+  @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg);  } }
+  
+  .spin {
+    -webkit-animation: spin 1s ease-in-out infinite;
+    -moz-animation: spin 1s ease-in-out infinite;
+    animation: spin 1s ease-in-out infinite;
+    transform-origin: 48% 48%;
+  }
+    
+    .lineheightfix {
+      line-height: 1.5;
+    }
+    
+    c {
+      font-family: 'Source Code Pro', 'Courier New', 'Courier', monospace;
+      font-weight: 700;
+      color: #283593 ;
+    }
+    
+    c:before {
+      content: '['
+    }
+    
+    c:after {
+      content: ']'
+    }
+  </style>
+</head>
+<body>
+  <nav class="indigo darken-2" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">关于制作者...</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/">home</a></li>
+        <li class="active"><a href="#">admin</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <a href='/'><a class="btn-floating btn-large waves-effect waves-light red z-depth-3" href='/'><i class="material-icons">chevron_left</i></a> <span class='indigo z-depth-1' style='padding: 0.5em; margin-left: -3em; border-radius: 1em; padding: 1em 1em 1em 4em; color: #fff;'>返回留言板页面</span></a>
+      <br><br>
+      <h3 class='header center indigo-text'>我是...</h3>
+      <h1 class="header center indigo-text">高逸扬</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">此实时留言板系统的作者</h5>
+      </div>
+      <br><br>
+    </div>
+  </div>
+  
+  <div class="container row">
+    <div class="col s12">
+      <p class='flow-text' style='text-indent: 2em'>此系统使用了 <c>Node.JS</c>, <c>MySQL</c>, <c>JavaScript</c> 作为主要技术栈；网络通信方面主要使用了 <c>socket.io</c>，底层使用了 <c>WebSocket</c>，服务器托管在 <c>DigitalOcean</c> 新加坡机房并实现了双机热切换的灾备（通过 <c>MySQL</c> 主从库实现）。</p>
+      <p class='flow-text' style='text-indent: 2em'>从一开始，除了使用了公共依赖库之外，其余代码便是均由高逸扬一人独立完成。他是一位 16 岁的勤礼外语中学学生，热爱编程、摄影、航拍与影片制作。他现在所掌握的语言大致有 <c>PHP</c>, <c>SQL</c>, <c>JavaScript (ES6)</c>, <c>HTML5</c>, <c>CSS3</c>, <c>Python</c>. 在毕业之前，他还计划学习 <c>Ruby on Rails</c>, <c>C</c>, <c>Objective-C</c>, <c>Java</c> 和 <c>Android 编程</c>。另外，他还参与制作了大量的学校宣传视频和纪念视频，例如最近一次发布在学校公众号的勤礼外语中学 2018 运动会短片，即是他主要使用了 <c>Adobe Premiere Pro</c>，<c>Adobe After Effects</c>，和 <c>Adobe Audition</c> 这三款专业级的非线性剪辑软件进行制作的。他希望使用代码与程序来改变人们生活的方式，并通过这些方式来对人类发展产生正面的影响。</p>
+    </div>
+  </div>
+  
+  <!-- Dialog Modal -->
+  <div id="dialog" class="modal">
+    <div class="modal-content">
+      <h4 id='dialog-header'>{title}</h4>
+      <p id='dialog-content'>{content}</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect btn-flat">close</a>
+    </div>
+  </div>
+
+  <footer class="page-footer indigo">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text lineheightfix">勤礼科学展 2018 - 留言板系统<br>Kinglee Science Fair 2018<br>Comment Board System</h5>
+          <p class="grey-text text-lighten-4" style='text-indent: 2em;'>遇到问题想反馈，或想给我留言？请点击此<a href='/feedback'>反馈与留言链接</a>。
+        </p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      by Galvin Gao. GitHub: <a class="indigo-text text-lighten-3" href="https://github.com/GalvinGao">https://github.com/GalvinGao</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Scripts -->
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+  <script>(function($){$(function(){$('.button-collapse').sideNav();});})(jQuery);
+  $(document).ready(function() {
+    $('select').material_select();
+    $('#dialog').modal();
+  });
+  </script>
+  </body>
+</html>

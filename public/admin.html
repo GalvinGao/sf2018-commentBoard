@@ -3,39 +3,85 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Admin  </title>
+  <title>Admin Control Panel</title>
   <link href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">
   <link href="https://cdn.bootcss.com/materialize/1.0.0-alpha.3/css/materialize.min.css" rel="stylesheet">
+  <style>
+  body {
+    font-family: 'Source Code Pro', 'Courier New', 'Source Code Pro', monospace;
+  }
+  
+  @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+  @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+  @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg);  } }
+  
+  .spin {
+    -webkit-animation: spin 1s ease-in-out infinite;
+    -moz-animation: spin 1s ease-in-out infinite;
+    animation: spin 1s ease-in-out infinite;
+    transform-origin: 48% 48%;
+  }
+  </style>
 </head>
 <body>
-  <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+  <nav class="indigo darken-2" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">admin@sf2018:~/sf2018#</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="/">Home</a></li>
-        <li class="active"><a href="/admin">Admin</a></li>
+        <li><a href="/">home</a></li>
+        <li class="active"><a href="#">admin</a></li>
       </ul>
     </div>
   </nav>
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
       <br><br>
-      <h1 class="header center orange-text">/admin/eval</h1>
+      <h1 class="header center indigo-text">/admin</h1>
       <div class="row center">
-        <h5 class="header col s12 light">Remote Code Execution</h5>
+        <h5 class="header col s12 light">admin_control_panel</h5>
       </div>
       <br><br>
     </div>
   </div>
   
-  <div class="container row center">
-    <div class="col s2"></div>
-    <div class="input-field col s8">
-      <input type="text" id="code">
-      <label for="code">Content</label>
+  <div class="container row">
+    <div class="col s12">
+    	<h4 class="header indigo-text">/api/users &nbsp;&nbsp;&nbsp;<a id="user-refresh" class="waves-effect waves-light btn"><i class="material-icons left" id='user-refresh-icon'>refresh</i><span id='user-dyn'>refresh</span></a></h4>
+    </div>
+    <div class="col s3">
+      <h5><code id='user-count'>0</code></h5>
+    </div>
+  </div>
+  
+  <div class="container row">
+    <div class="col s12">
+    	<h4 class="header indigo-text">/api/eval &nbsp;&nbsp;&nbsp;<a id="eval-submit" class="waves-effect waves-light btn"><i class="material-icons left">send</i><span id='eval-button'>submit</span></a></h4>
+    </div>
+    <div class="input-field col s12 m3 l3">
+      <select id="eval-action">
+        <option value="" disabled selected>select client type</option>
+        <option value="node">node (server)</option>
+        <option value="client">client (through websocket)</option>
+      </select>
+      <label>client type</label>
+    </div>
+    <div class="input-field col s12 m9 l9">
+      <input type="text" id="eval-code">
+      <label for="eval-code">code</label>
+    </div>
+  </div>
+  
+  <!-- Dialog Modal -->
+  <div id="dialog" class="modal">
+    <div class="modal-content">
+      <h4 id='dialog-header'>{title}</h4>
+      <p id='dialog-content'>{content}</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect btn-flat">close</a>
     </div>
   </div>
 
-  <footer class="page-footer orange">
+  <footer class="page-footer indigo">
     <div class="container">
       <div class="row">
         <div class="col l6 s12">
@@ -46,7 +92,7 @@
     </div>
     <div class="footer-copyright">
       <div class="container">
-      Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+      Made by <a class="indigo-text text-lighten-3" href="http://materializecss.com">Materialize</a>
       </div>
     </div>
   </footer>
@@ -54,29 +100,96 @@
 
   <!-- Scripts -->
   <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdn.bootcss.com/materialize/1.0.0-alpha.3/js/materialize.min.js"></script>
+  <script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
-  <script>(function($){$(function(){$('.button-collapse').sideNav();});})(jQuery);</script>
+  <script>(function($){$(function(){$('.button-collapse').sideNav();});})(jQuery);
+  $(document).ready(function() {
+    $('select').material_select();
+    $('#dialog').modal();
+  });
+  </script>
   <script>
     function adminToken(ts) {
-      var token = "PFaHq1hCgq4jovF3zEmalezz";
+      var token = "HYvZU30OKp2DrPLnwoYJIDKGX19Us0e6B4LjUJYPUPesyijJhFkxfjzl5LNC7HWF";
       //var ts = new Date().getTime();
       return md5(token + ts);
     }
     
-    function submit(action, code) {
+    function defaultUrl (path) {
+      return 'https://sf2018.iblueg.cn/admin' + path.toString()
+    }
+    
+    function evalcode(action, code) {
       var t = new Date().getTime();
-      $.get("https://dev.khs.science/admin/api/eval", {token: adminToken(t), t: t, action: action, code: code})
+      $.get(defaultUrl('/api/eval'), {token: adminToken(t), t: t, action: action, code: code})
       .done(function(data){
-        console.log("Done. Data: ", data);
+        dialog('GET /api/eval', 'response: ' + ob(data))
+      })
+      .always(function(){
+        $('#eval-submit').removeClass('disabled')
+        $('#eval-button').html(prevv)
       })
     }
     
-    $(".submit").click(function(){
-      var action = $("#action").val();
-      var code = $("#code").val();
-      submit(action, code);
+    $("#eval-submit").click(function(){
+      var action = $("#eval-action").val() || toast("eval: field `action` is not specified."); return false;
+			var code = $("#eval-code").val() || toast("eval: field `code` is not specified."); return false;
+			$('#eval-submit').addClass('disabled')
+      prevv = $('#eval-button').html()
+      $('#eval-button').html('submitting...')
+			evalcode(action, code);
+		})
+		
+		$('#user-refresh').click(function(){
+			// console.log('refreshing user count...')
+			$('#user-refresh').addClass('disabled')
+      $('#user-refresh-icon').addClass('spin')
+      prev = $('#user-dyn').html()
+      $('#user-dyn').html('loading...')
+      refreshUser()
     })
+    
+    function refreshUser() {
+      var t = new Date().getTime();
+      $.get(defaultUrl('/api/user'), {token: adminToken(t), t: t}, (data) => {
+        console.log(data)
+        $('#user-count').text(data.data)
+        $('#user-refresh').removeClass('disabled')
+        $('#user-refresh-icon').removeClass('spin')
+        $('#user-dyn').html(prev)
+      })
+      /*
+      $.get('http://httpbin.org/delay/1', {token: adminToken(t), t: t}, (data) => {
+        console.log(ob(data))
+        $('#user-count').text(ob(data))
+        $('#user-refresh').removeClass('disabled')
+        $('#user-refresh-icon').removeClass('spin')
+        $('#user-dyn').html(prev)
+      })
+      */
+    }
+    
+    function toast (message, duration=3000) {
+      Materialize.toast(message, duration);
+    }
+    
+    function dialog (title, content) {
+      $('#dialog-header').text(title)
+      $('#dialog-content').text(content)
+      $('#dialog').modal('open')
+    }
+    
+    function odb(object) {
+      console.info(JSON.stringify(object, null, 4));
+    }
+
+    function ob(object) {
+      return JSON.stringify(object, null, 4);
+    }
+
+    function replaceReturn(str) {
+      return str.replace(new RegExp("\n", "gm"), "<br>");
+    }
   </script>
   </body>
 </html>

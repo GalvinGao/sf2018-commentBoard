@@ -111,6 +111,16 @@ app.get('/', (req, res) => {
   res.end(fs.readFileSync('public/v2.html'))
 })
 
+app.get('/feedback', (req, res) => {
+  res.setHeader('Content-Type', 'text/html')
+  res.end(fs.readFileSync('public/feedback.html'))
+})
+
+app.get('/about', (req, res) => {
+  res.setHeader('Content-Type', 'text/html')
+  res.end(fs.readFileSync('public/about.html'))
+})
+
 /*
 
 app.get('/new', (req, res) => {
