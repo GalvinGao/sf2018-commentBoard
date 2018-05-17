@@ -134,7 +134,7 @@ app.get('/api/history', (req, res) => {
   } catch (err) {
     logHttps.debug('historyFetch Param Parsing error: ', err)
   }
-  connection.query('SELECT id, name, comment, time FROM `comments` ORDER BY `comments`.`id` DESC LIMIT ?, ?', sqlParam, function (err, result, fields) {
+  connection.query('SELECT id, name, comment, time FROM `comments` ORDER BY `comments`.`id` DESC', function (err, result, fields) {
     if (err) {
       logMysql.error('historyFetch Error: %s', err)
       res.end(genStatus(false))

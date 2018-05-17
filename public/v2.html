@@ -812,6 +812,7 @@
                   }
                   if (data.data.length === 0) {
                     window.gotAllHistory = true
+                    $('.new-page-loader').css('opacity', '0')
                   }
                 } else if (data.status in window.statusMeta.unexpected) {
                   console.error("[historyFetch] Server Error. Code:", data.status);
@@ -1044,6 +1045,9 @@
         }
         return num;
       }
+      
+      
+      
     </script>
 </body>
 
