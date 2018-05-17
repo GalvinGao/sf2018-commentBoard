@@ -725,11 +725,11 @@
                   time: data.data[i].time
                 });
                 window.gotAllHistory = true
-                $('.new-page-loader').css('opacity', '0')
+                $('.new-page-loader').css('display', 'none')
               }
               if (data.data.length === 0) {
                 window.gotAllHistory = true
-                $('.new-page-loader').css('opacity', '0')
+                $('.new-page-loader').css('display', 'none')
               }
               animateComments();
             } else if (data.status in window.statusMeta.unexpected) {
@@ -851,11 +851,11 @@
                       time: data.data[i].time
                     });
                     window.gotAllHistory = true
-                    $('.new-page-loader').css('opacity', '0')
+                    $('.new-page-loader').css('display', 'none')
                   }
                   if (data.data.length === 0) {
                     window.gotAllHistory = true
-                    $('.new-page-loader').css('opacity', '0')
+                    $('.new-page-loader').css('display', 'none')
                   }
                 } else if (data.status in window.statusMeta.unexpected) {
                   console.error("[historyFetch] Server Error. Code:", data.status);
