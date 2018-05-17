@@ -386,6 +386,7 @@
   </style>
   <link rel="stylesheet" href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" integrity="sha384-gGIdbE3rejhnmhbMZyasqhmdgF/Wza7NbuLq2eAVP92BbPF/ziwfO1LtP7E/ai36" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
+  <link href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -400,11 +401,11 @@
         </div>
       </div>
     </div>
-    <div class="section submit">
+    <div class="section submit" id='submit-section'>
       <h1 class="heading">
         <span class="text-wrapper">
-        <span class="line line1"></span>
-        <span class="letters">新留言 / Submit</span>
+          <span class="line line1"></span>
+          <span class="letters">新留言 / Submit</span>
         </span>
       </h1>
       <div class="submitForm row section-box">
@@ -476,6 +477,23 @@
           <div class="indeterminate"></div>
         </div>
       </div>
+    </div>
+  
+    <div class="fixed-action-btn horizontal click-to-toggle" style='margin-bottom: 1em;'>
+      <a class="btn-floating btn-large deep-purple accent-3" href='/about'>
+        <i class="large material-icons">account_circle</i>
+      </a>
+    </div>
+    <div class="fixed-action-btn horizontal click-to-toggle" style='margin-right: 3.5em; margin-bottom: 1em;'>
+      <a class="btn-floating btn-large pink accent-3" href='/feedback'>
+        <i class="large material-icons">comment</i>
+      </a>
+    </div>
+    <div class='desc white-text' style='position: fixed; right: 6.7em; bottom: 0.8em; font-size: .8em; width: auto; text-align: center'>
+      反馈
+    </div>
+    <div class='desc white-text' style='position: fixed; right: 1.8em; bottom: 0.8em; font-size: .8em; width: auto; text-align: center'>
+      关于我
     </div>
     <canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -2; opacity: 1; filter: blur(4px);" id="canvas"></canvas>
     <script>
