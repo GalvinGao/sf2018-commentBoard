@@ -724,9 +724,12 @@
                   message: data.data[i].comment,
                   time: data.data[i].time
                 });
+                window.gotAllHistory = true
+                $('.new-page-loader').css('opacity', '0')
               }
               if (data.data.length === 0) {
                 window.gotAllHistory = true
+                $('.new-page-loader').css('opacity', '0')
               }
               animateComments();
             } else if (data.status in window.statusMeta.unexpected) {

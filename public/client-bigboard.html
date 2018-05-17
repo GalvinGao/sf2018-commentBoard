@@ -307,6 +307,7 @@
       /* === Time Formatter === */
 
       function formatTime(timestampInput) {
+        timestampInput = parseInt(timestampInput)
         var timestampInput = new Date(timestampInput);
         var hour = pad(timestampInput.getHours(), 2);
         var min = pad(timestampInput.getMinutes(), 2);
