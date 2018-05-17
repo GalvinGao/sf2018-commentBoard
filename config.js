@@ -4,8 +4,8 @@ const config = {
 	bigBoardUrl: "/view/board",
 	adminToken: "HYvZU30OKp2DrPLnwoYJIDKGX19Us0e6B4LjUJYPUPesyijJhFkxfjzl5LNC7HWF",
 	adminPasswd: "GalvinGao2002_Kinglee2018ScienceFair_R0cks_EVirLqzgVpLCgjnRBE2QWMpKmVAh6rml",
-	keypath: "/etc/letsencrypt/live/khs.science/privkey.pem", // HTTPS Server Private Key [ENV-FLAG]
-	certpath: "/etc/letsencrypt/live/khs.science/fullchain.pem", // HTTPS Server Certificate [ENV-FLAG]
+	keypath: "/etc/letsencrypt/live/sf2018.iblueg.cn/privkey.pem", // HTTPS Server Private Key [ENV-FLAG]
+	certpath: "/etc/letsencrypt/live/sf2018.iblueg.cn/fullchain.pem", // HTTPS Server Certificate [ENV-FLAG]
 	// HTTP jumps to HTTPS - Hostname Config
 	// PLEASE MAKE SURE THIS IS CORRECTLY CONFIGURED!
 	// NO NEED FOR "/" OR "http://"!
