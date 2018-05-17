@@ -2,29 +2,29 @@
 	<head>
 		<meta charset="utf-8" />
 		<!--meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" /-->
-      <title>Layout Test</title>
-      <link href="https://fonts.googleapis.com/css?family=Oswald:400,700" rel="stylesheet">
+      <title>Comment Board (/view/board)</title>
+      <!--link href="https://fonts-proxy.ustclug.org/css?family=Oswald:400,700" rel="stylesheet"-->
       <link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
       <link rel="stylesheet" href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.min.css" integrity="sha384-gGIdbE3rejhnmhbMZyasqhmdgF/Wza7NbuLq2eAVP92BbPF/ziwfO1LtP7E/ai36" crossorigin="anonymous">
       <link href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">
       
 		<style>
 		  body {
-		    font-family: 思源黑体, Merriweather, Source Sans Pro, Verdana, Arial, Helvetica, sans-serif;
+		    font-family: '思源黑体', 'Merriweather', 'Source Sans Pro', 'PingFang SC', 'Lantinghei SC', 'Microsoft Yahei', 'Hiragino Sans GB', 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', 'Verdana', 'Arial', 'Helvetica', sans-serif;
             font-weight: 500;
 		    font-size: 1em;
 		    color: #000;
 		  }
           
           .comment:first-child {
-            margin-top: 10em;
+            margin-top: 3em;
             display: block;
             text-align: center;
           }
           
           .comment:first-child
           .content {
-            font-size: 4em;
+            font-size: 3em;
             padding-bottom: .3em;
             border-bottom: 4px solid rgba(0, 0, 200, 0.3)
           }
@@ -32,12 +32,12 @@
           .comment:first-child
           .metadata {
             padding-top: .2em;
-            font-size: 2em
+            font-size: 1.8em
           }
           
           
           .comment:nth-child(2) {
-            margin-top: 5em;
+            margin-top: 2.5em;
             display: block;
             text-align: center;
           }
@@ -52,7 +52,7 @@
           .content {
             text-indent: 1em;
             text-align: left;
-            font-size: 2.5em;
+            font-size: 2em;
             padding-bottom: .3em;
             border-bottom: 4px solid rgba(0, 0, 200, 0.3);
             word-break: normal;
@@ -63,7 +63,7 @@
           .comment
           .metadata {
             padding-top: .5em;
-            font-size: 1.5em;
+            font-size: 1.2em;
             text-align: right;
             margin-right: 12.5%;
           }
@@ -76,20 +76,14 @@
               background-attachment: fixed;
           }
           
-          .bkgd-wrapper {
-              height: 100%;
-              width: 100%;
-              position: fixed;
-              top: 0;
-              left: 0;
-              z-index: -32769;
-              background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.35));
-          }
+          
           
           body { z-index: 1; position: relative; }
           
           #bubbleContainer {
               z-index: -32767;
+              top: 0;
+              left: 0;
               overflow: hidden;
               position: fixed;
               height: 100%;
@@ -112,8 +106,8 @@
             text-align: left;
             font-size: 2.5em;
             position: relative;
-            top: 2em;
-            left: 3em;
+            top: 1em;
+            left: 1.5em;
             width: 20em;
           }
 
@@ -121,9 +115,8 @@
       </head>
 	<body>
       <div class="header">
-        [Logo] Kinglee Science Fair 2018
+        <img src='https://work-cdn.qn.iblueg.cn/logo-bundle/white-text.png' style='height: 2em; width: auto;' />
       </div>
-      <div class="bkgd-wrapper"></div>
       <div class="comment-list">
         <div class="comment preload">
           <div class="content">
@@ -164,7 +157,7 @@
             if (data.status in window.statusMeta.expected) {
               for (i in data.data) {
                 //console.log("[historyFetch] (Data) [%s] (%s says %s at %s)", i, data.data[i].name, data.data[i].comment, formatTime(data.data[i].time));
-                addNewComment(data.data[i].name, data.data[i].comment, data.data[i].time)
+                addNewComment(data.data[i].name, data.data[i].comment, data.data[i].time, true)
               }
             } else if (data.status in window.statusMeta.unexpected) {
               console.error("[historyFetch] Server Error. Code:", data.status);
@@ -193,15 +186,15 @@
 
       /* === WebSocket Connection & Basic Initiation === */
 
-      const socket = io()
+      const socket = io('https://sf2018.iblueg.cn')
       
       socket.on('connect', () => {
-        console.log('socket.io Service Connected, uid %s.', socket.id)
+        console.log('socket.io Service Connected, uid ', socket.id)
       })
       
       socket.on('new message guys', (msg) => {
         console.info("New Message received:", msg);
-        Materialize.toast("New Message: " + msg.name + " says " + msg.message, 3000); //DEVMARK
+        //Materialize.toast("New Message: " + msg.name + " says " + msg.message, 3000); //DEVMARK
         addNewComment(msg.name, msg.message, msg.time)
       })
 
@@ -232,7 +225,7 @@
           })
       }
       
-      function addNewComment(name, comment, time) {
+      function addNewComment(name, comment, time, history) {
         $list = $('.comment-list')
         comment = specializeMsg(comment.toString())
         time = formatTime(time)
@@ -242,11 +235,17 @@
             ${comment}
           </div>
           <div class="metadata">
-            <i class="material-icons">account_circle</i> ${name} &nbsp <i class="material-icons">access_time</i> ${time}
+            <i class="material-icons">account_circle</i> ${name} &nbsp;|&nbsp; <i class="material-icons">access_time</i> ${time}
           </div>
         </div>`
         
-        $list.prepend(template)
+        if (history) {
+          $list.append(template)
+          $('.new-comment').removeClass('new-comment')
+          return true
+        } else {
+          $list.prepend(template)
+        }
         
         $leaving = $('.comment-list').children()[1]
         
@@ -299,7 +298,7 @@
       function a() {
         d=[{"name":"曲俊锋","comment":"68非常美！55很好玩！66号用心！64号有趣！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"党元英","comment":"6号作品非常有创意讲述清晰，2号作品也讲述的非常认真","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"卢俊丽","comment":"14 8 71都做的很用心 很棒 很努力 继续加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高珊","comment":"10.7.9.60号很棒，孩子们很用心，讲解的趣味性也很强，继续加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"高晓红","comment":"18号，孩子，此次科学展是你通过自身的实验得到的结果，相信自己，是最棒的","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"卢俊丽","comment":"14. 8 15 71号三个小伙伴做的很棒很用心 非常认真 继续加油！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"于涛","comment":"21号，以事实调查，研究了食物的颜色对人食欲的影响。加油","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"林成松","comment":"64号71号69号75号74号很用心！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘敏","comment":"97号作品，小伙子们讲解精彩、侃侃而谈、自然大方！很棒！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"阮峻","comment":"108号、106号实验做得非常棒 ","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"郑吉泳","comment":"20号，19号，76号科学板报很有趣！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"刘潇雅","comment":"5号作品很用心，很有科学精神！我喜欢！","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"},{"name":"王芳","comment":"62，63，9号都很不错，孩子们都很棒，加油。","url":"http://www.jamestobin.co.uk/kinglee/science-fair-2017/kinglee.php"}]
         for (i in d) {
-          addNewComment(d[i].name, d[i].comment, Math.floor(Math.random() * 50000))
+          addNewComment(d[i].name, d[i].comment, Math.floor(Math.random() * 50000), true)
         }
       }
       

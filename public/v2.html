@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <meta name="sharecontent" data-msg-img="https://work-cdn.qn.iblueg.cn/logo-bundle/no-text.png" data-msg-title="勤礼外语中学科学展 2018 - 留言板" data-msg-content="写下你对科学展的看法吧！此网站由 Galvin 搭建~" data-msg-callBack="" data-line-img="https://work-cdn.qn.iblueg.cn/logo-bundle/no-text.png" data-line-title="勤礼外语中学科学展 2018 - 留言板" data-line-callBack=""/>
   <title>Kinglee Science Fair 2018</title>
   <style>
     /* Material Design Spinner */
@@ -89,7 +90,7 @@
 
     .section {
       color: #fff;
-      border-radius: 0.8em;
+      border-radius: 0.4em;
       padding: 1.5em;
       /* background: rgba(255, 255, 255, 0.7); */
       /*
@@ -104,8 +105,8 @@
       padding: 0.3em;
       text-align: left;
       font-display: swap;
-      font-family: 'chinese-font', 'Product Sans', 'Open Sans', serif;
-      background: #000000;
+      font-family: 'PingFang SC', 'Product Sans', 'Lantinghei SC', 'Microsoft Yahei', 'Hiragino Sans GB', 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', 'Open Sans', serif;
+      background: #030303 ;
     }
 
     .header {
@@ -266,8 +267,9 @@
       }
     }
 
-    .submitForm {
+    .submit {
       padding: 1em;
+      background: rgba(0, 0, 0, 0.3);
     }
 
     .is-loading,
@@ -295,11 +297,15 @@
 
     .spinContainer {
       text-align: center;
-      box-shadow: 0px 0px 25px cyan;
+      box-shadow: 0px 0px 25px #00f260;
       border-radius: 1em;
       z-index: 15;
       padding: 2em;
       width: 150pt;
+      text-align: center;
+      background: #00f260;
+      background: -webkit-linear-gradient(-45deg, #00f260, #0575e6);
+      background: linear-gradient(-45deg, #00f260, #0575e6);
     }
 
     .title {
@@ -368,6 +374,9 @@
       border: 1px solid grey !important;
       height: 4em !important;
       width: 11em !important;
+      background: #FC5C7D;
+      background: -webkit-linear-gradient(-45deg, #6A82FB, #FC5C7D);
+      background: linear-gradient(-45deg, #6A82FB, #FC5C7D);
     }
 
     .progress-indeterminate {
@@ -382,6 +391,8 @@
 <body>
   <div class="container flow-text">
     <div class="section header">
+      <img class='logo responsive-img' src='https://work-cdn.qn.iblueg.cn/logo-bundle/white-text.png' style='height: 1.4em; width: auto;' />
+      <br>
       <div class="title">
         <div class="text-wrapper">
           <div class="letters">Science Fair 2018</div>
@@ -398,7 +409,7 @@
       </h1>
       <div class="submitForm row section-box">
         <div class="input-field col s12">
-          <input placeholder="John Appleseed" id="name" type="text"></input>
+          <input placeholder="请在此输入您的姓名 / Please input your name at here" id="name" type="text"></input>
           <label for="name">您的姓名 / Your Name</label>
         </div>
         <div class="input-field col s12">
@@ -432,13 +443,15 @@
             </div>
           </div>
         </div>
-        <div class="new-page-loader"><div class="spinContainer z-index-5">
-          <div class="loader" align="center">
-            <svg class="circular" viewBox="0 0 50 50">
-              <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" stroke-width="5%" stroke-linecap="round"/>
-            </svg> 
-          </div><br> Loading...
-        </div></div>
+        <div class="new-page-loader">
+          <div class="spinContainer z-index-5">
+            <div class="loader" align="center">
+              <svg class="circular" viewBox="0 0 50 50">
+                <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" stroke-width="5%" stroke-linecap="round"/>
+              </svg> 
+            </div><br>加载中...<br>Loading...
+          </div>
+        </div>
       </div>
       <div class="ue loading not-loading">
         <div class="sk-folding-cube">
@@ -928,7 +941,8 @@
           opacity: [0.5, 1],
           easing: "easeInOutExpo",
           duration: 900
-        }).add({
+      })
+        .add({
           targets: '.title .letter',
           opacity: [0, 1],
           translateX: [40, 0],
@@ -940,7 +954,16 @@
           delay: function(el, i) {
             return 150 + 25 * i;
           }
-        })
+      })
+        .add({
+          targets: '.logo',
+          duration: 800,
+          opacity: [0, 1],
+          transitionY: [-100, 0],
+          scaleX: [0.8, 1],
+          offset: '-=800',
+          easing: "easeOutExpo"
+      })
 
       // Wrap every letter in a span
       $('.heading .letters').each(function() {
@@ -954,14 +977,15 @@
           opacity: [0.5, 1],
           easing: "easeOutExpo",
           duration: 700
-        })
+      })
         .add({
           targets: '.heading .line',
           translateX: [0, $(".heading .letters").width() + 20],
           opacity: [1, 0],
           easing: "easeOutExpo",
           duration: 700
-        }).add({
+      })
+        .add({
           targets: '.heading .letter',
           opacity: [0, 1],
           easing: "easeOutExpo",
@@ -970,19 +994,19 @@
           delay: function(el, i) {
             return 34 * (i + 1)
           }
-        });
-
-      anime({
-        targets: ".section-box .input-field, .section-box .single-comment",
-        translateY: [-150, 0],
-        translateX: [-100, 0],
-        scaleX: [0.2, 1],
-        opacity: [0, 1],
-        easing: "easeOutExpo",
-        duration: 1250,
-        delay: function(el, i) {
-          return 175 * i
-        }
+      })
+        .add({
+          targets: ".section-box .input-field, .section-box .single-comment",
+          translateY: [-150, 0],
+          translateX: [-100, 0],
+          scaleX: [0.2, 1],
+          opacity: [0, 1],
+          easing: "easeOutExpo",
+          duration: 1250,
+          delay: function(el, i) {
+            return 175 * i
+          },
+          offset: '-=1200'
       })
 
       function animateComments() {

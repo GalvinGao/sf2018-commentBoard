@@ -128,13 +128,13 @@ app.get('/api/history', (req, res) => {
   res.setHeader('Cache-Control', 'must-revalidate')
   // request.get(config.historyMessageApi).pipe(res)
   try {
-    var eachpage = parseInt(req.query.eachpage) || 20
-    var page = (parseInt(req.query.page) - 1) * eachpage || 1
+    var eachpage = parseInt(req.query.eachpage) || 50
+    var page = parseInt(req.query.page) * eachpage || 1
     var sqlParam = [ page, eachpage ]
   } catch (err) {
     logHttps.debug('historyFetch Param Parsing error: ', err)
   }
-  connection.query('SELECT name, comment, time FROM `comments` ORDER BY `comments`.`id` DESC LIMIT ?, ?', sqlParam, function (err, result, fields) {
+  connection.query('SELECT id, name, comment, time FROM `comments` ORDER BY `comments`.`id` DESC LIMIT ?, ?', sqlParam, function (err, result, fields) {
     if (err) {
       logMysql.error('historyFetch Error: %s', err)
       res.end(genStatus(false))
