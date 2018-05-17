@@ -479,22 +479,23 @@
       </div>
     </div>
   
-    <div class="fixed-action-btn horizontal click-to-toggle" style='margin-bottom: 1em;'>
+    <div class="fixed-action-btn horizontal click-to-toggle side-buttons">
       <a class="btn-floating btn-large deep-purple accent-3" href='/about'>
         <i class="large material-icons">account_circle</i>
-      </a>
+      </a><br><div class='center'><span class='white-text' style='font-size: 16px;'>关于我</span></div>
     </div>
-    <div class="fixed-action-btn horizontal click-to-toggle" style='margin-right: 3.5em; margin-bottom: 1em;'>
+    <div class="fixed-action-btn horizontal click-to-toggle side-buttons" style='margin-right: 65px;'>
       <a class="btn-floating btn-large pink accent-3" href='/feedback'>
         <i class="large material-icons">comment</i>
-      </a>
+      </a><br><div class='center'><span class='white-text' style='font-size: 16px;'>反馈</span></div>
     </div>
+  <!--
     <div class='desc white-text' style='position: fixed; right: 6.7em; bottom: 0.8em; font-size: .8em; width: auto; text-align: center'>
       反馈
     </div>
     <div class='desc white-text' style='position: fixed; right: 1.8em; bottom: 0.8em; font-size: .8em; width: auto; text-align: center'>
       关于我
-    </div>
+    </div>-->
     <canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -2; opacity: 1; filter: blur(4px);" id="canvas"></canvas>
     <script>
       var canvas,
@@ -731,7 +732,6 @@
         })
         .done(function() {
           window.finishedFirstAjax = true
-          initializeScrollFire()
           setTimeout('animateComments();', 2000)
         })
 
@@ -768,7 +768,7 @@
       
       socket.on('new message guys', (msg) => {
         console.info("New Message received:", msg);
-        Materialize.toast("New Message: " + msg.name + " says " + msg.message, 3000); //DEVMARK
+        //Materialize.toast("New Message: " + msg.name + " says " + msg.message, 3000); //DEVMARK
         app.comments.unshift({
           name: msg.name,
           message: msg.message,
@@ -795,7 +795,8 @@
       });
 
       /* === ScrollFire - Switch Page === */
-
+      
+      /*
       function initializeScrollFire() {
         if (!window.gotAllHistory) {
           var options = [{
@@ -808,6 +809,7 @@
         }
         setTimeout('initializeScrollFire()', 2000)
       }
+      */
 
       /* === New Page ajax & loader === */
 
@@ -1028,6 +1030,19 @@
             return 175 * i
           },
           offset: '-=1200'
+      })
+      .add({
+        targets: '.side-buttons',
+        translateX: [50, 0],
+        opacity: [0, 1],
+        scaleX: [1.5, 1],
+        scaleY: [1.5, 1],
+        easing: "easeOutExpo",
+        duration: 900,
+        delay: function(el, i) {
+          return 200 * i
+        },
+        offset: '-=900'
       })
 
       function animateComments() {
